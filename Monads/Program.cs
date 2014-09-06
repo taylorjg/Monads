@@ -1,6 +1,9 @@
 ﻿#pragma warning disable 168
 
 using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Monads
 {
@@ -10,6 +13,8 @@ namespace Monads
         {
             MaybeNotUsingBind();
             MaybeUsingBind();
+
+            TaskUsingBind();
         }
 
         private static void MaybeNotUsingBind()
@@ -32,6 +37,24 @@ namespace Monads
             var r1 = F1(10).Bind(F2).Bind(F3);
             var r2 = F1(100).Bind(F2).Bind(F3);
             var r3 = F1(1000).Bind(F2).Bind(F3);
+        }
+
+        private static void TaskUsingBind()
+        {
+            var memoryStream = new MemoryStream();
+            var t = TaskExtensions
+                .Unit("http://google.com")
+                .Bind(url => WebRequest.Create(url).GetResponseAsync())
+                // ReSharper disable PossibleNullReferenceException
+                .Bind(
+                    webResponse =>
+                    webResponse.GetResponseStream()
+                               .CopyToAsync(memoryStream)
+                               .ContinueWith(_ => TaskExtensions.Unit(memoryStream)).Unwrap());
+                // ReSharper restore PossibleNullReferenceException
+            t.Wait();
+            var r = t.Result;
+            var bytes = r.ToArray();
         }
 
         private static Maybe<int> F1(int x)
