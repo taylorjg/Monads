@@ -40,15 +40,15 @@ namespace Monads
         private readonly TA _a;
         private readonly bool _isNothing;
 
-        public Maybe<TA> Unit(TA a)
-        {
-            return Maybe.Just(a);
-        }
+        //public Maybe<TA> Unit(TA a)
+        //{
+        //    return Maybe.Just(a);
+        //}
 
-        public Maybe<TB> Bind<TB>(Func<TA, Maybe<TB>> f)
-        {
-            return IsJust ? f(FromJust()) : Maybe.Nothing<TB>();
-        }
+        //public Maybe<TB> Bind<TB>(Func<TA, Maybe<TB>> f)
+        //{
+        //    return IsJust ? f(FromJust()) : Maybe.Nothing<TB>();
+        //}
     }
 
     public static class Maybe
@@ -61,6 +61,21 @@ namespace Monads
         public static Maybe<T> Just<T>(T a)
         {
             return new Maybe<T>(a);
+        }
+
+        public static Maybe<TA> Unit<TA>(TA a)
+        {
+            return Just(a);
+        }
+
+        public static Maybe<TB> Bind<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f)
+        {
+            return ma.IsJust ? f(ma.FromJust()) : Nothing<TB>();
+        }
+
+        public static Maybe<TB> LiftM<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
+        {
+            return ma.Bind(a => Unit(f(a)));
         }
     }
 }
