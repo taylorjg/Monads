@@ -2,7 +2,7 @@
 
 namespace Monads
 {
-    public sealed class Maybe<TA>
+    public sealed class Maybe<TA> : IMonad<TA>
     {
         public Maybe()
         {
@@ -37,18 +37,36 @@ namespace Monads
             return IsJust ? _a : defaultValue;
         }
 
+        public Maybe<TB> Bind<TB>(Func<TA, Maybe<TB>> f)
+        {
+            var monadAdapter = MonadAdapter;
+            var mb = monadAdapter.Bind(this, f);
+            return (Maybe<TB>)mb;
+        }
+
+        private IMonadAdapter _monadAdapter;
+
+        public IMonadAdapter MonadAdapter
+        {
+            get { return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter()); }
+        }
+
         private readonly TA _a;
         private readonly bool _isNothing;
+    }
 
-        //public Maybe<TA> Unit(TA a)
-        //{
-        //    return Maybe.Just(a);
-        //}
+    internal class MaybeMonadAdapter : IMonadAdapter
+    {
+        public IMonad<TA> Unit<TA>(TA a)
+        {
+            return Maybe.Just(a);
+        }
 
-        //public Maybe<TB> Bind<TB>(Func<TA, Maybe<TB>> f)
-        //{
-        //    return IsJust ? f(FromJust()) : Maybe.Nothing<TB>();
-        //}
+        public IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
+        {
+            var maybeA = (Maybe<TA>)ma;
+            return maybeA.IsJust ? f(maybeA.FromJust()) : Maybe.Nothing<TB>();
+        }
     }
 
     public static class Maybe
@@ -66,16 +84,6 @@ namespace Monads
         public static Maybe<TA> Unit<TA>(TA a)
         {
             return Just(a);
-        }
-
-        public static Maybe<TB> Bind<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f)
-        {
-            return ma.IsJust ? f(ma.FromJust()) : Nothing<TB>();
-        }
-
-        public static Maybe<TB> LiftM<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
-        {
-            return ma.Bind(a => Unit(f(a)));
         }
     }
 }

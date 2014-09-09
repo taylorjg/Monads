@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="IMonad.cs" />
     <Compile Include="ListExtensions.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="Program.cs" />

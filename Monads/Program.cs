@@ -37,6 +37,7 @@ namespace Monads
             var r1 = F1(10).Bind(F2).Bind(F3);
             var r2 = F1(100).Bind(F2).Bind(F3);
             var r3 = F1(1000).Bind(F2).Bind(F3);
+            var r4 = Maybe.Unit(10).Bind(F2).Bind(F3);
         }
 
         private static void TaskUsingBind()
