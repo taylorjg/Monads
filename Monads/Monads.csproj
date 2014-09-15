@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Either.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="IMonad.cs" />
     <Compile Include="ListExtensions.cs" />

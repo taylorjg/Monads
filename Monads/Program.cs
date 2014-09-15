@@ -14,6 +14,8 @@ namespace Monads
             MaybeNotUsingBind();
             MaybeUsingBind();
 
+            EitherUsingBind();
+
             TaskUsingBind();
         }
 
@@ -38,6 +40,38 @@ namespace Monads
             var r2 = F1(100).Bind(F2).Bind(F3);
             var r3 = F1(1000).Bind(F2).Bind(F3);
             var r4 = Maybe.Unit(10).Bind(F2).Bind(F3);
+            var r5 = Maybe.Unit(10).LiftM(RawFunction);
+        }
+
+        private static void EitherUsingBind()
+        {
+            var er1 = Either.Right<string, int>(10);
+            var er2 = er1
+                .Bind(FunctionReturningEither1)
+                .Bind(FunctionReturningEither2);
+
+            var el1 = Either.Left<string, int>("my error message");
+            var el2 = el1
+                .Bind(FunctionReturningEither1)
+                .Bind(FunctionReturningEither2);
+
+            var er3 = Either.Right<string, int>(10);
+            var er4 = er3.LiftM(RawFunction);
+        }
+
+        private static Either<string, string> FunctionReturningEither1(int n)
+        {
+            return Either.Right<string, string>(Convert.ToString(n));
+        }
+
+        private static Either<string, bool> FunctionReturningEither2(string s)
+        {
+            return Either.Right<string, bool>(s.Length > 1);
+        }
+
+        private static string RawFunction(int n)
+        {
+            return Convert.ToString(n * n);
         }
 
         private static void TaskUsingBind()

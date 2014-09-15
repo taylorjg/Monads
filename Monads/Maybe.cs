@@ -4,22 +4,29 @@ namespace Monads
 {
     public sealed class Maybe<TA> : IMonad<TA>
     {
-        public Maybe()
+        private Maybe()
         {
-            _a = default(TA);
-            _isNothing = true;
         }
 
-        public Maybe(TA a)
+        internal static Maybe<T> MakeJust<T>(T a)
         {
-            _a = a;
-            _isNothing = false;
+            return new Maybe<T>
+                {
+                    _a = a,
+                    IsNothing = false
+                };
         }
 
-        public bool IsNothing
+        internal static Maybe<T> MakeNothing<T>()
         {
-            get { return _isNothing; }
+            return new Maybe<T>
+                {
+                    _a = default(T),
+                    IsNothing = true
+                };
         }
+
+        public bool IsNothing { get; private set; }
 
         public bool IsJust
         {
@@ -39,20 +46,29 @@ namespace Monads
 
         public Maybe<TB> Bind<TB>(Func<TA, Maybe<TB>> f)
         {
-            var monadAdapter = MonadAdapter;
+            var monadAdapter = GetMonadAdapter();
             var mb = monadAdapter.Bind(this, f);
             return (Maybe<TB>)mb;
         }
 
-        private IMonadAdapter _monadAdapter;
-
-        public IMonadAdapter MonadAdapter
+        public Maybe<TB> LiftM<TB>(Func<TA, TB> f)
         {
-            get { return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter()); }
+            return (Maybe<TB>)MonadExtensions.LiftM(this, f);
         }
 
-        private readonly TA _a;
-        private readonly bool _isNothing;
+        private IMonadAdapter _monadAdapter;
+
+        public IMonadAdapter GetMonadAdapter()
+        {
+            return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
+        }
+
+        public IMonadAdapter<T1> GetMonadAdapter<T1>()
+        {
+            return null;
+        }
+
+        private TA _a;
     }
 
     internal class MaybeMonadAdapter : IMonadAdapter
@@ -73,12 +89,12 @@ namespace Monads
     {
         public static Maybe<T> Nothing<T>()
         {
-            return new Maybe<T>();
+            return Maybe<T>.MakeNothing<T>();
         }
 
         public static Maybe<T> Just<T>(T a)
         {
-            return new Maybe<T>(a);
+            return Maybe<T>.MakeJust(a);
         }
 
         public static Maybe<TA> Unit<TA>(TA a)
