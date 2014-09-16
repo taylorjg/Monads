@@ -4,22 +4,21 @@ namespace Monads
 {
     public sealed class Either<TE, TA> : IMonad<TA>
     {
-        internal static Either<TE, TA> MakeLeft(TE e)
+        private Either(LeftOrRight leftOrRight, TE e, TA a)
         {
-            return new Either<TE, TA>
-                {
-                    _leftOrRight = LeftOrRight.Left,
-                    _e = e
-                };
+            _leftOrRight = leftOrRight;
+            _e = e;
+            _a = a;
         }
 
-        internal static Either<TE, TA> MakeRight(TA a)
+        internal Either(TE e)
+            : this(LeftOrRight.Left, e, default(TA))
         {
-            return new Either<TE, TA>
-                {
-                    _leftOrRight = LeftOrRight.Right,
-                    _a = a
-                };
+        }
+
+        internal Either(TA a)
+            : this(LeftOrRight.Right, default(TE), a)
+        {
         }
 
         public bool IsLeft {
@@ -76,9 +75,9 @@ namespace Monads
             Right
         }
 
-        private LeftOrRight _leftOrRight;
-        private TE _e;
-        private TA _a;
+        private readonly LeftOrRight _leftOrRight;
+        private readonly TE _e;
+        private readonly TA _a;
     }
 
     internal class EitherMonadAdapter<TE> : IMonadAdapter<TE>
@@ -99,12 +98,12 @@ namespace Monads
     {
         public static Either<TE, TA> Left<TE, TA>(TE e)
         {
-            return Either<TE, TA>.MakeLeft(e);
+            return new Either<TE, TA>(e);
         }
 
         public static Either<TE, TA> Right<TE, TA>(TA a)
         {
-            return Either<TE, TA>.MakeRight(a);
+            return new Either<TE, TA>(a);
         }
 
         public static Either<TE, TA> Unit<TE, TA>(TA a)
