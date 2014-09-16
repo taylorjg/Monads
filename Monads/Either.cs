@@ -84,31 +84,31 @@ namespace Monads
     {
         public IMonad<TA> Unit<TA>(TA a)
         {
-            return Either.Right<TE, TA>(a);
+            return Either<TE>.Right(a);
         }
 
         public IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
         {
             var eitherA = (Either<TE, TA>)ma;
-            return eitherA.IsRight ? f(eitherA.Right) : Either.Left<TE, TB>(eitherA.Left);
+            return eitherA.IsRight ? f(eitherA.Right) : Either<TE>.Left<TB>(eitherA.Left);
         }
     }
 
-    public static class Either
+    public static class Either<TE>
     {
-        public static Either<TE, TA> Left<TE, TA>(TE e)
+        public static Either<TE, TA> Left<TA>(TE e)
         {
             return new Either<TE, TA>(e);
         }
 
-        public static Either<TE, TA> Right<TE, TA>(TA a)
+        public static Either<TE, TA> Right<TA>(TA a)
         {
             return new Either<TE, TA>(a);
         }
 
-        public static Either<TE, TA> Unit<TE, TA>(TA a)
+        public static Either<TE, TA> Unit<TA>(TA a)
         {
-            return Right<TE, TA>(a);
+            return Right(a);
         }
     }
 }
