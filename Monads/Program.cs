@@ -60,6 +60,8 @@ namespace Monads
 
             var el5 = Either<string>.Left<string>("error");
             var er5 = Either<string>.Right("success");
+
+            var er6 = Either<string>.Unit(12).LiftM(RawFunction);
         }
 
         private static Either<string, string> FunctionReturningEither1(int n)
