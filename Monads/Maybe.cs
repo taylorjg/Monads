@@ -60,21 +60,7 @@ namespace Monads
 
         public Maybe<TB> LiftM<TB>(Func<TA, TB> f)
         {
-            return (Maybe<TB>)MonadExtensions.LiftM(this, f);
-        }
-    }
-
-    internal class MaybeMonadAdapter : IMonadAdapter
-    {
-        public IMonad<TA> Unit<TA>(TA a)
-        {
-            return Maybe.Just(a);
-        }
-
-        public IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
-        {
-            var maybeA = (Maybe<TA>)ma;
-            return maybeA.IsJust ? f(maybeA.FromJust()) : Maybe.Nothing<TB>();
+            return (Maybe<TB>)MonadCombinators.LiftM(this, f);
         }
     }
 
@@ -93,6 +79,20 @@ namespace Monads
         public static Maybe<TA> Unit<TA>(TA a)
         {
             return Just(a);
+        }
+    }
+
+    internal class MaybeMonadAdapter : IMonadAdapter
+    {
+        public IMonad<TA> Unit<TA>(TA a)
+        {
+            return Maybe.Just(a);
+        }
+
+        public IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
+        {
+            var maybeA = (Maybe<TA>)ma;
+            return maybeA.IsJust ? f(maybeA.FromJust()) : Maybe.Nothing<TB>();
         }
     }
 }

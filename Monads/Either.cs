@@ -73,21 +73,7 @@ namespace Monads
 
         public Either<TE, TB> LiftM<TB>(Func<TA, TB> f)
         {
-            return (Either<TE, TB>)MonadExtensions<TE>.LiftM(this, f);
-        }
-    }
-
-    internal class EitherMonadAdapter<TE> : IMonadAdapter<TE>
-    {
-        public IMonad<TE, TA> Unit<TA>(TA a)
-        {
-            return Either<TE>.Right(a);
-        }
-
-        public IMonad<TE, TB> Bind<TA, TB>(IMonad<TE, TA> ma, Func<TA, IMonad<TE, TB>> f)
-        {
-            var eitherA = (Either<TE, TA>)ma;
-            return eitherA.IsRight ? f(eitherA.Right) : Either<TE>.Left<TB>(eitherA.Left);
+            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(this, f);
         }
     }
 
@@ -106,6 +92,20 @@ namespace Monads
         public static Either<TE, TA> Unit<TA>(TA a)
         {
             return Right(a);
+        }
+    }
+
+    internal class EitherMonadAdapter<TE> : IMonadAdapter<TE>
+    {
+        public IMonad<TE, TA> Unit<TA>(TA a)
+        {
+            return Either<TE>.Right(a);
+        }
+
+        public IMonad<TE, TB> Bind<TA, TB>(IMonad<TE, TA> ma, Func<TA, IMonad<TE, TB>> f)
+        {
+            var eitherA = (Either<TE, TA>)ma;
+            return eitherA.IsRight ? f(eitherA.Right) : Either<TE>.Left<TB>(eitherA.Left);
         }
     }
 }

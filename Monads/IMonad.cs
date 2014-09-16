@@ -30,7 +30,7 @@ namespace Monads
     }
     // ReSharper restore UnusedTypeParameter
 
-    public static class Monad
+    internal static class Monad
     {
         public static IMonad<TA> Unit<TA>(IMonadAdapter monadAdapter, TA a)
         {
@@ -43,7 +43,7 @@ namespace Monads
         }
     }
 
-    public static class Monad<T1>
+    internal static class Monad<T1>
     {
         public static IMonad<T1, TA> Unit<TA>(IMonadAdapter<T1> monadAdapter, TA a)
         {
@@ -56,7 +56,7 @@ namespace Monads
         }
     }
 
-    public static class MonadExtensions
+    internal static class MonadCombinators
     {
         public static IMonad<TB> LiftM<TA, TB>(IMonad<TA> ma, Func<TA, TB> f)
         {
@@ -70,7 +70,7 @@ namespace Monads
         }
     }
 
-    public static class MonadExtensions<T1>
+    internal static class MonadCombinators<T1>
     {
         public static IMonad<T1, TB> LiftM<TA, TB>(IMonad<T1, TA> ma, Func<TA, TB> f)
         {
