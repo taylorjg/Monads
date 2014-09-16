@@ -2,7 +2,7 @@
 
 namespace Monads
 {
-    public sealed class Either<TE, TA> : IMonad<TA>
+    public sealed class Either<TE, TA> : IMonad<TE, TA>
     {
         private Either(LeftOrRight leftOrRight, TE e, TA a)
         {
@@ -47,28 +47,6 @@ namespace Monads
             }
         }
 
-        public Either<TE, TB> Bind<TB>(Func<TA, Either<TE, TB>> f)
-        {
-            var monadAdapter = GetMonadAdapter<TE>();
-            var mb = monadAdapter.Bind(this, f);
-            return (Either<TE, TB>)mb;
-        }
-
-        public Either<TE, TB> LiftM<TB>(Func<TA, TB> f)
-        {
-            return (Either<TE, TB>)this.LiftM<TE, TA, TB>(f);
-        }
-
-        public IMonadAdapter GetMonadAdapter()
-        {
-            return null;
-        }
-
-        public IMonadAdapter<T1> GetMonadAdapter<T1>()
-        {
-            return new EitherMonadAdapter<T1>();
-        }
-
         private enum LeftOrRight
         {
             Left,
@@ -78,16 +56,35 @@ namespace Monads
         private readonly LeftOrRight _leftOrRight;
         private readonly TE _e;
         private readonly TA _a;
+
+        private IMonadAdapter<TE> _monadAdapter;
+
+        public IMonadAdapter<TE> GetMonadAdapter()
+        {
+            return _monadAdapter ?? (_monadAdapter = new EitherMonadAdapter<TE>());
+        }
+
+        public Either<TE, TB> Bind<TB>(Func<TA, Either<TE, TB>> f)
+        {
+            var monadAdapter = GetMonadAdapter();
+            var mb = monadAdapter.Bind(this, f);
+            return (Either<TE, TB>)mb;
+        }
+
+        public Either<TE, TB> LiftM<TB>(Func<TA, TB> f)
+        {
+            return (Either<TE, TB>)MonadExtensions<TE>.LiftM(this, f);
+        }
     }
 
     internal class EitherMonadAdapter<TE> : IMonadAdapter<TE>
     {
-        public IMonad<TA> Unit<TA>(TA a)
+        public IMonad<TE, TA> Unit<TA>(TA a)
         {
             return Either<TE>.Right(a);
         }
 
-        public IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
+        public IMonad<TE, TB> Bind<TA, TB>(IMonad<TE, TA> ma, Func<TA, IMonad<TE, TB>> f)
         {
             var eitherA = (Either<TE, TA>)ma;
             return eitherA.IsRight ? f(eitherA.Right) : Either<TE>.Left<TB>(eitherA.Left);

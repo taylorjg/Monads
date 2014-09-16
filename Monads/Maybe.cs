@@ -41,6 +41,16 @@ namespace Monads
             return IsJust ? _a : defaultValue;
         }
 
+        private readonly TA _a;
+        private readonly bool _isNothing;
+
+        private IMonadAdapter _monadAdapter;
+
+        public IMonadAdapter GetMonadAdapter()
+        {
+            return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
+        }
+
         public Maybe<TB> Bind<TB>(Func<TA, Maybe<TB>> f)
         {
             var monadAdapter = GetMonadAdapter();
@@ -52,21 +62,6 @@ namespace Monads
         {
             return (Maybe<TB>)MonadExtensions.LiftM(this, f);
         }
-
-        private IMonadAdapter _monadAdapter;
-
-        public IMonadAdapter GetMonadAdapter()
-        {
-            return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
-        }
-
-        public IMonadAdapter<T1> GetMonadAdapter<T1>()
-        {
-            return null;
-        }
-
-        private readonly TA _a;
-        private readonly bool _isNothing;
     }
 
     internal class MaybeMonadAdapter : IMonadAdapter
