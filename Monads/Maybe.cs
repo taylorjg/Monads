@@ -4,29 +4,26 @@ namespace Monads
 {
     public sealed class Maybe<TA> : IMonad<TA>
     {
-        private Maybe()
+        private Maybe(TA a, bool isNothing)
+        {
+            _a = a;
+            _isNothing = isNothing;
+        }
+
+        internal Maybe(TA a)
+            : this(a, false)
         {
         }
 
-        internal static Maybe<T> MakeJust<T>(T a)
+        internal Maybe()
+            : this(default(TA), true)
         {
-            return new Maybe<T>
-                {
-                    _a = a,
-                    IsNothing = false
-                };
         }
 
-        internal static Maybe<T> MakeNothing<T>()
+        public bool IsNothing
         {
-            return new Maybe<T>
-                {
-                    _a = default(T),
-                    IsNothing = true
-                };
+            get { return _isNothing; }
         }
-
-        public bool IsNothing { get; private set; }
 
         public bool IsJust
         {
@@ -68,7 +65,8 @@ namespace Monads
             return null;
         }
 
-        private TA _a;
+        private readonly TA _a;
+        private readonly bool _isNothing;
     }
 
     internal class MaybeMonadAdapter : IMonadAdapter
@@ -87,14 +85,14 @@ namespace Monads
 
     public static class Maybe
     {
-        public static Maybe<T> Nothing<T>()
+        public static Maybe<TA> Nothing<TA>()
         {
-            return Maybe<T>.MakeNothing<T>();
+            return new Maybe<TA>();
         }
 
-        public static Maybe<T> Just<T>(T a)
+        public static Maybe<TA> Just<TA>(TA a)
         {
-            return Maybe<T>.MakeJust(a);
+            return new Maybe<TA>(a);
         }
 
         public static Maybe<TA> Unit<TA>(TA a)
