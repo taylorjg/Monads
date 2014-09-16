@@ -40,5 +40,12 @@ namespace MonadLibTests
             var either = Either<string>.Left<int>("error");
             Assert.Throws<InvalidOperationException>(() => { var dummy = either.Right; });
         }
+
+        // TODO: add tests re monadic behaviour:
+        // Either.Unit
+        // Either.Bind x 1 with left/right
+        // Either.Bind x 2 with left/right combinations
+        // Either.Unit => Either.Bind x 2 with left/right combinations
+        // Either.LiftM with left/right
     }
 }

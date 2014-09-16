@@ -30,5 +30,12 @@ namespace MonadLibTests
             var maybe = Maybe.Nothing<int>();
             Assert.Throws<InvalidOperationException>(() => maybe.FromJust());
         }
+
+        // TODO: add tests re monadic behaviour:
+        // Maybe.Unit
+        // Maybe.Bind x 1 with nothing/just
+        // Maybe.Bind x 2 with nothing/just combinations
+        // Maybe.Unit => Maybe.Bind x 2 with nothing/just combinations
+        // Maybe.LiftM with nothing/just
     }
 }
