@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Monads
+namespace MonadLib
 {
-    public static class TaskExtensions
+    public static class TaskMonadExtensions
     {
         public static Task<TA> Unit<TA>(TA a)
         {

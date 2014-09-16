@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using MonadLib;
 
 namespace Monads
 {
@@ -82,7 +83,7 @@ namespace Monads
         private static void TaskUsingBind()
         {
             var memoryStream = new MemoryStream();
-            var t = TaskExtensions
+            var t = TaskMonadExtensions
                 .Unit("http://google.com")
                 .Bind(url => WebRequest.Create(url).GetResponseAsync())
                 // ReSharper disable PossibleNullReferenceException
@@ -90,7 +91,7 @@ namespace Monads
                     webResponse =>
                     webResponse.GetResponseStream()
                                .CopyToAsync(memoryStream)
-                               .ContinueWith(_ => TaskExtensions.Unit(memoryStream)).Unwrap());
+                               .ContinueWith(_ => TaskMonadExtensions.Unit(memoryStream)).Unwrap());
                 // ReSharper restore PossibleNullReferenceException
             t.Wait();
             var r = t.Result;

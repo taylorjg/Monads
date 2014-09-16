@@ -1,6 +1,9 @@
 ﻿using System;
+using MonadLib;
 
+// ReSharper disable CheckNamespace
 namespace Monads
+// ReSharper restore CheckNamespace
 {
     public sealed class Maybe<TA> : IMonad<TA>
     {

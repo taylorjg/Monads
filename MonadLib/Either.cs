@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monads
+namespace MonadLib
 {
     public sealed class Either<TE, TA> : IMonad<TE, TA>
     {

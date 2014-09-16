@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monads
+namespace MonadLib
 {
     // ReSharper disable UnusedTypeParameter
     public interface IMonad<TA>
