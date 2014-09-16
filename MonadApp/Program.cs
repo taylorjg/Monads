@@ -1,9 +1,6 @@
 ﻿#pragma warning disable 168
 
 using System;
-using System.IO;
-using System.Net;
-using System.Threading.Tasks;
 using MonadLib;
 
 namespace Monads
@@ -12,30 +9,11 @@ namespace Monads
     {
         private static void Main()
         {
-            MaybeNotUsingBind();
-            MaybeUsingBind();
-
-            EitherUsingBind();
-
-            TaskUsingBind();
+            MaybeExample();
+            EitherExample();
         }
 
-        private static void MaybeNotUsingBind()
-        {
-            var r1Step1 = F1(10);
-            var r1Step2 = (r1Step1.IsJust) ? F2(r1Step1.FromJust()) : Maybe.Nothing<string>();
-            var r1Step3 = (r1Step2.IsJust) ? F3(r1Step2.FromJust()) : Maybe.Nothing<bool>();
-
-            var r2Step1 = F1(100);
-            var r2Step2 = (r2Step1.IsJust) ? F2(r2Step1.FromJust()) : Maybe.Nothing<string>();
-            var r2Step3 = (r2Step2.IsJust) ? F3(r2Step2.FromJust()) : Maybe.Nothing<bool>();
-
-            var r3Step1 = F1(100);
-            var r3Step2 = (r3Step1.IsJust) ? F2(r3Step1.FromJust()) : Maybe.Nothing<string>();
-            var r3Step3 = (r3Step2.IsJust) ? F3(r3Step2.FromJust()) : Maybe.Nothing<bool>();
-        }
-
-        private static void MaybeUsingBind()
+        private static void MaybeExample()
         {
             var r1 = F1(10).Bind(F2).Bind(F3);
             var r2 = F1(100).Bind(F2).Bind(F3);
@@ -44,7 +22,7 @@ namespace Monads
             var r5 = Maybe.Unit(10).LiftM(RawFunction);
         }
 
-        private static void EitherUsingBind()
+        private static void EitherExample()
         {
             var er1 = Either<string>.Right(10);
             var er2 = er1
@@ -78,24 +56,6 @@ namespace Monads
         private static string RawFunction(int n)
         {
             return Convert.ToString(n * n);
-        }
-
-        private static void TaskUsingBind()
-        {
-            var memoryStream = new MemoryStream();
-            var t = TaskMonadExtensions
-                .Unit("http://google.com")
-                .Bind(url => WebRequest.Create(url).GetResponseAsync())
-                // ReSharper disable PossibleNullReferenceException
-                .Bind(
-                    webResponse =>
-                    webResponse.GetResponseStream()
-                               .CopyToAsync(memoryStream)
-                               .ContinueWith(_ => TaskMonadExtensions.Unit(memoryStream)).Unwrap());
-                // ReSharper restore PossibleNullReferenceException
-            t.Wait();
-            var r = t.Result;
-            var bytes = r.ToArray();
         }
 
         private static Maybe<int> F1(int x)
