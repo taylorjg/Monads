@@ -63,7 +63,7 @@ namespace Monads
 
         public Maybe<TB> LiftM<TB>(Func<TA, TB> f)
         {
-            return (Maybe<TB>)MonadCombinators.LiftM(this, f);
+            return (Maybe<TB>)MonadCombinators.LiftM(f, this);
         }
     }
 

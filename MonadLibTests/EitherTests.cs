@@ -46,6 +46,25 @@ namespace MonadLibTests
         // Either.Bind x 1 with left/right
         // Either.Bind x 2 with left/right combinations
         // Either.Unit => Either.Bind x 2 with left/right combinations
-        // Either.LiftM with left/right
+        // Either.LiftM2 with left/right
+        // Either.LiftM3 with left/right
+
+        [Test]
+        public void LiftMAppliedToLeft()
+        {
+            var either = Either<string>.Left<int>("error").LiftM(a => a * a > 50);
+            Assert.That(either.IsLeft, Is.True);
+            Assert.That(either.IsRight, Is.False);
+            Assert.That(either.Left, Is.EqualTo("error"));
+        }
+
+        [Test]
+        public void LiftMAppliedToRight()
+        {
+            var either = Either<string>.Right(10).LiftM(a => a * a > 50);
+            Assert.That(either.IsLeft, Is.False);
+            Assert.That(either.IsRight, Is.True);
+            Assert.That(either.Right, Is.True);
+        }
     }
 }

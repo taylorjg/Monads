@@ -58,7 +58,7 @@ namespace MonadLib
 
     internal static class MonadCombinators
     {
-        public static IMonad<TB> LiftM<TA, TB>(IMonad<TA> ma, Func<TA, TB> f)
+        public static IMonad<TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
             return monadAdapter.Bind(ma, a =>
@@ -68,11 +68,39 @@ namespace MonadLib
                 return mb;
             });
         }
+
+        public static IMonad<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, IMonad<TA> ma, IMonad<TB> mb)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+
+            return monadAdapter.Bind(ma,
+                                     a => monadAdapter.Bind(mb,
+                                                            b =>
+                                                                {
+                                                                    var c = f(a, b);
+                                                                    var mc = monadAdapter.Unit(c);
+                                                                    return mc;
+                                                                }));
+        }
+
+        public static IMonad<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+
+            return monadAdapter.Bind(ma,
+                                     a => monadAdapter.Bind(mb,
+                                                            b => monadAdapter.Bind(mc, c =>
+                                                                {
+                                                                    var d = f(a, b, c);
+                                                                    var md = monadAdapter.Unit(d);
+                                                                    return md;
+                                                                })));
+        }
     }
 
     internal static class MonadCombinators<T1>
     {
-        public static IMonad<T1, TB> LiftM<TA, TB>(IMonad<T1, TA> ma, Func<TA, TB> f)
+        public static IMonad<T1, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
             return monadAdapter.Bind(ma, a =>
@@ -81,6 +109,34 @@ namespace MonadLib
                 var mb = monadAdapter.Unit(b);
                 return mb;
             });
+        }
+
+        public static IMonad<T1, TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+
+            return monadAdapter.Bind(ma,
+                                     a => monadAdapter.Bind(mb,
+                                                            b =>
+                                                            {
+                                                                var c = f(a, b);
+                                                                var mc = monadAdapter.Unit(c);
+                                                                return mc;
+                                                            }));
+        }
+
+        public static IMonad<T1, TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+
+            return monadAdapter.Bind(ma,
+                                     a => monadAdapter.Bind(mb,
+                                                            b => monadAdapter.Bind(mc, c =>
+                                                            {
+                                                                var d = f(a, b, c);
+                                                                var md = monadAdapter.Unit(d);
+                                                                return md;
+                                                            })));
         }
     }
 }

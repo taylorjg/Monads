@@ -73,7 +73,7 @@ namespace MonadLib
 
         public Either<TE, TB> LiftM<TB>(Func<TA, TB> f)
         {
-            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(this, f);
+            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, this);
         }
     }
 
