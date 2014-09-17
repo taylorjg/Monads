@@ -41,6 +41,19 @@ namespace MonadLib
             return IsJust ? _a : defaultValue;
         }
 
+        public void Match(Action<TA> justAction, Action nothingAction)
+        {
+            if (IsJust)
+                justAction(FromJust());
+            else
+                nothingAction();
+        }
+
+        public T Match<T>(Func<TA, T> justFunc, Func<T> nothingFunc)
+        {
+            return IsJust ? justFunc(FromJust()) : nothingFunc();
+        }
+
         private readonly TA _a;
         private readonly bool _isNothing;
 
@@ -49,6 +62,11 @@ namespace MonadLib
         public IMonadAdapter GetMonadAdapter()
         {
             return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
+        }
+
+        public void Match()
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -17,14 +17,15 @@ namespace Monads
                     {"review", Maybe.Just("RRR")}
                 };
 
-            var maybeMovieReview = GetMovieReview(alist);
+            GetMovieReview(alist).Match(
+                movieReview => Console.WriteLine("GetMovieReview returned {0}.", FormatMovieReview(movieReview)),
+                () => Console.WriteLine("GetMovieReview returned Nothing."));
 
-            if (maybeMovieReview.IsJust)
-                Console.WriteLine("GetMovieReview returned {0}", FormatMovieReview(maybeMovieReview.FromJust()));
-            else
-                Console.WriteLine("GetMovieReview returned Nothing.");
-
-            Console.WriteLine("GetMovieReview returned {0}", FormatMovieReview(maybeMovieReview.FromMaybe(new MovieReview())));
+            Console.WriteLine(
+                "GetMovieReview returned {0}.",
+                GetMovieReview(alist).Match(
+                    FormatMovieReview,
+                    () => "Nothing"));
         }
 
         private class MovieReview
