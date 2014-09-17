@@ -63,17 +63,24 @@ namespace MonadLib
         {
             return _monadAdapter ?? (_monadAdapter = new EitherMonadAdapter<TE>());
         }
+    }
 
-        public Either<TE, TB> Bind<TB>(Func<TA, Either<TE, TB>> f)
+    public static class Either
+    {
+        public static Either<TE, TB> Bind<TE, TA, TB>(this Either<TE, TA> ma, Func<TA, Either<TE, TB>> f)
         {
-            var monadAdapter = GetMonadAdapter();
-            var mb = monadAdapter.Bind(this, f);
-            return (Either<TE, TB>)mb;
+            var monadAdapter = ma.GetMonadAdapter();
+            return (Either<TE, TB>)monadAdapter.Bind(ma, f);
         }
 
-        public Either<TE, TB> LiftM<TB>(Func<TA, TB> f)
+        public static Either<TE, TB> LiftM<TE, TA, TB>(this Either<TE, TA> ma, Func<TA, TB> f)
         {
-            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, this);
+            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, ma);
+        }
+
+        public static Either<TE, TB> LiftM<TE, TA, TB>(Func<TA, TB> f, Either<TE, TA> ma)
+        {
+            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, ma);
         }
     }
 

@@ -1,9 +1,6 @@
 ﻿using System;
-using MonadLib;
 
-// ReSharper disable CheckNamespace
-namespace Monads
-// ReSharper restore CheckNamespace
+namespace MonadLib
 {
     public sealed class Maybe<TA> : IMonad<TA>
     {
@@ -53,18 +50,6 @@ namespace Monads
         {
             return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
         }
-
-        public Maybe<TB> Bind<TB>(Func<TA, Maybe<TB>> f)
-        {
-            var monadAdapter = GetMonadAdapter();
-            var mb = monadAdapter.Bind(this, f);
-            return (Maybe<TB>)mb;
-        }
-
-        public Maybe<TB> LiftM<TB>(Func<TA, TB> f)
-        {
-            return (Maybe<TB>)MonadCombinators.LiftM(f, this);
-        }
     }
 
     public static class Maybe
@@ -82,6 +67,42 @@ namespace Monads
         public static Maybe<TA> Unit<TA>(TA a)
         {
             return Just(a);
+        }
+
+        public static Maybe<TB> Bind<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return (Maybe<TB>)monadAdapter.Bind(ma, f);
+        }
+
+        public static Maybe<TB> LiftM<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
+        {
+            return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
+        }
+
+        public static Maybe<TC> LiftM2<TA, TB, TC>(this Maybe<TA> ma, Maybe<TB> mb, Func<TA, TB, TC> f)
+        {
+            return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
+        }
+
+        public static Maybe<TD> LiftM3<TA, TB, TC, TD>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Func<TA, TB, TC, TD> f)
+        {
+            return (Maybe<TD>)MonadCombinators.LiftM3(f, ma, mb, mc);
+        }
+
+        public static Maybe<TB> LiftM<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
+        {
+            return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
+        }
+
+        public static Maybe<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, Maybe<TA> ma, Maybe<TB> mb)
+        {
+            return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
+        }
+
+        public static Maybe<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc)
+        {
+            return (Maybe<TD>)MonadCombinators.LiftM3(f, ma, mb, mc);
         }
     }
 

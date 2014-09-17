@@ -1,76 +1,73 @@
-﻿#pragma warning disable 168
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using MonadLib;
 
 namespace Monads
 {
+    using AssociationList = Dictionary<string, Maybe<string>>;
+
     internal class Program
     {
         private static void Main()
         {
-            MaybeExample();
-            EitherExample();
+            var alist = new AssociationList
+                {
+                    {"title", Maybe.Just("TTT")},
+                    {"user", Maybe.Just("UUU")},
+                    {"review", Maybe.Just("RRR")}
+                };
+
+            var maybeMovieReview = GetMovieReview(alist);
+
+            if (maybeMovieReview.IsJust)
+                Console.WriteLine("GetMovieReview returned {0}", FormatMovieReview(maybeMovieReview.FromJust()));
+            else
+                Console.WriteLine("GetMovieReview returned Nothing.");
+
+            Console.WriteLine("GetMovieReview returned {0}", FormatMovieReview(maybeMovieReview.FromMaybe(new MovieReview())));
         }
 
-        private static void MaybeExample()
+        private class MovieReview
         {
-            var r1 = F1(10).Bind(F2).Bind(F3);
-            var r2 = F1(100).Bind(F2).Bind(F3);
-            var r3 = F1(1000).Bind(F2).Bind(F3);
-            var r4 = Maybe.Unit(10).Bind(F2).Bind(F3);
-            var r5 = Maybe.Unit(10).LiftM(RawFunction);
+            public string Title { get; set; }
+            public string User { get; set; }
+            public string Review { get; set; }
         }
 
-        private static void EitherExample()
+        private static Maybe<MovieReview> GetMovieReview(AssociationList alist)
         {
-            var er1 = Either<string>.Right(10);
-            var er2 = er1
-                .Bind(FunctionReturningEither1)
-                .Bind(FunctionReturningEither2);
-
-            var el1 = Either<string>.Left<int>("my error message");
-            var el2 = el1
-                .Bind(FunctionReturningEither1)
-                .Bind(FunctionReturningEither2);
-
-            var er3 = Either<string>.Right(10);
-            var er4 = er3.LiftM(RawFunction);
-
-            var el5 = Either<string>.Left<string>("error");
-            var er5 = Either<string>.Right("success");
-
-            var er6 = Either<string>.Unit(12).LiftM(RawFunction);
+            return Maybe.LiftM3(
+                MakeMovieReview,
+                Lookup1(alist, "title"),
+                Lookup1(alist, "user"),
+                Lookup1(alist, "review"));
         }
 
-        private static Either<string, string> FunctionReturningEither1(int n)
+        private static MovieReview MakeMovieReview(string title, string user, string review)
         {
-            return Either<string>.Right(Convert.ToString(n));
+            return new MovieReview
+                {
+                    Title = title,
+                    User = user,
+                    Review = review
+                };
         }
 
-        private static Either<string, bool> FunctionReturningEither2(string s)
+        private static Maybe<string> Lookup1(AssociationList alist, string key)
         {
-            return Either<string>.Right(s.Length > 1);
+            Maybe<string> value;
+            return alist.TryGetValue(key, out value) && value.IsJust && !string.IsNullOrEmpty(value.FromJust())
+                       ? value
+                       : Maybe.Nothing<string>();
         }
 
-        private static string RawFunction(int n)
+        private static string FormatMovieReview(MovieReview movieReview)
         {
-            return Convert.ToString(n * n);
-        }
-
-        private static Maybe<int> F1(int x)
-        {
-            return Maybe.Just(x * x);
-        }
-
-        private static Maybe<string> F2(int x)
-        {
-            return x <= 10000 ? Maybe.Just(Convert.ToString(x)) : Maybe.Nothing<string>();
-        }
-
-        private static Maybe<bool> F3(string s)
-        {
-            return s.Length <= 3 ? Maybe.Just(s.Contains("0")) : Maybe.Nothing<bool>();
+            return string.Format(
+                "{{Title: {0}; User: {1}; Review: {2}}}",
+                movieReview.Title,
+                movieReview.User,
+                movieReview.Review);
         }
     }
 }

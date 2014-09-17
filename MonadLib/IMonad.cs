@@ -73,29 +73,35 @@ namespace MonadLib
         {
             var monadAdapter = ma.GetMonadAdapter();
 
-            return monadAdapter.Bind(ma,
-                                     a => monadAdapter.Bind(mb,
-                                                            b =>
-                                                                {
-                                                                    var c = f(a, b);
-                                                                    var mc = monadAdapter.Unit(c);
-                                                                    return mc;
-                                                                }));
+            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b =>
+                {
+                    var c = f(a, b);
+                    var mc = monadAdapter.Unit(c);
+                    return mc;
+                }));
         }
 
         public static IMonad<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc)
         {
             var monadAdapter = ma.GetMonadAdapter();
 
-            return monadAdapter.Bind(ma,
-                                     a => monadAdapter.Bind(mb,
-                                                            b => monadAdapter.Bind(mc, c =>
-                                                                {
-                                                                    var d = f(a, b, c);
-                                                                    var md = monadAdapter.Unit(d);
-                                                                    return md;
-                                                                })));
+            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b => monadAdapter.Bind(mc, c =>
+                {
+                    var d = f(a, b, c);
+                    var md = monadAdapter.Unit(d);
+                    return md;
+                })));
         }
+
+        // TODO: add further combinators:
+        // http://en.wikibooks.org/wiki/Haskell/YAHT/Monads#Monadic_Combinators
+        // sequence
+        // filterM
+        // foldM
+        // mapM
+        // forM
+        // when
+        // join
     }
 
     internal static class MonadCombinators<T1>
@@ -115,28 +121,24 @@ namespace MonadLib
         {
             var monadAdapter = ma.GetMonadAdapter();
 
-            return monadAdapter.Bind(ma,
-                                     a => monadAdapter.Bind(mb,
-                                                            b =>
-                                                            {
-                                                                var c = f(a, b);
-                                                                var mc = monadAdapter.Unit(c);
-                                                                return mc;
-                                                            }));
+            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b =>
+                {
+                    var c = f(a, b);
+                    var mc = monadAdapter.Unit(c);
+                    return mc;
+                }));
         }
 
         public static IMonad<T1, TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc)
         {
             var monadAdapter = ma.GetMonadAdapter();
 
-            return monadAdapter.Bind(ma,
-                                     a => monadAdapter.Bind(mb,
-                                                            b => monadAdapter.Bind(mc, c =>
-                                                            {
-                                                                var d = f(a, b, c);
-                                                                var md = monadAdapter.Unit(d);
-                                                                return md;
-                                                            })));
+            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b => monadAdapter.Bind(mc, c =>
+                {
+                    var d = f(a, b, c);
+                    var md = monadAdapter.Unit(d);
+                    return md;
+                })));
         }
     }
 }

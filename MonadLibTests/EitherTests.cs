@@ -28,14 +28,14 @@ namespace MonadLibTests
         }
 
         [Test]
-        public void LeftOfRightThrowsException()
+        public void LeftAppliedToRightThrowsException()
         {
             var either = Either<string>.Right(42);
             Assert.Throws<InvalidOperationException>(() => { var dummy = either.Left; });
         }
 
         [Test]
-        public void RightOfLeftThrowsException()
+        public void RightAppliedToLeftThrowsException()
         {
             var either = Either<string>.Left<int>("error");
             Assert.Throws<InvalidOperationException>(() => { var dummy = either.Right; });
