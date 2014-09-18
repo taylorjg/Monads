@@ -31,6 +31,7 @@ am playing around with monads in C#.
 ## Links
 
 * http://www.haskell.org/haskellwiki/Monad
+* http://www.haskell.org/haskellwiki/All_About_Monads
 * http://en.wikibooks.org/wiki/Haskell/YAHT/Monads#Monadic_Combinators
 * https://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad.html
 * https://hackage.haskell.org/package/base-4.7.0.1/docs/src/Control-Monad.html
