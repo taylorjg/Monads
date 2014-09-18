@@ -47,6 +47,19 @@ namespace MonadLib
             }
         }
 
+        public void Match(Action<TE> leftAction, Action<TA> rightAction)
+        {
+            if (IsLeft)
+                leftAction(Left);
+            else
+                rightAction(Right);
+        }
+
+        public T Match<T>(Func<TE, T> leftFunc, Func<TA, T> rightFunc)
+        {
+            return IsLeft ? leftFunc(Left) : rightFunc(Right);
+        }
+
         private enum LeftOrRight
         {
             Left,

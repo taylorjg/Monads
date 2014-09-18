@@ -41,6 +41,60 @@ namespace MonadLibTests
             Assert.Throws<InvalidOperationException>(() => { var dummy = either.Right; });
         }
 
+        [Test]
+        public void MatchAppliedToLeft()
+        {
+            var either = Either<string>.Left<int>("error");
+            var leftActionCalled = false;
+            var leftActionParam = default(string);
+            var rightActionCalled = false;
+            either.Match(
+                e =>
+                    {
+                        leftActionCalled = true;
+                        leftActionParam = e;
+                    },
+                _ =>
+                    {
+                        rightActionCalled = true;
+                    });
+            Assert.That(leftActionCalled, Is.True);
+            Assert.That(leftActionParam, Is.EqualTo("error"));
+            Assert.That(rightActionCalled, Is.False);
+        }
+
+        [Test]
+        public void MatchAppliedToRight()
+        {
+            var either = Either<string>.Right(42);
+            var leftActionCalled = false;
+            var rightActionCalled = false;
+            var rightActionParam = default(int);
+            either.Match(
+                _ =>
+                {
+                    leftActionCalled = true;
+                },
+                a =>
+                {
+                    rightActionCalled = true;
+                    rightActionParam = a;
+                });
+            Assert.That(leftActionCalled, Is.False);
+            Assert.That(rightActionCalled, Is.True);
+            Assert.That(rightActionParam, Is.EqualTo(42));
+        }
+
+        //[Test]
+        //public void MatchOfTAppliedToLeft()
+        //{
+        //}
+
+        //[Test]
+        //public void MatchOfTAppliedToRight()
+        //{
+        //}
+
         // TODO: add tests re monadic behaviour:
         // Either.Unit
         // Either.Bind x 1 with left/right

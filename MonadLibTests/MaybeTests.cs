@@ -53,7 +53,7 @@ namespace MonadLibTests
             var maybe = Maybe.Nothing<int>();
             var justActionCalled = false;
             var nothingActionCalled = false;
-            maybe.Match(_ => justActionCalled = true, () => nothingActionCalled = true);
+            maybe.Match(_ => { justActionCalled = true; }, () => { nothingActionCalled = true; });
             Assert.That(justActionCalled, Is.False);
             Assert.That(nothingActionCalled, Is.True);
         }
@@ -63,7 +63,7 @@ namespace MonadLibTests
         {
             var maybe = Maybe.Just(42);
             var justActionCalled = false;
-            var justActionParam = 0;
+            var justActionParam = default(int);
             var nothingActionCalled = false;
             maybe.Match(
                 a =>
@@ -71,7 +71,7 @@ namespace MonadLibTests
                         justActionCalled = true;
                         justActionParam = a;
                     },
-                () => nothingActionCalled = true);
+                () => { nothingActionCalled = true; });
             Assert.That(justActionCalled, Is.True);
             Assert.That(justActionParam, Is.EqualTo(42));
             Assert.That(nothingActionCalled, Is.False);
@@ -89,7 +89,7 @@ namespace MonadLibTests
         public void MatchOfTAppliedToJust()
         {
             var maybe = Maybe.Just(42);
-            var justFuncParam = 0;
+            var justFuncParam = default(int);
             var actual = maybe.Match(
                 a =>
                     {
