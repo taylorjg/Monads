@@ -57,7 +57,7 @@ namespace Monads
         private static Maybe<string> Lookup1(AssociationList alist, string key)
         {
             Maybe<string> value;
-            return alist.TryGetValue(key, out value) && value.IsJust && !string.IsNullOrEmpty(value.FromJust())
+            return alist.TryGetValue(key, out value) && value.IsJust && !string.IsNullOrEmpty(value.FromJust)
                        ? value
                        : Maybe.Nothing<string>();
         }

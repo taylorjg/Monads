@@ -1,4 +1,6 @@
-﻿using System;
+﻿#pragma warning disable 168
+
+using System;
 using MonadLib;
 using NUnit.Framework;
 
@@ -21,14 +23,14 @@ namespace MonadLibTests
             var maybe = Maybe.Just(42);
             Assert.That(maybe.IsJust, Is.True);
             Assert.That(maybe.IsNothing, Is.False);
-            Assert.That(maybe.FromJust(), Is.EqualTo(42));
+            Assert.That(maybe.FromJust, Is.EqualTo(42));
         }
 
         [Test]
         public void FromJustAppliedToNothingThrowsException()
         {
             var maybe = Maybe.Nothing<int>();
-            Assert.Throws<InvalidOperationException>(() => maybe.FromJust());
+            Assert.Throws<InvalidOperationException>(() => { var dummy = maybe.FromJust; });
         }
 
         [Test]
@@ -115,7 +117,7 @@ namespace MonadLibTests
             var maybe = Maybe.Unit(10).LiftM(a => Convert.ToString(a * a));
             Assert.That(maybe.IsJust, Is.True);
             Assert.That(maybe.IsNothing, Is.False);
-            Assert.That(maybe.FromJust(), Is.EqualTo("100"));
+            Assert.That(maybe.FromJust, Is.EqualTo("100"));
         }
 
         [Test]
@@ -124,6 +126,47 @@ namespace MonadLibTests
             var maybe = Maybe.Nothing<int>().LiftM(a => Convert.ToString(a * a));
             Assert.That(maybe.IsJust, Is.False);
             Assert.That(maybe.IsNothing, Is.True);
+        }
+
+        [Test]
+        [Ignore("I need to fix a design flaw in order for this to work!")]
+        public void SequenceAppliedToEmptyCollection()
+        {
+            var maybes = new Maybe<int>[] {};
+            var actual = Maybe.Sequence(maybes);
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new int[] {}));
+        }
+
+        [Test]
+        public void SequenceAppliedToJusts()
+        {
+            var maybes = new[]
+                {
+                    Maybe.Just(1),
+                    Maybe.Just(2),
+                    Maybe.Just(3),
+                    Maybe.Just(4)
+                };
+            var actual = Maybe.Sequence(maybes);
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new[] {1, 2, 3, 4}));
+        }
+
+        [Test]
+        public void SequenceAppliedToMixtureOfJustsAndNothings()
+        {
+            var maybes = new[]
+                {
+                    Maybe.Just(1),
+                    Maybe.Just(2),
+                    Maybe.Nothing<int>(),
+                    Maybe.Just(4),
+                    Maybe.Nothing<int>(),
+                    Maybe.Just(6)
+                };
+            var actual = Maybe.Sequence(maybes);
+            Assert.That(actual.IsNothing, Is.True);
         }
     }
 }

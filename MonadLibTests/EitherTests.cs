@@ -120,5 +120,47 @@ namespace MonadLibTests
             Assert.That(either.IsRight, Is.True);
             Assert.That(either.Right, Is.True);
         }
+
+        [Test]
+        [Ignore("I need to fix a design flaw in order for this to work!")]
+        public void SequenceAppliedToEmptyCollection()
+        {
+            var eithers = new Either<string, int>[] {};
+            var actual = Either.Sequence(eithers);
+            Assert.That(actual.IsRight, Is.True);
+            Assert.That(actual.Right, Is.EqualTo(new int[] {}));
+        }
+
+        [Test]
+        public void SequenceAppliedToRights()
+        {
+            var eithers = new[]
+                {
+                    Either<string>.Right(1),
+                    Either<string>.Right(2),
+                    Either<string>.Right(3),
+                    Either<string>.Right(4)
+                };
+            var actual = Either.Sequence(eithers);
+            Assert.That(actual.IsRight, Is.True);
+            Assert.That(actual.Right, Is.EqualTo(new[] {1, 2, 3, 4}));
+        }
+
+        [Test]
+        public void SequenceAppliedToMixtureOfLeftsAndRights()
+        {
+            var eithers = new[]
+                {
+                    Either<string>.Right(1),
+                    Either<string>.Right(2),
+                    Either<string>.Left<int>("Error 1"),
+                    Either<string>.Right(4),
+                    Either<string>.Left<int>("Error 2"),
+                    Either<string>.Right(6)
+                };
+            var actual = Either.Sequence(eithers);
+            Assert.That(actual.IsLeft, Is.True);
+            Assert.That(actual.Left, Is.EqualTo("Error 1"));
+        }
     }
 }

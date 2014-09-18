@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MonadLib
 {
@@ -94,6 +95,11 @@ namespace MonadLib
         public static Either<TE, TB> LiftM<TE, TA, TB>(Func<TA, TB> f, Either<TE, TA> ma)
         {
             return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, ma);
+        }
+
+        public static Either<TE, IEnumerable<TA>> Sequence<TE, TA>(IEnumerable<Either<TE, TA>> ms)
+        {
+            return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.Sequence(ms);
         }
     }
 

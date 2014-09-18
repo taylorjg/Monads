@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Flinq;
 
 namespace MonadLib
 {
@@ -95,6 +98,7 @@ namespace MonadLib
 
         // TODO: add further combinators:
         // http://en.wikibooks.org/wiki/Haskell/YAHT/Monads#Monadic_Combinators
+        // https://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad.html
         // sequence
         // filterM
         // foldM
@@ -102,6 +106,16 @@ namespace MonadLib
         // forM
         // when
         // join
+
+        // ReSharper disable PossibleMultipleEnumeration
+        public static IMonad<IEnumerable<TA>> Sequence<TA>(IEnumerable<IMonad<TA>> ms)
+        {
+            // DESIGN PROBLEM: what if ms contains no items ?
+            var monadAdapter = ms.ElementAt(0).GetMonadAdapter();
+            var z = monadAdapter.Unit(System.Linq.Enumerable.Empty<TA>());
+            return ms.FoldRight(z, (m, mtick) => monadAdapter.Bind(m, x => monadAdapter.Bind(mtick, xs => monadAdapter.Unit(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
+        }
+        // ReSharper restore PossibleMultipleEnumeration
     }
 
     internal static class MonadCombinators<T1>
@@ -140,5 +154,15 @@ namespace MonadLib
                     return md;
                 })));
         }
+
+        // ReSharper disable PossibleMultipleEnumeration
+        public static IMonad<T1, IEnumerable<TA>> Sequence<TA>(IEnumerable<IMonad<T1, TA>> ms)
+        {
+            // DESIGN PROBLEM: what if ms contains no items ?
+            var monadAdapter = ms.ElementAt(0).GetMonadAdapter();
+            var z = monadAdapter.Unit(System.Linq.Enumerable.Empty<TA>());
+            return ms.FoldRight(z, (m, mtick) => monadAdapter.Bind(m, x => monadAdapter.Bind(mtick, xs => monadAdapter.Unit(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
+        }
+        // ReSharper restore PossibleMultipleEnumeration
     }
 }

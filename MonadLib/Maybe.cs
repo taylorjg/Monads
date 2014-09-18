@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MonadLib
 {
@@ -30,10 +31,13 @@ namespace MonadLib
             get { return !IsNothing; }
         }
 
-        public TA FromJust()
+        public TA FromJust
         {
-            if (IsNothing) throw new InvalidOperationException("FromJust called on Maybe containing Nothing.");
-            return _a;
+            get
+            {
+                if (IsNothing) throw new InvalidOperationException("FromJust called on Maybe containing Nothing.");
+                return _a;
+            }
         }
 
         public TA FromMaybe(TA defaultValue)
@@ -44,14 +48,14 @@ namespace MonadLib
         public void Match(Action<TA> justAction, Action nothingAction)
         {
             if (IsJust)
-                justAction(FromJust());
+                justAction(FromJust);
             else
                 nothingAction();
         }
 
         public T Match<T>(Func<TA, T> justFunc, Func<T> nothingFunc)
         {
-            return IsJust ? justFunc(FromJust()) : nothingFunc();
+            return IsJust ? justFunc(FromJust) : nothingFunc();
         }
 
         private readonly TA _a;
@@ -122,6 +126,11 @@ namespace MonadLib
         {
             return (Maybe<TD>)MonadCombinators.LiftM3(f, ma, mb, mc);
         }
+
+        public static Maybe<IEnumerable<TA>> Sequence<TA>(IEnumerable<Maybe<TA>> ms)
+        {
+            return (Maybe<IEnumerable<TA>>)MonadCombinators.Sequence(ms);
+        }
     }
 
     internal class MaybeMonadAdapter : IMonadAdapter
@@ -134,7 +143,7 @@ namespace MonadLib
         public IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
         {
             var maybeA = (Maybe<TA>)ma;
-            return maybeA.IsJust ? f(maybeA.FromJust()) : Maybe.Nothing<TB>();
+            return maybeA.IsJust ? f(maybeA.FromJust) : Maybe.Nothing<TB>();
         }
     }
 }
