@@ -67,11 +67,6 @@ namespace MonadLib
         {
             return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
         }
-
-        public void Match()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public static class Maybe

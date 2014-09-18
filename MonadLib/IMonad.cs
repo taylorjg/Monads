@@ -96,17 +96,6 @@ namespace MonadLib
                 })));
         }
 
-        // TODO: add further combinators:
-        // http://en.wikibooks.org/wiki/Haskell/YAHT/Monads#Monadic_Combinators
-        // https://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad.html
-        // sequence
-        // filterM
-        // foldM
-        // mapM
-        // forM
-        // when
-        // join
-
         // ReSharper disable PossibleMultipleEnumeration
         public static IMonad<IEnumerable<TA>> Sequence<TA>(IEnumerable<IMonad<TA>> ms)
         {
