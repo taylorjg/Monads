@@ -105,6 +105,11 @@ namespace MonadLib
             return ms.FoldRight(z, (m, mtick) => monadAdapter.Bind(m, x => monadAdapter.Bind(mtick, xs => monadAdapter.Unit(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
         }
         // ReSharper restore PossibleMultipleEnumeration
+
+        public static IMonad<IEnumerable<TB>> MapM<TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as)
+        {
+            return Sequence(@as.Map(f));
+        }
     }
 
     internal static class MonadCombinators<T1>
@@ -153,5 +158,10 @@ namespace MonadLib
             return ms.FoldRight(z, (m, mtick) => monadAdapter.Bind(m, x => monadAdapter.Bind(mtick, xs => monadAdapter.Unit(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
         }
         // ReSharper restore PossibleMultipleEnumeration
+
+        public static IMonad<T1, IEnumerable<TB>> MapM<TA, TB>(Func<TA, IMonad<T1, TB>> f, IEnumerable<TA> @as)
+        {
+            return Sequence(@as.Map(f));
+        }
     }
 }

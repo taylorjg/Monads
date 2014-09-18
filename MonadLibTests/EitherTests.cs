@@ -162,5 +162,23 @@ namespace MonadLibTests
             Assert.That(actual.IsLeft, Is.True);
             Assert.That(actual.Left, Is.EqualTo("Error 1"));
         }
+
+        [Test]
+        public void MapMWithFuncReturningRights()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Either.MapM(n => Either<string>.Right(Convert.ToString(n)), ints);
+            Assert.That(actual.IsRight, Is.True);
+            Assert.That(actual.Right, Is.EqualTo(new[] { "1", "2", "3", "4", "5" }));
+        }
+
+        [Test]
+        public void MapMWithFuncReturningMixtureOfLeftsAndRights()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Either.MapM(n => n < 4 ? Either<string>.Right(Convert.ToString(n)) : Either<string>.Left<string>("error"), ints);
+            Assert.That(actual.IsLeft, Is.True);
+            Assert.That(actual.Left, Is.EqualTo("error"));
+        }
     }
 }

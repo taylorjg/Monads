@@ -101,6 +101,11 @@ namespace MonadLib
         {
             return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.Sequence(ms);
         }
+
+        public static Either<TE, IEnumerable<TB>> MapM<TE, TA, TB>(Func<TA, Either<TE, TB>> f, IEnumerable<TA> @as)
+        {
+            return (Either<TE, IEnumerable<TB>>)MonadCombinators<TE>.MapM(f, @as);
+        }
     }
 
     public static class Either<TE>

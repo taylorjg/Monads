@@ -168,5 +168,22 @@ namespace MonadLibTests
             var actual = Maybe.Sequence(maybes);
             Assert.That(actual.IsNothing, Is.True);
         }
+
+        [Test]
+        public void MapMWithFuncReturningJusts()
+        {
+            var ints = new[] {1, 2, 3, 4, 5};
+            var actual = Maybe.MapM(n => Maybe.Just(Convert.ToString(n)), ints);
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new[] { "1", "2", "3", "4", "5"}));
+        }
+
+        [Test]
+        public void MapMWithFuncReturningMixtureOfJustsAndNothings()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Maybe.MapM(n => n < 4 ? Maybe.Just(Convert.ToString(n)) : Maybe.Nothing<string>(), ints);
+            Assert.That(actual.IsNothing, Is.True);
+        }
     }
 }

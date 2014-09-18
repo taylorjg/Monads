@@ -126,6 +126,11 @@ namespace MonadLib
         {
             return (Maybe<IEnumerable<TA>>)MonadCombinators.Sequence(ms);
         }
+
+        public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as)
+        {
+            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapM(f, @as);
+        }
     }
 
     internal class MaybeMonadAdapter : IMonadAdapter

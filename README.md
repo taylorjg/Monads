@@ -13,7 +13,7 @@ am playing around with monads in C#.
  * foldM
  * zipWithM
  * mapAndUnzipM
- * mapM
+ * ~~mapM~~
  * forM
  * liftM4
  * liftM5
