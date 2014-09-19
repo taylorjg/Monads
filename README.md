@@ -8,7 +8,7 @@ am playing around with monads in C#.
 
 * Implement more monad combinators e.g.:
  * ~~sequence~~
- * replicateM
+ * ~~replicateM~~
  * filterM
  * foldM
  * zipWithM
@@ -20,13 +20,18 @@ am playing around with monads in C#.
  * guard
  * when
  * unless
- * join
+ * ~~join~~
  * forever
 * Implement more monads e.g.:
  * Reader
  * Writer
  * State
  * IO
+* Implement some monad transformers ?
+ * MaybeT
+ * ReaderT
+ * WriterT
+ * StateT
 
 ## Links
 
@@ -35,3 +40,6 @@ am playing around with monads in C#.
 * http://en.wikibooks.org/wiki/Haskell/YAHT/Monads#Monadic_Combinators
 * https://hackage.haskell.org/package/base-4.7.0.1/docs/Control-Monad.html
 * https://hackage.haskell.org/package/base-4.7.0.1/docs/src/Control-Monad.html
+* http://en.wikibooks.org/wiki/Haskell/Monad_transformers
+* https://hackage.haskell.org/package/transformers-0.3.0.0/docs/Control-Monad-Trans-Maybe.html
+* https://hackage.haskell.org/package/transformers-0.3.0.0/docs/src/Control-Monad-Trans-Maybe.html#MaybeT
