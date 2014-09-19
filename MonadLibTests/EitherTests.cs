@@ -180,5 +180,45 @@ namespace MonadLibTests
             Assert.That(actual.IsLeft, Is.True);
             Assert.That(actual.Left, Is.EqualTo("error"));
         }
+
+        [Test]
+        public void ReplicateMAppliedToLeft()
+        {
+            var actual = Either.ReplicateM(5, Either<string>.Left<int>("error"));
+            Assert.That(actual.IsLeft, Is.True);
+            Assert.That(actual.Left, Is.EqualTo("error"));
+        }
+
+        [Test]
+        public void ReplicateMAppliedToRight()
+        {
+            var actual = Either.ReplicateM(5, Either<string>.Right(42));
+            Assert.That(actual.IsRight, Is.True);
+            Assert.That(actual.Right, Is.EqualTo(new[] {42, 42, 42, 42, 42}));
+        }
+
+        [Test]
+        public void JoinAppliedToLeft()
+        {
+            var actual = Either.Join(Either<string>.Left<Either<string, int>>("error"));
+            Assert.That(actual.IsLeft, Is.True);
+            Assert.That(actual.Left, Is.EqualTo("error"));
+        }
+
+        [Test]
+        public void JoinAppliedToRightOfRight()
+        {
+            var actual = Either.Join(Either<string>.Right(Either<string>.Right(42)));
+            Assert.That(actual.IsRight, Is.True);
+            Assert.That(actual.Right, Is.EqualTo(42));
+        }
+
+        [Test]
+        public void JoinAppliedToRightOfLeft()
+        {
+            var actual = Either.Join(Either<string>.Right(Either<string>.Left<int>("error")));
+            Assert.That(actual.IsLeft, Is.True);
+            Assert.That(actual.Left, Is.EqualTo("error"));
+        }
     }
 }

@@ -185,5 +185,42 @@ namespace MonadLibTests
             var actual = Maybe.MapM(n => n < 4 ? Maybe.Just(Convert.ToString(n)) : Maybe.Nothing<string>(), ints);
             Assert.That(actual.IsNothing, Is.True);
         }
+
+        [Test]
+        public void ReplicateMAppliedToJust()
+        {
+            var actual = Maybe.ReplicateM(5, Maybe.Just(42));
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new[] {42, 42, 42, 42, 42}));
+        }
+
+        [Test]
+        public void ReplicateMAppliedToNothing()
+        {
+            var actual = Maybe.ReplicateM(5, Maybe.Nothing<int>());
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void JoinAppliedToNothing()
+        {
+            var actual = Maybe.Join(Maybe.Nothing<Maybe<int>>());
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void JoinAppliedToJustOfJust()
+        {
+            var actual = Maybe.Join(Maybe.Just(Maybe.Just(42)));
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(42));
+        }
+
+        [Test]
+        public void JoinAppliedToJustOfNothing()
+        {
+            var actual = Maybe.Join(Maybe.Just(Maybe.Nothing<int>()));
+            Assert.That(actual.IsNothing, Is.True);
+        }
     }
 }

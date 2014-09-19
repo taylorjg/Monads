@@ -106,6 +106,19 @@ namespace MonadLib
         {
             return (Either<TE, IEnumerable<TB>>)MonadCombinators<TE>.MapM(f, @as);
         }
+
+        public static Either<TE, IEnumerable<TA>> ReplicateM<TE, TA>(int n, Either<TE, TA> ma)
+        {
+            return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.ReplicateM(n, ma);
+        }
+
+        public static Either<TE, TA> Join<TE, TA>(Either<TE, Either<TE, TA>> mma)
+        {
+            // Ideally, we would like to use MonadCombinators<TE>.Join(mma) but there
+            // is a casting issue that I have figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (Either<TE, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
     }
 
     public static class Either<TE>

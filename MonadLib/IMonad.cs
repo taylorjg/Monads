@@ -110,6 +110,17 @@ namespace MonadLib
         {
             return Sequence(@as.Map(f));
         }
+
+        public static IMonad<IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<TA> ma)
+        {
+            return Sequence(System.Linq.Enumerable.Repeat(ma, n));
+        }
+
+        public static IMonad<TA> Join<TA>(IMonad<IMonad<TA>> mma)
+        {
+            var monadAdapter = mma.GetMonadAdapter();
+            return monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
     }
 
     internal static class MonadCombinators<T1>
@@ -162,6 +173,25 @@ namespace MonadLib
         public static IMonad<T1, IEnumerable<TB>> MapM<TA, TB>(Func<TA, IMonad<T1, TB>> f, IEnumerable<TA> @as)
         {
             return Sequence(@as.Map(f));
+        }
+
+        public static IMonad<T1, IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<T1, TA> ma)
+        {
+            return Sequence(System.Linq.Enumerable.Repeat(ma, n));
+        }
+
+        public static IMonad<T1, TA> Join<TA>(IMonad<T1, IMonad<T1, TA>> mma)
+        {
+            var monadAdapter = mma.GetMonadAdapter();
+            return monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+    }
+
+    internal static class MonadHelpers
+    {
+        public static TA Identity<TA>(TA a)
+        {
+            return a;
         }
     }
 }

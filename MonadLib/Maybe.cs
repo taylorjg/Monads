@@ -131,6 +131,19 @@ namespace MonadLib
         {
             return (Maybe<IEnumerable<TB>>)MonadCombinators.MapM(f, @as);
         }
+
+        public static Maybe<IEnumerable<TA>> ReplicateM<TA>(int n, Maybe<TA> ma)
+        {
+            return (Maybe<IEnumerable<TA>>)MonadCombinators.ReplicateM(n, ma);
+        }
+
+        public static Maybe<TA> Join<TA>(Maybe<Maybe<TA>> mma)
+        {
+            // Ideally, we would like to use MonadCombinators.Join(mma) but there
+            // is a casting issue that I have figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (Maybe<TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
     }
 
     internal class MaybeMonadAdapter : IMonadAdapter
