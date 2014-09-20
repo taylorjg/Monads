@@ -6,12 +6,12 @@ am playing around with monads in C#.
 
 ## TODO
 
-* Implement missing Maybe methods:
- * maybe :: b -> (a -> b) -> Maybe a -> b
- * mapMaybe :: (a -> Maybe b) -> [a] -> [b]
- * maybeToList :: Maybe a -> [a]
- * listToMaybe :: [a] -> Maybe a
- * catMaybes :: [Maybe a] -> [a]
+* ~~Implement missing Maybe methods:~~
+ * ~~maybe :: b -> (a -> b) -> Maybe a -> b~~
+ * ~~mapMaybe :: (a -> Maybe b) -> [a] -> [b]~~
+ * ~~maybeToList :: Maybe a -> [a]~~
+ * ~~listToMaybe :: [a] -> Maybe a~~
+ * ~~catMaybes :: [Maybe a] -> [a]~~
 * ~~Implement missing Either methods:~~
  * ~~either :: (a -> c) -> (b -> c) -> Either a b -> c~~
  * ~~Data.Either.lefts :: [Either a b] -> [a]~~

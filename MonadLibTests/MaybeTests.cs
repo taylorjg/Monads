@@ -1,6 +1,7 @@
 ﻿#pragma warning disable 168
 
 using System;
+using System.Linq;
 using MonadLib;
 using NUnit.Framework;
 
@@ -221,6 +222,89 @@ namespace MonadLibTests
         {
             var actual = Maybe.Join(Maybe.Just(Maybe.Nothing<int>()));
             Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void ListToMaybeAppliedToEmptyList()
+        {
+            var @as = Enumerable.Range(1, 0);
+            var actual = Maybe.ListToMaybe(@as);
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void ListToMaybeAppliedToListWithOneItem()
+        {
+            var @as = Enumerable.Range(1, 1);
+            var actual = Maybe.ListToMaybe(@as);
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ListToMaybeAppliedToListWithManyItems()
+        {
+            var @as = Enumerable.Range(1, 10);
+            var actual = Maybe.ListToMaybe(@as);
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void MapMaybe()
+        {
+            var @as = Enumerable.Range(1, 10);
+            Func<int, bool> isEven = n => n % 2 == 0;
+            var actual = Maybe.MapMaybe(a => isEven(a) ? Maybe.Just(a) : Maybe.Nothing<int>(), @as);
+            Assert.That(actual, Is.EqualTo(new[] {2, 4, 6, 8, 10}));
+        }
+
+        [Test]
+        public void CatMaybes()
+        {
+            var maybes = new[]
+                {
+                    Maybe.Just(1),
+                    Maybe.Just(2),
+                    Maybe.Nothing<int>(),
+                    Maybe.Just(4),
+                    Maybe.Nothing<int>(),
+                    Maybe.Just(6)
+                };
+            var actual = Maybe.CatMaybes(maybes);
+            Assert.That(actual, Is.EqualTo(new[] {1, 2, 4, 6}));
+        }
+
+        [Test]
+        public void MatchWithDefaultAppliedToNothing()
+        {
+            var maybe = Maybe.Nothing<int>();
+            var actual = Maybe.MatchWithDefault("my-default-value", Convert.ToString, maybe);
+            Assert.That(actual, Is.EqualTo("my-default-value"));
+        }
+
+        [Test]
+        public void MatchWithDefaultAppliedToJust()
+        {
+            var maybe = Maybe.Just(42);
+            var actual = Maybe.MatchWithDefault("my-default-value", Convert.ToString, maybe);
+            Assert.That(actual, Is.EqualTo("42"));
+        }
+
+        [Test]
+        public void ToListAppliedToJust()
+        {
+            var maybe = Maybe.Nothing<int>();
+            var actual = maybe.ToList();
+            Assert.That(actual, Is.Empty);
+        }
+
+        [Test]
+        public void ToListAppliedToNothing()
+        {
+            var maybe = Maybe.Just(42);
+            var actual = maybe.ToList();
+            Assert.That(actual, Is.EqualTo(new[] {42}));
         }
     }
 }

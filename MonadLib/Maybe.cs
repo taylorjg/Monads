@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Flinq;
 
 namespace MonadLib
 {
@@ -45,12 +47,12 @@ namespace MonadLib
             return IsJust ? _a : defaultValue;
         }
 
-        // TODO: add remaining Maybe methods:
-        // maybe :: b -> (a -> b) -> Maybe a -> b
-        // mapMaybe :: (a -> Maybe b) -> [a] -> [b]
-        // maybeToList :: Maybe a -> [a]
-        // listToMaybe :: [a] -> Maybe a
-        // catMaybes :: [Maybe a] -> [a]
+        public IEnumerable<TA> ToList()
+        {
+            return Match(
+                a => System.Linq.Enumerable.Repeat(a, 1),
+                System.Linq.Enumerable.Empty<TA>);
+        }
 
         public void Match(Action<TA> justAction, Action nothingAction)
         {
@@ -86,6 +88,29 @@ namespace MonadLib
         public static Maybe<TA> Just<TA>(TA a)
         {
             return new Maybe<TA>(a);
+        }
+
+        public static Maybe<TA> ListToMaybe<TA>(IEnumerable<TA> @as)
+        {
+            using (var enumerator = @as.GetEnumerator())
+            {
+                return enumerator.MoveNext() ? Just(enumerator.Current) : Nothing<TA>();
+            }
+        }
+
+        public static IEnumerable<TB> MapMaybe<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as)
+        {
+            return @as.Map(f).Where(m => m.IsJust).Select(m => m.FromJust);
+        }
+
+        public static IEnumerable<TA> CatMaybes<TA>(IEnumerable<Maybe<TA>> ms)
+        {
+            return ms.Where(m => m.IsJust).Select(m => m.FromJust);
+        }
+
+        public static TB MatchWithDefault<TA, TB>(TB b, Func<TA, TB> f, Maybe<TA> ma)
+        {
+            return ma.Match(f, () => b);
         }
 
         public static Maybe<TA> Unit<TA>(TA a)
