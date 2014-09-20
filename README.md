@@ -12,11 +12,11 @@ am playing around with monads in C#.
  * maybeToList :: Maybe a -> [a]
  * listToMaybe :: [a] -> Maybe a
  * catMaybes :: [Maybe a] -> [a]
-* Implement missing Either methods:
- * either :: (a -> c) -> (b -> c) -> Either a b -> c
- * Data.Either.lefts :: [Either a b] -> [a]
- * Data.Either.rights :: [Either a b] -> [b]
- * Data.Either.partitionEithers :: [Either a b] -> ([a], [b])
+* ~~Implement missing Either methods:~~
+ * ~~either :: (a -> c) -> (b -> c) -> Either a b -> c~~
+ * ~~Data.Either.lefts :: [Either a b] -> [a]~~
+ * ~~Data.Either.rights :: [Either a b] -> [b]~~
+ * ~~Data.Either.partitionEithers :: [Either a b] -> ([a], [b])~~
 * Implement more monad combinators e.g.:
  * ~~sequence~~
  * ~~replicateM~~
