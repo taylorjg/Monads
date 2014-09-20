@@ -45,7 +45,7 @@ namespace MonadLib
             return IsJust ? _a : defaultValue;
         }
 
-        // TODO: add other Maybe methods:
+        // TODO: add remaining Maybe methods:
         // maybe :: b -> (a -> b) -> Maybe a -> b
         // mapMaybe :: (a -> Maybe b) -> [a] -> [b]
         // maybeToList :: Maybe a -> [a]

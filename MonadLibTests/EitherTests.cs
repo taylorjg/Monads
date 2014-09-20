@@ -1,6 +1,7 @@
 ﻿#pragma warning disable 168
 
 using System;
+using System.Collections.Generic;
 using MonadLib;
 using NUnit.Framework;
 
@@ -9,6 +10,19 @@ namespace MonadLibTests
     [TestFixture]
     internal class EitherTests
     {
+        private static IEnumerable<Either<string, int>> MixtureOfLeftsAndRights()
+        {
+            return new[]
+                {
+                    Either<string>.Right(1),
+                    Either<string>.Right(2),
+                    Either<string>.Left<int>("Error 1"),
+                    Either<string>.Right(4),
+                    Either<string>.Left<int>("Error 2"),
+                    Either<string>.Right(6)
+                };
+        }
+
         [Test]
         public void Left()
         {
@@ -85,23 +99,27 @@ namespace MonadLibTests
             Assert.That(rightActionParam, Is.EqualTo(42));
         }
 
-        //[Test]
-        //public void MatchOfTAppliedToLeft()
-        //{
-        //}
+        [Test]
+        public void MatchOfTAppliedToLeft()
+        {
+            var either = Either<string>.Left<int>("error");
+            var actual = either.Match(_ => 1.0, _ => 2.0);
+            Assert.That(actual, Is.EqualTo(1.0));
+        }
 
-        //[Test]
-        //public void MatchOfTAppliedToRight()
-        //{
-        //}
+        [Test]
+        public void MatchOfTAppliedToRight()
+        {
+            var either = Either<string>.Right(42);
+            var actual = either.Match(_ => 1.0, _ => 2.0);
+            Assert.That(actual, Is.EqualTo(2.0));
+        }
 
-        // TODO: add tests re monadic behaviour:
+        // TODO: add tests to cover the following:
         // Either.Unit
-        // Either.Bind x 1 with left/right
-        // Either.Bind x 2 with left/right combinations
-        // Either.Unit => Either.Bind x 2 with left/right combinations
-        // Either.LiftM2 with left/right
-        // Either.LiftM3 with left/right
+        // Either.Bind
+        // Either.LiftM2
+        // Either.LiftM3
 
         [Test]
         public void LiftMAppliedToLeft()
@@ -149,15 +167,7 @@ namespace MonadLibTests
         [Test]
         public void SequenceAppliedToMixtureOfLeftsAndRights()
         {
-            var eithers = new[]
-                {
-                    Either<string>.Right(1),
-                    Either<string>.Right(2),
-                    Either<string>.Left<int>("Error 1"),
-                    Either<string>.Right(4),
-                    Either<string>.Left<int>("Error 2"),
-                    Either<string>.Right(6)
-                };
+            var eithers = MixtureOfLeftsAndRights();
             var actual = Either.Sequence(eithers);
             Assert.That(actual.IsLeft, Is.True);
             Assert.That(actual.Left, Is.EqualTo("Error 1"));
@@ -219,6 +229,31 @@ namespace MonadLibTests
             var actual = Either.Join(Either<string>.Right(Either<string>.Left<int>("error")));
             Assert.That(actual.IsLeft, Is.True);
             Assert.That(actual.Left, Is.EqualTo("error"));
+        }
+
+        [Test]
+        public void Lefts()
+        {
+            var eithers = MixtureOfLeftsAndRights();
+            var actual = Either.Lefts(eithers);
+            Assert.That(actual, Is.EqualTo(new[] { "Error 1", "Error 2" }));
+        }
+
+        [Test]
+        public void Rights()
+        {
+            var eithers = MixtureOfLeftsAndRights();
+            var actual = Either.Rights(eithers);
+            Assert.That(actual, Is.EqualTo(new[] { 1, 2, 4, 6 }));
+        }
+
+        [Test]
+        public void PartitionEithers()
+        {
+            var eithers = MixtureOfLeftsAndRights();
+            var actual = Either.PartitionEithers(eithers);
+            Assert.That(actual.Item1, Is.EqualTo(new[] { "Error 1", "Error 2" }));
+            Assert.That(actual.Item2, Is.EqualTo(new[] {1, 2, 4, 6}));
         }
     }
 }

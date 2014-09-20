@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Flinq;
 
 namespace MonadLib
 {
@@ -48,12 +50,6 @@ namespace MonadLib
             }
         }
 
-        // TODO: add other Either methods:
-        // either :: (a -> c) -> (b -> c) -> Either a b -> c
-        // Data.Either.lefts :: [Either a b] -> [a]
-        // Data.Either.rights :: [Either a b] -> [b]
-        // Data.Either.partitionEithers :: [Either a b] -> ([a], [b])
-
         public void Match(Action<TE> leftAction, Action<TA> rightAction)
         {
             if (IsLeft)
@@ -87,6 +83,32 @@ namespace MonadLib
 
     public static class Either
     {
+        public static IEnumerable<TE> Lefts<TE, TA>(IEnumerable<Either<TE, TA>> eithers)
+        {
+            return eithers.Where(e => e.IsLeft).Select(e => e.Left);
+        }
+
+        public static IEnumerable<TA> Rights<TE, TA>(IEnumerable<Either<TE, TA>> eithers)
+        {
+            return eithers.Where(e => e.IsRight).Select(e => e.Right);
+        }
+
+        public static Tuple<IEnumerable<TE>, IEnumerable<TA>> PartitionEithers<TE, TA>(IEnumerable<Either<TE, TA>> eithers)
+        {
+            var z = Tuple.Create(
+                System.Linq.Enumerable.Empty<TE>(),
+                System.Linq.Enumerable.Empty<TA>());
+
+            return eithers.FoldRight(z, (either, acc) => either.Match(
+                e => Tuple.Create(System.Linq.Enumerable.Repeat(e, 1).Concat(acc.Item1), acc.Item2),
+                a => Tuple.Create(acc.Item1, System.Linq.Enumerable.Repeat(a, 1).Concat(acc.Item2))));
+        }
+
+        public static TB Match<TE, TA, TB>(Func<TE, TB> f, Func<TA, TB> g, Either<TE, TA> either)
+        {
+            return either.Match(f, g);
+        }
+
         public static Either<TE, TB> Bind<TE, TA, TB>(this Either<TE, TA> ma, Func<TA, Either<TE, TB>> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
