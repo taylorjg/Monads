@@ -48,6 +48,12 @@ namespace MonadLib
             }
         }
 
+        // TODO: add other Either methods:
+        // either :: (a -> c) -> (b -> c) -> Either a b -> c
+        // Data.Either.lefts :: [Either a b] -> [a]
+        // Data.Either.rights :: [Either a b] -> [b]
+        // Data.Either.partitionEithers :: [Either a b] -> ([a], [b])
+
         public void Match(Action<TE> leftAction, Action<TA> rightAction)
         {
             if (IsLeft)
@@ -95,6 +101,26 @@ namespace MonadLib
         public static Either<TE, TB> LiftM<TE, TA, TB>(Func<TA, TB> f, Either<TE, TA> ma)
         {
             return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, ma);
+        }
+
+        public static Either<TE, TC> LiftM2<TE, TA, TB, TC>(this Either<TE, TA> ma, Either<TE, TB> mb, Func<TA, TB, TC> f)
+        {
+            return (Either<TE, TC>)MonadCombinators<TE>.LiftM2(f, ma, mb);
+        }
+
+        public static Either<TE, TC> LiftM2<TE, TA, TB, TC>(Func<TA, TB, TC> f, Either<TE, TA> ma, Either<TE, TB> mb)
+        {
+            return (Either<TE, TC>)MonadCombinators<TE>.LiftM2(f, ma, mb);
+        }
+
+        public static Either<TE, TD> LiftM3<TE, TA, TB, TC, TD>(this Either<TE, TA> ma, Either<TE, TB> mb, Either<TE, TC> mc, Func<TA, TB, TC, TD> f)
+        {
+            return (Either<TE, TD>)MonadCombinators<TE>.LiftM3(f, ma, mb, mc);
+        }
+
+        public static Either<TE, TD> LiftM3<TE, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Either<TE, TA> ma, Either<TE, TB> mb, Either<TE, TC> mc)
+        {
+            return (Either<TE, TD>)MonadCombinators<TE>.LiftM3(f, ma, mb, mc);
         }
 
         public static Either<TE, IEnumerable<TA>> Sequence<TE, TA>(IEnumerable<Either<TE, TA>> ms)

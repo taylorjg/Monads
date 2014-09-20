@@ -6,6 +6,17 @@ am playing around with monads in C#.
 
 ## TODO
 
+* Implement missing Maybe methods:
+ * maybe :: b -> (a -> b) -> Maybe a -> b
+ * mapMaybe :: (a -> Maybe b) -> [a] -> [b]
+ * maybeToList :: Maybe a -> [a]
+ * listToMaybe :: [a] -> Maybe a
+ * catMaybes :: [Maybe a] -> [a]
+* Implement missing Either methods:
+ * either :: (a -> c) -> (b -> c) -> Either a b -> c
+ * Data.Either.lefts :: [Either a b] -> [a]
+ * Data.Either.rights :: [Either a b] -> [b]
+ * Data.Either.partitionEithers :: [Either a b] -> ([a], [b])
 * Implement more monad combinators e.g.:
  * ~~sequence~~
  * ~~replicateM~~
@@ -32,6 +43,7 @@ am playing around with monads in C#.
  * ReaderT
  * WriterT
  * StateT
+* Add XML Documentation comments ?
 
 ## Links
 
