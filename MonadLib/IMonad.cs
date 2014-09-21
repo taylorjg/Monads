@@ -64,36 +64,47 @@ namespace MonadLib
         public static IMonad<TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(ma, a =>
-            {
-                var b = f(a);
-                var mb = monadAdapter.Unit(b);
-                return mb;
-            });
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Unit(f(a)));
         }
 
         public static IMonad<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, IMonad<TA> ma, IMonad<TB> mb)
         {
             var monadAdapter = ma.GetMonadAdapter();
-
-            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b =>
-                {
-                    var c = f(a, b);
-                    var mc = monadAdapter.Unit(c);
-                    return mc;
-                }));
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Unit(f(a, b))));
         }
 
         public static IMonad<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc)
         {
             var monadAdapter = ma.GetMonadAdapter();
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Bind(
+                        mc, c => monadAdapter.Unit(f(a, b, c)))));
+        }
 
-            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b => monadAdapter.Bind(mc, c =>
-                {
-                    var d = f(a, b, c);
-                    var md = monadAdapter.Unit(d);
-                    return md;
-                })));
+        public static IMonad<TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Bind(
+                        mc, c => monadAdapter.Bind(
+                            md, d => monadAdapter.Unit(f(a, b, c, d))))));
+        }
+
+        public static IMonad<TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md, IMonad<TE> me)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Bind(
+                        mc, c => monadAdapter.Bind(
+                            md, d => monadAdapter.Bind(
+                                me, e => monadAdapter.Unit
+                                             (f(a, b, c, d, e)))))));
         }
 
         // ReSharper disable PossibleMultipleEnumeration
@@ -102,7 +113,10 @@ namespace MonadLib
             // DESIGN PROBLEM: what if ms contains no items ?
             var monadAdapter = ms.ElementAt(0).GetMonadAdapter();
             var z = monadAdapter.Unit(System.Linq.Enumerable.Empty<TA>());
-            return ms.FoldRight(z, (m, mtick) => monadAdapter.Bind(m, x => monadAdapter.Bind(mtick, xs => monadAdapter.Unit(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
+            return ms.FoldRight(
+                z, (m, mtick) => monadAdapter.Bind(
+                    m, x => monadAdapter.Bind(
+                        mtick, xs => monadAdapter.Unit(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
         }
         // ReSharper restore PossibleMultipleEnumeration
 
@@ -128,36 +142,47 @@ namespace MonadLib
         public static IMonad<T1, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(ma, a =>
-            {
-                var b = f(a);
-                var mb = monadAdapter.Unit(b);
-                return mb;
-            });
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Unit(f(a)));
         }
 
         public static IMonad<T1, TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb)
         {
             var monadAdapter = ma.GetMonadAdapter();
-
-            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b =>
-                {
-                    var c = f(a, b);
-                    var mc = monadAdapter.Unit(c);
-                    return mc;
-                }));
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Unit(f(a, b))));
         }
 
         public static IMonad<T1, TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc)
         {
             var monadAdapter = ma.GetMonadAdapter();
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Bind(
+                        mc, c => monadAdapter.Unit(f(a, b, c)))));
+        }
 
-            return monadAdapter.Bind(ma, a => monadAdapter.Bind(mb, b => monadAdapter.Bind(mc, c =>
-                {
-                    var d = f(a, b, c);
-                    var md = monadAdapter.Unit(d);
-                    return md;
-                })));
+        public static IMonad<T1, TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Bind(
+                        mc, c => monadAdapter.Bind(
+                            md, d => monadAdapter.Unit(f(a, b, c, d))))));
+        }
+
+        public static IMonad<T1, TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md, IMonad<T1, TE> me)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return monadAdapter.Bind(
+                ma, a => monadAdapter.Bind(
+                    mb, b => monadAdapter.Bind(
+                        mc, c => monadAdapter.Bind(
+                            md, d => monadAdapter.Bind(
+                                me, e => monadAdapter.Unit
+                                             (f(a, b, c, d, e)))))));
         }
 
         // ReSharper disable PossibleMultipleEnumeration
