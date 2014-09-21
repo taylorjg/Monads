@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EitherTests.cs" />
+    <Compile Include="MaybeMonadLaws.cs" />
     <Compile Include="MaybeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
