@@ -5,57 +5,43 @@ using Flinq;
 
 namespace MonadLib
 {
+    public sealed class Unit
+    {
+    }
+
     // ReSharper disable UnusedTypeParameter
     public interface IMonad<TA>
     {
-        IMonadAdapter GetMonadAdapter();
+        MonadAdapter GetMonadAdapter();
     }
     // ReSharper restore UnusedTypeParameter
 
     // ReSharper disable UnusedTypeParameter
     public interface IMonad<T1, TA>
     {
-        IMonadAdapter<T1> GetMonadAdapter();
+        MonadAdapter<T1> GetMonadAdapter();
     }
     // ReSharper restore UnusedTypeParameter
 
-    public interface IMonadAdapter
+    public abstract class MonadAdapter
     {
-        IMonad<TA> Return<TA>(TA a);
-        IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f);
-    }
+        public abstract IMonad<TA> Return<TA>(TA a);
+        public abstract IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f);
 
-    // ReSharper disable UnusedTypeParameter
-    public interface IMonadAdapter<T1>
-    {
-        IMonad<T1, TA> Return<TA>(TA a);
-        IMonad<T1, TB> Bind<TA, TB>(IMonad<T1, TA> ma, Func<TA, IMonad<T1, TB>> f);
-    }
-    // ReSharper restore UnusedTypeParameter
-
-    internal static class Monad
-    {
-        public static IMonad<TA> Return<TA>(IMonadAdapter monadAdapter, TA a)
+        public virtual IMonad<TB> BindIgnoringLeft<TA, TB>(IMonad<TA> ma, IMonad<TB> mb)
         {
-            return monadAdapter.Return(a);
-        }
-
-        public static IMonad<TB> Bind<TA, TB>(IMonadAdapter monadAdapter, IMonad<TA> ma, Func<TA, IMonad<TB>> f)
-        {
-            return monadAdapter.Bind(ma, f);
+            return Bind(ma, _ => mb);
         }
     }
 
-    internal static class Monad<T1>
+    public abstract class MonadAdapter<T1>
     {
-        public static IMonad<T1, TA> Return<TA>(IMonadAdapter<T1> monadAdapter, TA a)
-        {
-            return monadAdapter.Return(a);
-        }
+        public abstract IMonad<T1, TA> Return<TA>(TA a);
+        public abstract IMonad<T1, TB> Bind<TA, TB>(IMonad<T1, TA> ma, Func<TA, IMonad<T1, TB>> f);
 
-        public static IMonad<T1, TB> Bind<TA, TB>(IMonadAdapter<T1> monadAdapter, IMonad<T1, TA> ma, Func<TA, IMonad<T1, TB>> f)
+        public virtual IMonad<T1, TB> BindIgnoringLeft<TA, TB>(IMonad<T1, TA> ma, IMonad<T1, TB> mb)
         {
-            return monadAdapter.Bind(ma, f);
+            return Bind(ma, _ => mb);
         }
     }
 

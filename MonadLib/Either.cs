@@ -73,9 +73,9 @@ namespace MonadLib
         private readonly TE _e;
         private readonly TA _a;
 
-        private IMonadAdapter<TE> _monadAdapter;
+        private MonadAdapter<TE> _monadAdapter;
 
-        public IMonadAdapter<TE> GetMonadAdapter()
+        public MonadAdapter<TE> GetMonadAdapter()
         {
             return _monadAdapter ?? (_monadAdapter = new EitherMonadAdapter<TE>());
         }
@@ -187,14 +187,14 @@ namespace MonadLib
         }
     }
 
-    internal class EitherMonadAdapter<TE> : IMonadAdapter<TE>
+    internal class EitherMonadAdapter<TE> : MonadAdapter<TE>
     {
-        public IMonad<TE, TA> Return<TA>(TA a)
+        public override IMonad<TE, TA> Return<TA>(TA a)
         {
             return Either<TE>.Right(a);
         }
 
-        public IMonad<TE, TB> Bind<TA, TB>(IMonad<TE, TA> ma, Func<TA, IMonad<TE, TB>> f)
+        public override IMonad<TE, TB> Bind<TA, TB>(IMonad<TE, TA> ma, Func<TA, IMonad<TE, TB>> f)
         {
             var eitherA = (Either<TE, TA>)ma;
             return eitherA.IsRight ? f(eitherA.Right) : Either<TE>.Left<TB>(eitherA.Left);

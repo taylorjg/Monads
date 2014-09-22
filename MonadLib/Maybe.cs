@@ -70,9 +70,9 @@ namespace MonadLib
         private readonly TA _a;
         private readonly bool _isNothing;
 
-        private IMonadAdapter _monadAdapter;
+        private MonadAdapter _monadAdapter;
 
-        public IMonadAdapter GetMonadAdapter()
+        public MonadAdapter GetMonadAdapter()
         {
             return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
         }
@@ -178,14 +178,14 @@ namespace MonadLib
         }
     }
 
-    internal class MaybeMonadAdapter : IMonadAdapter
+    internal class MaybeMonadAdapter : MonadAdapter
     {
-        public IMonad<TA> Return<TA>(TA a)
+        public override IMonad<TA> Return<TA>(TA a)
         {
             return Maybe.Just(a);
         }
 
-        public IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
+        public override IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
         {
             var maybeA = (Maybe<TA>)ma;
             return maybeA.IsJust ? f(maybeA.FromJust) : Maybe.Nothing<TB>();
