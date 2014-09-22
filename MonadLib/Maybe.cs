@@ -156,17 +156,38 @@ namespace MonadLib
 
         public static Maybe<IEnumerable<TA>> Sequence<TA>(IEnumerable<Maybe<TA>> ms)
         {
-            return (Maybe<IEnumerable<TA>>)MonadCombinators.Sequence(ms);
+            return (Maybe<IEnumerable<TA>>)MonadCombinators.SequenceInternal(ms, new MaybeMonadAdapter());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Maybe<Unit> Sequence_<TA>(IEnumerable<Maybe<TA>> ms)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Maybe<Unit>)MonadCombinators.SequenceInternal_(ms, new MaybeMonadAdapter());
         }
 
         public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as)
         {
-            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapM(f, @as);
+            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapMInternal(f, @as, new MaybeMonadAdapter());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Maybe<Unit> MapM_<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadAdapter());
         }
 
         public static Maybe<IEnumerable<TA>> ReplicateM<TA>(int n, Maybe<TA> ma)
         {
             return (Maybe<IEnumerable<TA>>)MonadCombinators.ReplicateM(n, ma);
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Maybe<Unit> ReplicateM_<TA>(int n, Maybe<TA> ma)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Maybe<Unit>)MonadCombinators.ReplicateM_(n, ma);
         }
 
         public static Maybe<TA> Join<TA>(Maybe<Maybe<TA>> mma)

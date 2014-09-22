@@ -7,6 +7,8 @@ using NUnit.Framework;
 
 namespace MonadLibTests
 {
+    // ReSharper disable InconsistentNaming
+
     [TestFixture]
     internal class MaybeTests
     {
@@ -104,126 +106,6 @@ namespace MonadLibTests
             Assert.That(justFuncParam, Is.EqualTo(42));
         }
 
-        // TODO: add tests to cover the following:
-        // Maybe.Return
-        // Maybe.Bind
-        // Maybe.LiftM2
-        // Maybe.LiftM3
-        // Maybe.LiftM4
-        // Maybe.LiftM5
-
-        [Test]
-        public void LiftMAppliedToJust()
-        {
-            var maybe = Maybe.Return(10).LiftM(a => Convert.ToString(a * a));
-            Assert.That(maybe.IsJust, Is.True);
-            Assert.That(maybe.IsNothing, Is.False);
-            Assert.That(maybe.FromJust, Is.EqualTo("100"));
-        }
-
-        [Test]
-        public void LiftMAppliedToNothing()
-        {
-            var maybe = Maybe.Nothing<int>().LiftM(a => Convert.ToString(a * a));
-            Assert.That(maybe.IsJust, Is.False);
-            Assert.That(maybe.IsNothing, Is.True);
-        }
-
-        [Test]
-        [Ignore("I need to fix a design flaw in order for this to work!")]
-        public void SequenceAppliedToEmptyCollection()
-        {
-            var maybes = new Maybe<int>[] {};
-            var actual = Maybe.Sequence(maybes);
-            Assert.That(actual.IsJust, Is.True);
-            Assert.That(actual.FromJust, Is.EqualTo(new int[] {}));
-        }
-
-        [Test]
-        public void SequenceAppliedToJusts()
-        {
-            var maybes = new[]
-                {
-                    Maybe.Just(1),
-                    Maybe.Just(2),
-                    Maybe.Just(3),
-                    Maybe.Just(4)
-                };
-            var actual = Maybe.Sequence(maybes);
-            Assert.That(actual.IsJust, Is.True);
-            Assert.That(actual.FromJust, Is.EqualTo(new[] {1, 2, 3, 4}));
-        }
-
-        [Test]
-        public void SequenceAppliedToMixtureOfJustsAndNothings()
-        {
-            var maybes = new[]
-                {
-                    Maybe.Just(1),
-                    Maybe.Just(2),
-                    Maybe.Nothing<int>(),
-                    Maybe.Just(4),
-                    Maybe.Nothing<int>(),
-                    Maybe.Just(6)
-                };
-            var actual = Maybe.Sequence(maybes);
-            Assert.That(actual.IsNothing, Is.True);
-        }
-
-        [Test]
-        public void MapMWithFuncReturningJusts()
-        {
-            var ints = new[] {1, 2, 3, 4, 5};
-            var actual = Maybe.MapM(n => Maybe.Just(Convert.ToString(n)), ints);
-            Assert.That(actual.IsJust, Is.True);
-            Assert.That(actual.FromJust, Is.EqualTo(new[] { "1", "2", "3", "4", "5"}));
-        }
-
-        [Test]
-        public void MapMWithFuncReturningMixtureOfJustsAndNothings()
-        {
-            var ints = new[] { 1, 2, 3, 4, 5 };
-            var actual = Maybe.MapM(n => n < 4 ? Maybe.Just(Convert.ToString(n)) : Maybe.Nothing<string>(), ints);
-            Assert.That(actual.IsNothing, Is.True);
-        }
-
-        [Test]
-        public void ReplicateMAppliedToJust()
-        {
-            var actual = Maybe.ReplicateM(5, Maybe.Just(42));
-            Assert.That(actual.IsJust, Is.True);
-            Assert.That(actual.FromJust, Is.EqualTo(new[] {42, 42, 42, 42, 42}));
-        }
-
-        [Test]
-        public void ReplicateMAppliedToNothing()
-        {
-            var actual = Maybe.ReplicateM(5, Maybe.Nothing<int>());
-            Assert.That(actual.IsNothing, Is.True);
-        }
-
-        [Test]
-        public void JoinAppliedToNothing()
-        {
-            var actual = Maybe.Join(Maybe.Nothing<Maybe<int>>());
-            Assert.That(actual.IsNothing, Is.True);
-        }
-
-        [Test]
-        public void JoinAppliedToJustOfJust()
-        {
-            var actual = Maybe.Join(Maybe.Just(Maybe.Just(42)));
-            Assert.That(actual.IsJust, Is.True);
-            Assert.That(actual.FromJust, Is.EqualTo(42));
-        }
-
-        [Test]
-        public void JoinAppliedToJustOfNothing()
-        {
-            var actual = Maybe.Join(Maybe.Just(Maybe.Nothing<int>()));
-            Assert.That(actual.IsNothing, Is.True);
-        }
-
         [Test]
         public void ListToMaybeAppliedToEmptyList()
         {
@@ -306,5 +188,164 @@ namespace MonadLibTests
             var actual = maybe.ToList();
             Assert.That(actual, Is.EqualTo(new[] {42}));
         }
+
+        // TODO: add tests to cover the following:
+        // Maybe.Return
+        // Maybe.Bind
+        // Maybe.LiftM2
+        // Maybe.LiftM3
+        // Maybe.LiftM4
+        // Maybe.LiftM5
+
+        [Test]
+        public void LiftMAppliedToJust()
+        {
+            var maybe = Maybe.Return(10).LiftM(a => Convert.ToString(a * a));
+            Assert.That(maybe.IsJust, Is.True);
+            Assert.That(maybe.IsNothing, Is.False);
+            Assert.That(maybe.FromJust, Is.EqualTo("100"));
+        }
+
+        [Test]
+        public void LiftMAppliedToNothing()
+        {
+            var maybe = Maybe.Nothing<int>().LiftM(a => Convert.ToString(a * a));
+            Assert.That(maybe.IsJust, Is.False);
+            Assert.That(maybe.IsNothing, Is.True);
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
+        public void Sequence(Tuple<string, Maybe<int>[], bool, int[]> tuple)
+        {
+            var maybes = tuple.Item2;
+            var expectedIsJust = tuple.Item3;
+            var expectedFromJust = tuple.Item4;
+            var actual = Maybe.Sequence(maybes);
+            Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
+            if (expectedIsJust)
+            {
+                Assert.That(actual.FromJust, Is.EqualTo(expectedFromJust));
+            }
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
+        public void Sequence_(Tuple<string, Maybe<int>[], bool, int[]> tuple)
+        {
+            var maybes = tuple.Item2;
+            var expectedIsJust = tuple.Item3;
+            var actual = Maybe.Sequence_(maybes);
+            Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
+            if (expectedIsJust)
+            {
+                Assert.That(actual.FromJust, Is.EqualTo(new Unit()));
+            }
+        }
+
+        [Test]
+        public void MapMWithFuncReturningJusts()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Maybe.MapM(n => Maybe.Just(Convert.ToString(n)), ints);
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new[] { "1", "2", "3", "4", "5" }));
+        }
+
+        [Test]
+        public void MapMWithFuncReturningMixtureOfJustsAndNothings()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Maybe.MapM(n => n < 4 ? Maybe.Just(Convert.ToString(n)) : Maybe.Nothing<string>(), ints);
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void MapM_WithFuncReturningJusts()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Maybe.MapM_(n => Maybe.Just(Convert.ToString(n)), ints);
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new Unit()));
+        }
+
+        [Test]
+        public void MapM_WithFuncReturningMixtureOfJustsAndNothings()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Maybe.MapM_(n => n < 4 ? Maybe.Just(Convert.ToString(n)) : Maybe.Nothing<string>(), ints);
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void ReplicateMAppliedToJust()
+        {
+            var actual = Maybe.ReplicateM(5, Maybe.Just(42));
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new[] { 42, 42, 42, 42, 42 }));
+        }
+
+        [Test]
+        public void ReplicateMAppliedToNothing()
+        {
+            var actual = Maybe.ReplicateM(5, Maybe.Nothing<int>());
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void ReplicateM_AppliedToJust()
+        {
+            var actual = Maybe.ReplicateM_(5, Maybe.Just(42));
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(new Unit()));
+        }
+
+        [Test]
+        public void ReplicateM_AppliedToNothing()
+        {
+            var actual = Maybe.ReplicateM_(5, Maybe.Nothing<int>());
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void JoinAppliedToNothing()
+        {
+            var actual = Maybe.Join(Maybe.Nothing<Maybe<int>>());
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void JoinAppliedToJustOfJust()
+        {
+            var actual = Maybe.Join(Maybe.Just(Maybe.Just(42)));
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo(42));
+        }
+
+        [Test]
+        public void JoinAppliedToJustOfNothing()
+        {
+            var actual = Maybe.Join(Maybe.Just(Maybe.Nothing<int>()));
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        private static readonly object[] TestCaseSourceForSequenceTests =
+            {
+                Tuple.Create(
+                    "4 Justs",
+                    new[] {Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4)},
+                    true,
+                    new[] {1, 2, 3, 4}),
+
+                Tuple.Create(
+                    "3 Justs and 1 Nothing",
+                    new[] {Maybe.Just(1), Maybe.Just(2), Maybe.Nothing<int>(), Maybe.Just(4)},
+                    false,
+                    null as int[]),
+
+                Tuple.Create(
+                    "Empty list of maybes",
+                    new Maybe<int>[] {},
+                    true,
+                    new int[] {})
+            };
     }
 }

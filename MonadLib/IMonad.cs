@@ -7,6 +7,16 @@ namespace MonadLib
 {
     public sealed class Unit
     {
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Unit)) return false;
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
     }
 
     // ReSharper disable UnusedTypeParameter
@@ -92,27 +102,45 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
-        // ReSharper disable PossibleMultipleEnumeration
-        public static IMonad<IEnumerable<TA>> Sequence<TA>(IEnumerable<IMonad<TA>> ms)
+        public static IMonad<IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<TA>> ms, MonadAdapter monadAdapter)
         {
-            // DESIGN PROBLEM: what if ms contains no items ?
-            var monadAdapter = ms.ElementAt(0).GetMonadAdapter();
             var z = monadAdapter.Return(System.Linq.Enumerable.Empty<TA>());
             return ms.FoldRight(
                 z, (m, mtick) => monadAdapter.Bind(
                     m, x => monadAdapter.Bind(
                         mtick, xs => monadAdapter.Return(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
         }
-        // ReSharper restore PossibleMultipleEnumeration
 
-        public static IMonad<IEnumerable<TB>> MapM<TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as)
+        // ReSharper disable InconsistentNaming
+        public static IMonad<Unit> SequenceInternal_<TA>(IEnumerable<IMonad<TA>> ms, MonadAdapter monadAdapter)
+        // ReSharper restore InconsistentNaming
         {
-            return Sequence(@as.Map(f));
+            var z = monadAdapter.Return(new Unit());
+            return ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
+        }
+
+        public static IMonad<IEnumerable<TB>> MapMInternal<TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as, MonadAdapter monadAdapter)
+        {
+            return SequenceInternal(@as.Map(f), monadAdapter);
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static IMonad<Unit> MapMInternal_<TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as, MonadAdapter monadAdapter)
+        // ReSharper restore InconsistentNaming
+        {
+            return SequenceInternal_(@as.Map(f), monadAdapter);
         }
 
         public static IMonad<IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<TA> ma)
         {
-            return Sequence(System.Linq.Enumerable.Repeat(ma, n));
+            return SequenceInternal(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static IMonad<Unit> ReplicateM_<TA>(int n, IMonad<TA> ma)
+        // ReSharper restore InconsistentNaming
+        {
+            return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
         }
 
         public static IMonad<TA> Join<TA>(IMonad<IMonad<TA>> mma)
@@ -176,6 +204,18 @@ namespace MonadLib
             var monadAdapter = ms.ElementAt(0).GetMonadAdapter();
             var z = monadAdapter.Return(System.Linq.Enumerable.Empty<TA>());
             return ms.FoldRight(z, (m, mtick) => monadAdapter.Bind(m, x => monadAdapter.Bind(mtick, xs => monadAdapter.Return(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
+        }
+        // ReSharper restore PossibleMultipleEnumeration
+
+        // ReSharper disable PossibleMultipleEnumeration
+        // ReSharper disable InconsistentNaming
+        public static IMonad<T1, Unit> Sequence_<TA>(IEnumerable<IMonad<T1, TA>> ms)
+        // ReSharper restore InconsistentNaming
+        {
+            // DESIGN PROBLEM: what if ms contains no items ?
+            var monadAdapter = ms.ElementAt(0).GetMonadAdapter();
+            var z = monadAdapter.Return(new Unit());
+            return ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
         }
         // ReSharper restore PossibleMultipleEnumeration
 
