@@ -7,6 +7,8 @@ using NUnit.Framework;
 
 namespace MonadLibTests
 {
+    // ReSharper disable InconsistentNaming
+
     [TestFixture]
     internal class EitherTests
     {
@@ -115,6 +117,31 @@ namespace MonadLibTests
             Assert.That(actual, Is.EqualTo(2.0));
         }
 
+        [Test]
+        public void Lefts()
+        {
+            var eithers = MixtureOfLeftsAndRights();
+            var actual = Either.Lefts(eithers);
+            Assert.That(actual, Is.EqualTo(new[] { "Error 1", "Error 2" }));
+        }
+
+        [Test]
+        public void Rights()
+        {
+            var eithers = MixtureOfLeftsAndRights();
+            var actual = Either.Rights(eithers);
+            Assert.That(actual, Is.EqualTo(new[] { 1, 2, 4, 6 }));
+        }
+
+        [Test]
+        public void PartitionEithers()
+        {
+            var eithers = MixtureOfLeftsAndRights();
+            var actual = Either.PartitionEithers(eithers);
+            Assert.That(actual.Item1, Is.EqualTo(new[] { "Error 1", "Error 2" }));
+            Assert.That(actual.Item2, Is.EqualTo(new[] {1, 2, 4, 6}));
+        }
+
         // TODO: add tests to cover the following:
         // Either.Return
         // Either.Bind
@@ -141,38 +168,41 @@ namespace MonadLibTests
             Assert.That(either.Right, Is.True);
         }
 
-        [Test]
-        [Ignore("I need to fix a design flaw in order for this to work!")]
-        public void SequenceAppliedToEmptyCollection()
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
+        public void Sequence(Tuple<string, Either<string, int>[], bool, string, int[]> tuple)
         {
-            var eithers = new Either<string, int>[] {};
+            var eithers = tuple.Item2;
+            var expectedIsRight = tuple.Item3;
+            var expectedLeft = tuple.Item4;
+            var expectedRight = tuple.Item5;
             var actual = Either.Sequence(eithers);
-            Assert.That(actual.IsRight, Is.True);
-            Assert.That(actual.Right, Is.EqualTo(new int[] {}));
+            Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
+            if (expectedIsRight)
+            {
+                Assert.That(actual.Right, Is.EqualTo(expectedRight));
+            }
+            else
+            {
+                Assert.That(actual.Left, Is.EqualTo(expectedLeft));
+            }
         }
 
-        [Test]
-        public void SequenceAppliedToRights()
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
+        public void Sequence_(Tuple<string, Either<string, int>[], bool, string, int[]> tuple)
         {
-            var eithers = new[]
-                {
-                    Either<string>.Right(1),
-                    Either<string>.Right(2),
-                    Either<string>.Right(3),
-                    Either<string>.Right(4)
-                };
-            var actual = Either.Sequence(eithers);
-            Assert.That(actual.IsRight, Is.True);
-            Assert.That(actual.Right, Is.EqualTo(new[] {1, 2, 3, 4}));
-        }
-
-        [Test]
-        public void SequenceAppliedToMixtureOfLeftsAndRights()
-        {
-            var eithers = MixtureOfLeftsAndRights();
-            var actual = Either.Sequence(eithers);
-            Assert.That(actual.IsLeft, Is.True);
-            Assert.That(actual.Left, Is.EqualTo("Error 1"));
+            var eithers = tuple.Item2;
+            var expectedIsRight = tuple.Item3;
+            var expectedLeft = tuple.Item4;
+            var actual = Either.Sequence_(eithers);
+            Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
+            if (expectedIsRight)
+            {
+                Assert.That(actual.Right, Is.EqualTo(new Unit()));
+            }
+            else
+            {
+                Assert.That(actual.Left, Is.EqualTo(expectedLeft));
+            }
         }
 
         [Test]
@@ -194,6 +224,24 @@ namespace MonadLibTests
         }
 
         [Test]
+        public void MapM_WithFuncReturningRights()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Either.MapM_(n => Either<string>.Right(Convert.ToString(n)), ints);
+            Assert.That(actual.IsRight, Is.True);
+            Assert.That(actual.Right, Is.EqualTo(new Unit()));
+        }
+
+        [Test]
+        public void MapM_WithFuncReturningMixtureOfLeftsAndRights()
+        {
+            var ints = new[] { 1, 2, 3, 4, 5 };
+            var actual = Either.MapM_(n => n < 4 ? Either<string>.Right(Convert.ToString(n)) : Either<string>.Left<string>("error"), ints);
+            Assert.That(actual.IsLeft, Is.True);
+            Assert.That(actual.Left, Is.EqualTo("error"));
+        }
+
+        [Test]
         public void ReplicateMAppliedToLeft()
         {
             var actual = Either.ReplicateM(5, Either<string>.Left<int>("error"));
@@ -206,7 +254,23 @@ namespace MonadLibTests
         {
             var actual = Either.ReplicateM(5, Either<string>.Right(42));
             Assert.That(actual.IsRight, Is.True);
-            Assert.That(actual.Right, Is.EqualTo(new[] {42, 42, 42, 42, 42}));
+            Assert.That(actual.Right, Is.EqualTo(new[] { 42, 42, 42, 42, 42 }));
+        }
+
+        [Test]
+        public void ReplicateM_AppliedToLeft()
+        {
+            var actual = Either.ReplicateM_(5, Either<string>.Left<int>("error"));
+            Assert.That(actual.IsLeft, Is.True);
+            Assert.That(actual.Left, Is.EqualTo("error"));
+        }
+
+        [Test]
+        public void ReplicateM_AppliedToRight()
+        {
+            var actual = Either.ReplicateM_(5, Either<string>.Right(42));
+            Assert.That(actual.IsRight, Is.True);
+            Assert.That(actual.Right, Is.EqualTo(new Unit()));
         }
 
         [Test]
@@ -233,29 +297,40 @@ namespace MonadLibTests
             Assert.That(actual.Left, Is.EqualTo("error"));
         }
 
-        [Test]
-        public void Lefts()
-        {
-            var eithers = MixtureOfLeftsAndRights();
-            var actual = Either.Lefts(eithers);
-            Assert.That(actual, Is.EqualTo(new[] { "Error 1", "Error 2" }));
-        }
+        private static readonly object[] TestCaseSourceForSequenceTests =
+            {
+                Tuple.Create(
+                    "4 Rights",
+                    new[]
+                        {
+                            Either<string>.Right(1),
+                            Either<string>.Right(2),
+                            Either<string>.Right(3),
+                            Either<string>.Right(4)
+                        },
+                    true,
+                    null as string,
+                    new[] {1, 2, 3, 4}),
 
-        [Test]
-        public void Rights()
-        {
-            var eithers = MixtureOfLeftsAndRights();
-            var actual = Either.Rights(eithers);
-            Assert.That(actual, Is.EqualTo(new[] { 1, 2, 4, 6 }));
-        }
+                Tuple.Create(
+                    "3 Rights and 1 Left",
+                    new[]
+                        {
+                            Either<string>.Right(1),
+                            Either<string>.Right(2),
+                            Either<string>.Left<int>("error"),
+                            Either<string>.Right(4)
+                        },
+                    false,
+                    "error",
+                    null as int[]),
 
-        [Test]
-        public void PartitionEithers()
-        {
-            var eithers = MixtureOfLeftsAndRights();
-            var actual = Either.PartitionEithers(eithers);
-            Assert.That(actual.Item1, Is.EqualTo(new[] { "Error 1", "Error 2" }));
-            Assert.That(actual.Item2, Is.EqualTo(new[] {1, 2, 4, 6}));
-        }
+                Tuple.Create(
+                    "Empty list of eithers",
+                    new Either<string, int>[] {},
+                    true,
+                    null as string,
+                    new int[] {})
+            };
     }
 }

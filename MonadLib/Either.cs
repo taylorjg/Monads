@@ -147,17 +147,38 @@ namespace MonadLib
 
         public static Either<TE, IEnumerable<TA>> Sequence<TE, TA>(IEnumerable<Either<TE, TA>> ms)
         {
-            return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.Sequence(ms);
+            return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.SequenceInternal(ms, new EitherMonadAdapter<TE>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Either<TE, Unit> Sequence_<TE, TA>(IEnumerable<Either<TE, TA>> ms)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Either<TE, Unit>)MonadCombinators<TE>.SequenceInternal_(ms, new EitherMonadAdapter<TE>());
         }
 
         public static Either<TE, IEnumerable<TB>> MapM<TE, TA, TB>(Func<TA, Either<TE, TB>> f, IEnumerable<TA> @as)
         {
-            return (Either<TE, IEnumerable<TB>>)MonadCombinators<TE>.MapM(f, @as);
+            return (Either<TE, IEnumerable<TB>>)MonadCombinators<TE>.MapMInternal(f, @as, new EitherMonadAdapter<TE>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Either<TE, Unit> MapM_<TE, TA, TB>(Func<TA, Either<TE, TB>> f, IEnumerable<TA> @as)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Either<TE, Unit>)MonadCombinators<TE>.MapMInternal_(f, @as, new EitherMonadAdapter<TE>());
         }
 
         public static Either<TE, IEnumerable<TA>> ReplicateM<TE, TA>(int n, Either<TE, TA> ma)
         {
             return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.ReplicateM(n, ma);
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Either<TE, Unit> ReplicateM_<TE, TA>(int n, Either<TE, TA> ma)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Either<TE, Unit>)MonadCombinators<TE>.ReplicateM_(n, ma);
         }
 
         public static Either<TE, TA> Join<TE, TA>(Either<TE, Either<TE, TA>> mma)

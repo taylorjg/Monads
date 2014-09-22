@@ -331,13 +331,25 @@ namespace MonadLibTests
             {
                 Tuple.Create(
                     "4 Justs",
-                    new[] {Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4)},
+                    new[]
+                        {
+                            Maybe.Just(1),
+                            Maybe.Just(2),
+                            Maybe.Just(3),
+                            Maybe.Just(4)
+                        },
                     true,
                     new[] {1, 2, 3, 4}),
 
                 Tuple.Create(
                     "3 Justs and 1 Nothing",
-                    new[] {Maybe.Just(1), Maybe.Just(2), Maybe.Nothing<int>(), Maybe.Just(4)},
+                    new[]
+                        {
+                            Maybe.Just(1),
+                            Maybe.Just(2),
+                            Maybe.Nothing<int>(),
+                            Maybe.Just(4)
+                        },
                     false,
                     null as int[]),
 
