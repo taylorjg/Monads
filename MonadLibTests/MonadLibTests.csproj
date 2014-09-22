@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EitherMonadLaws.cs" />
     <Compile Include="EitherTests.cs" />
     <Compile Include="MaybeMonadLaws.cs" />
     <Compile Include="MaybeTests.cs" />
