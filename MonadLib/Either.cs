@@ -100,8 +100,8 @@ namespace MonadLib
                 System.Linq.Enumerable.Empty<TA>());
 
             return eithers.FoldRight(z, (either, acc) => either.Match(
-                e => Tuple.Create(System.Linq.Enumerable.Repeat(e, 1).Concat(acc.Item1), acc.Item2),
-                a => Tuple.Create(acc.Item1, System.Linq.Enumerable.Repeat(a, 1).Concat(acc.Item2))));
+                e => Tuple.Create(MonadHelpers.Cons(e, acc.Item1), acc.Item2),
+                a => Tuple.Create(acc.Item1, MonadHelpers.Cons(a, acc.Item2))));
         }
 
         public static TB Match<TE, TA, TB>(Func<TE, TB> f, Func<TA, TB> g, Either<TE, TA> either)

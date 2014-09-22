@@ -108,7 +108,7 @@ namespace MonadLib
             return ms.FoldRight(
                 z, (m, mtick) => monadAdapter.Bind(
                     m, x => monadAdapter.Bind(
-                        mtick, xs => monadAdapter.Return(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
+                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
         // ReSharper disable InconsistentNaming
@@ -205,7 +205,7 @@ namespace MonadLib
             return ms.FoldRight(
                 z, (m, mtick) => monadAdapter.Bind(
                     m, x => monadAdapter.Bind(
-                        mtick, xs => monadAdapter.Return(System.Linq.Enumerable.Repeat(x, 1).Concat(xs)))));
+                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
         // ReSharper disable InconsistentNaming
@@ -252,6 +252,11 @@ namespace MonadLib
         public static TA Identity<TA>(TA a)
         {
             return a;
+        }
+
+        public static IEnumerable<TA> Cons<TA>(TA x, IEnumerable<TA> xs)
+        {
+            return System.Linq.Enumerable.Repeat(x, 1).Concat(xs);
         }
     }
 }
