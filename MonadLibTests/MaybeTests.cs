@@ -192,6 +192,7 @@ namespace MonadLibTests
         // TODO: add tests to cover the following:
         // Maybe.Return
         // Maybe.Bind
+        // Maybe.BindIgnoringLeft
         // Maybe.LiftM2
         // Maybe.LiftM3
         // Maybe.LiftM4

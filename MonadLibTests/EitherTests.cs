@@ -145,6 +145,7 @@ namespace MonadLibTests
         // TODO: add tests to cover the following:
         // Either.Return
         // Either.Bind
+        // Either.BindIgnoringLeft
         // Either.LiftM2
         // Either.LiftM3
         // Either.LiftM4

@@ -19,13 +19,19 @@ am playing around with monads in C#.
  * ~~Data.Either.partitionEithers :: [Either a b] -> ([a], [b])~~
 * Implement more monad combinators e.g.:
  * ~~sequence~~
+ * ~~sequence&#95;~~
  * ~~replicateM~~
+ * ~~replicateM&#95;~~
  * filterM
  * foldM
+ * foldM&#95;
  * zipWithM
+ * zipWithM_
  * mapAndUnzipM
  * ~~mapM~~
+ * ~~mapM&#95;~~
  * forM
+ * forM&#95;
  * liftM4
  * liftM5
  * guard
@@ -33,6 +39,8 @@ am playing around with monads in C#.
  * unless
  * ~~join~~
  * forever
+ * void
+ * ap
 * Implement more monads e.g.:
  * Reader
  * Writer
