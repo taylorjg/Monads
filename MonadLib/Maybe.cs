@@ -113,7 +113,7 @@ namespace MonadLib
             return ma.Match(f, () => b);
         }
 
-        public static Maybe<TA> Unit<TA>(TA a)
+        public static Maybe<TA> Return<TA>(TA a)
         {
             return Just(a);
         }
@@ -180,7 +180,7 @@ namespace MonadLib
 
     internal class MaybeMonadAdapter : IMonadAdapter
     {
-        public IMonad<TA> Unit<TA>(TA a)
+        public IMonad<TA> Return<TA>(TA a)
         {
             return Maybe.Just(a);
         }

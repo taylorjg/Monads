@@ -13,7 +13,7 @@ namespace MonadLibTests
             // (return x) >>= f == f x
             const int x = 5;
             Func<int, Maybe<int>> f = n => Maybe.Just(n * n);
-            var actual1 = Maybe.Unit(x).Bind(f);
+            var actual1 = Maybe.Return(x).Bind(f);
             var actual2 = f(x);
             Assert.That(actual1.IsJust, Is.True);
             Assert.That(actual2.IsJust, Is.True);
@@ -24,8 +24,8 @@ namespace MonadLibTests
         public void BindRightIdentity()
         {
             // m >>= return == m
-            var m = Maybe.Unit(5);
-            var actual1 = m.Bind(Maybe.Unit);
+            var m = Maybe.Return(5);
+            var actual1 = m.Bind(Maybe.Return);
             var actual2 = m;
             Assert.That(actual1.IsJust, Is.True);
             Assert.That(actual2.IsJust, Is.True);
@@ -38,7 +38,7 @@ namespace MonadLibTests
             // (m >>= f) >>= g == m >>= (\x -> f x >>= g)
             Func<int, Maybe<int>> f = n => Maybe.Just(n * n);
             Func<int, Maybe<string>> g = n => Maybe.Just(Convert.ToString(n));
-            var m = Maybe.Unit(5);
+            var m = Maybe.Return(5);
             var actual1 = m.Bind(f).Bind(g);
             var actual2 = m.Bind(x => f(x).Bind(g));
             Assert.That(actual1.IsJust, Is.True);

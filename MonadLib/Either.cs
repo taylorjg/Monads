@@ -181,7 +181,7 @@ namespace MonadLib
             return new Either<TE, TA>(a);
         }
 
-        public static Either<TE, TA> Unit<TA>(TA a)
+        public static Either<TE, TA> Return<TA>(TA a)
         {
             return Right(a);
         }
@@ -189,7 +189,7 @@ namespace MonadLib
 
     internal class EitherMonadAdapter<TE> : IMonadAdapter<TE>
     {
-        public IMonad<TE, TA> Unit<TA>(TA a)
+        public IMonad<TE, TA> Return<TA>(TA a)
         {
             return Either<TE>.Right(a);
         }

@@ -116,10 +116,12 @@ namespace MonadLibTests
         }
 
         // TODO: add tests to cover the following:
-        // Either.Unit
+        // Either.Return
         // Either.Bind
         // Either.LiftM2
         // Either.LiftM3
+        // Either.LiftM4
+        // Either.LiftM5
 
         [Test]
         public void LiftMAppliedToLeft()

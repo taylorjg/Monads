@@ -104,18 +104,18 @@ namespace MonadLibTests
             Assert.That(justFuncParam, Is.EqualTo(42));
         }
 
-        // TODO: add tests re monadic behaviour:
-        // Maybe.Unit
-        // Maybe.Bind x 1 with nothing/just
-        // Maybe.Bind x 2 with nothing/just combinations
-        // Maybe.Unit => Maybe.Bind x 2 with nothing/just combinations
-        // Maybe.LiftM2 with left/right
-        // Maybe.LiftM3 with left/right
+        // TODO: add tests to cover the following:
+        // Maybe.Return
+        // Maybe.Bind
+        // Maybe.LiftM2
+        // Maybe.LiftM3
+        // Maybe.LiftM4
+        // Maybe.LiftM5
 
         [Test]
         public void LiftMAppliedToJust()
         {
-            var maybe = Maybe.Unit(10).LiftM(a => Convert.ToString(a * a));
+            var maybe = Maybe.Return(10).LiftM(a => Convert.ToString(a * a));
             Assert.That(maybe.IsJust, Is.True);
             Assert.That(maybe.IsNothing, Is.False);
             Assert.That(maybe.FromJust, Is.EqualTo("100"));
