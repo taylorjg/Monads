@@ -44,7 +44,7 @@ am playing around with monads in C#.
 * Implement more monads e.g.:
  * Reader
  * Writer
- * State
+ * ~~State~~
  * IO
 * Implement some monad transformers ?
  * MaybeT

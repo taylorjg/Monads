@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MonadLib
 {
@@ -11,20 +12,15 @@ namespace MonadLib
 
         public Func<TS, Tuple<TA, TS>> RunState { get; private set; }
 
-        // get :: State s s
-        // get s = (s,s)
-
-        // put :: s -> State s ()
-        // put x s = ((),x)
-
-        // modify :: (s -> s) -> State s ()
-        // modify f = do { x <- get; put (f x) }
-
-        // evalState :: State s a -> s -> a
-        // evalState act = fst . runState act
+        public TA EvalState(TS s)
+        {
+            return RunState(s).Item1;
+        }
  
-        // execState :: State s a -> s -> s
-        // execState act = snd . runState act
+        public TS ExecState(TS s)
+        {
+            return RunState(s).Item2;
+        }
 
         private MonadAdapter<TS> _monadAdapter;
 
@@ -41,6 +37,80 @@ namespace MonadLib
             var monadAdapter = ma.GetMonadAdapter();
             return (State<TS, TB>)monadAdapter.Bind(ma, f);
         }
+
+        public static State<TS, TB> LiftM<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f)
+        {
+            return (State<TS, TB>)MonadCombinators<TS>.LiftM(f, ma);
+        }
+
+        public static State<TS, TB> LiftM<TS, TA, TB>(Func<TA, TB> f, State<TS, TA> ma)
+        {
+            return (State<TS, TB>)MonadCombinators<TS>.LiftM(f, ma);
+        }
+
+        public static State<TS, TC> LiftM2<TS, TA, TB, TC>(this State<TS, TA> ma, State<TS, TB> mb, Func<TA, TB, TC> f)
+        {
+            return (State<TS, TC>)MonadCombinators<TS>.LiftM2(f, ma, mb);
+        }
+
+        public static State<TS, TC> LiftM2<TS, TA, TB, TC>(Func<TA, TB, TC> f, State<TS, TA> ma, State<TS, TB> mb)
+        {
+            return (State<TS, TC>)MonadCombinators<TS>.LiftM2(f, ma, mb);
+        }
+
+        public static State<TS, TD> LiftM3<TS, TA, TB, TC, TD>(this State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, Func<TA, TB, TC, TD> f)
+        {
+            return (State<TS, TD>)MonadCombinators<TS>.LiftM3(f, ma, mb, mc);
+        }
+
+        public static State<TS, TD> LiftM3<TS, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc)
+        {
+            return (State<TS, TD>)MonadCombinators<TS>.LiftM3(f, ma, mb, mc);
+        }
+
+        public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms)
+        {
+            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new EitherMonadAdapter<TS>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static State<TS, Unit> Sequence_<TS, TA>(IEnumerable<State<TS, TA>> ms)
+        // ReSharper restore InconsistentNaming
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.SequenceInternal_(ms, new EitherMonadAdapter<TS>());
+        }
+
+        public static State<TS, IEnumerable<TB>> MapM<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as)
+        {
+            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new EitherMonadAdapter<TS>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static State<TS, Unit> MapM_<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as)
+        // ReSharper restore InconsistentNaming
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new EitherMonadAdapter<TS>());
+        }
+
+        public static State<TS, IEnumerable<TA>> ReplicateM<TS, TA>(int n, State<TS, TA> ma)
+        {
+            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.ReplicateM(n, ma);
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static State<TS, Unit> ReplicateM_<TS, TA>(int n, State<TS, TA> ma)
+        // ReSharper restore InconsistentNaming
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.ReplicateM_(n, ma);
+        }
+
+        public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma)
+        {
+            // Ideally, we would like to use MonadCombinators<TE>.Join(mma) but there
+            // is a casting issue that I have figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (State<TS, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
     }
 
     public static class State<TS>
@@ -48,6 +118,21 @@ namespace MonadLib
         public static State<TS, TA> Return<TA>(TA a)
         {
             return new State<TS, TA>(s => Tuple.Create(a, s));
+        }
+
+        public static State<TS, TS> Get()
+        {
+            return new State<TS, TS>(s => Tuple.Create(s, s));
+        }
+
+        public static State<TS, Unit> Put(TS s)
+        {
+            return new State<TS, Unit>(_ => Tuple.Create(new Unit(), s));
+        }
+
+        public static State<TS, Unit> Modify(Func<TS, TS> f)
+        {
+            return new State<TS, Unit>(s => Get().Bind(a => Put(f(a))).RunState(s));
         }
     }
 

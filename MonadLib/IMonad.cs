@@ -9,8 +9,7 @@ namespace MonadLib
     {
         public override bool Equals(object obj)
         {
-            if (!(obj is Unit)) return false;
-            return true;
+            return obj is Unit;
         }
 
         public override int GetHashCode()
