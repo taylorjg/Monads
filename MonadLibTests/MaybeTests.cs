@@ -158,18 +158,18 @@ namespace MonadLibTests
         }
 
         [Test]
-        public void MatchWithDefaultAppliedToNothing()
+        public void MapOrDefaultAppliedToNothing()
         {
             var maybe = Maybe.Nothing<int>();
-            var actual = Maybe.MatchWithDefault("my-default-value", Convert.ToString, maybe);
+            var actual = Maybe.MapOrDefault("my-default-value", Convert.ToString, maybe);
             Assert.That(actual, Is.EqualTo("my-default-value"));
         }
 
         [Test]
-        public void MatchWithDefaultAppliedToJust()
+        public void MapOrDefaultAppliedToJust()
         {
             var maybe = Maybe.Just(42);
-            var actual = Maybe.MatchWithDefault("my-default-value", Convert.ToString, maybe);
+            var actual = Maybe.MapOrDefault("my-default-value", Convert.ToString, maybe);
             Assert.That(actual, Is.EqualTo("42"));
         }
 

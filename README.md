@@ -17,6 +17,9 @@ am playing around with monads in C#.
  * ~~Data.Either.lefts :: [Either a b] -> [a]~~
  * ~~Data.Either.rights :: [Either a b] -> [b]~~
  * ~~Data.Either.partitionEithers :: [Either a b] -> ([a], [b])~~
+* Override Equals() and GetHashCode() on:
+ * Maybe<TA>
+ * Either<TE, TA>
 * Implement more monad combinators e.g.:
  * ~~sequence~~
  * ~~sequence&#95;~~
@@ -46,12 +49,17 @@ am playing around with monads in C#.
  * Writer
  * ~~State~~
  * IO
+* Implement MonadPlus
 * Implement some monad transformers ?
  * MaybeT
  * ReaderT
  * WriterT
  * StateT
-* Add XML Documentation comments ?
+* Documentation
+ * Add XML Documentation comments
+ * Create Sandcastle documentation from the XML Documentation comments
+ * Make the Sandcastle documentation available via a gh-pages branch of this repo - like the [Flinq documentation](http://taylorjg.github.io/Flinq/)
+* Make MonadLib available as a NuGet package
 
 ## Links
 

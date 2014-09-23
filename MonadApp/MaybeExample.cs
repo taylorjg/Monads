@@ -12,9 +12,9 @@ namespace Monads
         {
             var alist = new AssociationList
                 {
-                    {"title", Maybe.Just("TTT")},
-                    {"user", Maybe.Just("UUU")},
-                    {"review", Maybe.Just("RRR")}
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Just("Jon")},
+                    {"review", Maybe.Just("A film about a shark")}
                 };
 
             // Using void Maybe.Match()
@@ -41,10 +41,9 @@ namespace Monads
 
         private static Maybe<string> Lookup(AssociationList alist, string key)
         {
-            Maybe<string> value;
-            return alist.TryGetValue(key, out value) && value.IsJust && !string.IsNullOrEmpty(value.FromJust)
-                       ? value
-                       : Maybe.Nothing<string>();
+            return alist.GetValue(key).Bind(
+                v => v.Bind(
+                    s => !string.IsNullOrEmpty(s) ? v : Maybe.Nothing<string>()));
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Monads
         {
             var alist = new AssociationList
                 {
-                    {"title", Maybe.Just("TTT")},
-                    {"user", Maybe.Just("UUU")},
-                    {"review", Maybe.Just("RRR")}
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Just("Jon")},
+                    {"review", Maybe.Just("A film about a shark")}
                 };
 
             // Using void Either.Match()
@@ -41,21 +41,24 @@ namespace Monads
 
         private static Either<string, string> Lookup(AssociationList alist, string key)
         {
-            Maybe<string> value;
-            if (alist.TryGetValue(key, out value))
-            {
-                if (value.IsJust)
-                {
-                    if (!string.IsNullOrEmpty(value.FromJust))
+            return alist.GetValue(key).Match(
+                v => v.Match(
+                    s =>
+                        {
+                            if (!string.IsNullOrEmpty(s)) return Either<string>.Right(s);
+                            var msg = string.Format("Found key \"{0}\" but its value is empty", key);
+                            return Either<string>.Left<string>(msg);
+                        },
+                    () =>
+                        {
+                            var msg = string.Format("Found key \"{0}\" but it has no value", key);
+                            return Either<string>.Left<string>(msg);
+                        }),
+                () =>
                     {
-                        return Either<string>.Right(value.FromJust);
-                    }
-                    return Either<string>.Left<string>(string.Format("Found key \"{0}\" but its value is empty", key));
-                }
-                return Either<string>.Left<string>(string.Format("Found key \"{0}\" but it has no value", key));
-            }
-
-            return Either<string>.Left<string>(string.Format("Failed to find a value for key \"{0}\"", key));
+                        var msg = string.Format("Failed to find a value for key \"{0}\"", key);
+                        return Either<string>.Left<string>(msg);
+                    });
         }
     }
 }

@@ -108,9 +108,15 @@ namespace MonadLib
             return ms.Where(m => m.IsJust).Select(m => m.FromJust);
         }
 
-        public static TB MatchWithDefault<TA, TB>(TB b, Func<TA, TB> f, Maybe<TA> ma)
+        public static TB MapOrDefault<TA, TB>(TB b, Func<TA, TB> f, Maybe<TA> ma)
         {
             return ma.Match(f, () => b);
+        }
+
+        public static Maybe<TValue> GetValue<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key)
+        {
+            TValue value;
+            return dictionary.TryGetValue(key, out value) ? Just(value) : Nothing<TValue>();
         }
 
         public static Maybe<TA> Return<TA>(TA a)
