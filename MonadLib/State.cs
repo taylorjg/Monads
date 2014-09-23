@@ -2,14 +2,14 @@
 
 namespace MonadLib
 {
-    internal sealed class State<TS, TA> : IMonad<TS, TA>
+    public sealed class State<TS, TA> : IMonad<TS, TA>
     {
-        internal State(Func<TS, Tuple<TA, TS>> run)
+        internal State(Func<TS, Tuple<TA, TS>> runState)
         {
-            Run = run;
+            RunState = runState;
         }
 
-        public Func<TS, Tuple<TA, TS>> Run { get; private set; }
+        public Func<TS, Tuple<TA, TS>> RunState { get; private set; }
 
         // get :: State s s
         // get s = (s,s)
@@ -34,11 +34,28 @@ namespace MonadLib
         }
     }
 
+    public static class State
+    {
+        public static State<TS, TB> Bind<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return (State<TS, TB>)monadAdapter.Bind(ma, f);
+        }
+    }
+
+    public static class State<TS>
+    {
+        public static State<TS, TA> Return<TA>(TA a)
+        {
+            return new State<TS, TA>(s => Tuple.Create(a, s));
+        }
+    }
+
     internal class StateMonadAdapter<TS> : MonadAdapter<TS>
     {
         public override IMonad<TS, TA> Return<TA>(TA a)
         {
-            return new State<TS, TA>(s => Tuple.Create(a, s));
+            return State<TS>.Return(a);
         }
 
         public override IMonad<TS, TB> Bind<TA, TB>(IMonad<TS, TA> ma, Func<TA, IMonad<TS, TB>> f)
@@ -46,12 +63,12 @@ namespace MonadLib
             return new State<TS, TB>(s =>
                 {
                     var stateA = (State<TS, TA>) ma;
-                    var pair = stateA.Run(s);
+                    var pair = stateA.RunState(s);
                     var a = pair.Item1;
                     var stick = pair.Item2;
                     var mb = f(a);
                     var stateB = (State<TS, TB>) mb;
-                    return stateB.Run(stick);
+                    return stateB.RunState(stick);
                 });
         }
     }
