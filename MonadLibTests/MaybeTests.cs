@@ -1,6 +1,5 @@
-﻿#pragma warning disable 168
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MonadLib;
 using NUnit.Framework;
@@ -33,7 +32,9 @@ namespace MonadLibTests
         public void FromJustAppliedToNothingThrowsException()
         {
             var maybe = Maybe.Nothing<int>();
+#pragma warning disable 168
             Assert.Throws<InvalidOperationException>(() => { var dummy = maybe.FromJust; });
+#pragma warning restore 168
         }
 
         [Test]
@@ -193,34 +194,65 @@ namespace MonadLibTests
         // Maybe.Return
         // Maybe.Bind
         // Maybe.BindIgnoringLeft
-        // Maybe.LiftM2
-        // Maybe.LiftM3
-        // Maybe.LiftM4
-        // Maybe.LiftM5
 
-        [Test]
-        public void LiftMAppliedToJust()
+        [Test, TestCaseSource("TestCaseSourceForLiftM")]
+        public void LiftM(Maybe<int> ma, bool expectedIsJust, int expectedFromJust)
         {
-            var maybe = Maybe.Return(10).LiftM(a => Convert.ToString(a * a));
-            Assert.That(maybe.IsJust, Is.True);
-            Assert.That(maybe.IsNothing, Is.False);
-            Assert.That(maybe.FromJust, Is.EqualTo("100"));
+            var actual = Maybe.LiftM(a => a, ma);
+            Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
+            if (expectedIsJust)
+            {
+                Assert.That(actual.FromJust, Is.EqualTo(expectedFromJust));
+            }
         }
 
-        [Test]
-        public void LiftMAppliedToNothing()
+        [Test, TestCaseSource("TestCaseSourceForLiftM2")]
+        public void LiftM2(Maybe<int> ma, Maybe<int> mb, bool expectedIsJust, int expectedFromJust)
         {
-            var maybe = Maybe.Nothing<int>().LiftM(a => Convert.ToString(a * a));
-            Assert.That(maybe.IsJust, Is.False);
-            Assert.That(maybe.IsNothing, Is.True);
+            var actual = Maybe.LiftM2((a, b) => a + b, ma, mb);
+            Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
+            if (expectedIsJust)
+            {
+                Assert.That(actual.FromJust, Is.EqualTo(expectedFromJust));
+            }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
-        public void Sequence(Tuple<string, Maybe<int>[], bool, int[]> tuple)
+        [Test, TestCaseSource("TestCaseSourceForLiftM3")]
+        public void LiftM3(Maybe<int> ma, Maybe<int> mb, Maybe<int> mc, bool expectedIsJust, int expectedFromJust)
         {
-            var maybes = tuple.Item2;
-            var expectedIsJust = tuple.Item3;
-            var expectedFromJust = tuple.Item4;
+            var actual = Maybe.LiftM3((a, b, c) => a + b + c, ma, mb, mc);
+            Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
+            if (expectedIsJust)
+            {
+                Assert.That(actual.FromJust, Is.EqualTo(expectedFromJust));
+            }
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForLiftM4")]
+        public void LiftM4(Maybe<int> ma, Maybe<int> mb, Maybe<int> mc, Maybe<int> md, bool expectedIsJust, int expectedFromJust)
+        {
+            var actual = Maybe.LiftM4((a, b, c, d) => a + b + c + d, ma, mb, mc, md);
+            Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
+            if (expectedIsJust)
+            {
+                Assert.That(actual.FromJust, Is.EqualTo(expectedFromJust));
+            }
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForLiftM5")]
+        public void LiftM5(Maybe<int> ma, Maybe<int> mb, Maybe<int> mc, Maybe<int> md, Maybe<int> me, bool expectedIsJust, int expectedFromJust)
+        {
+            var actual = Maybe.LiftM5((a, b, c, d, e) => a + b + c + d + e, ma, mb, mc, md, me);
+            Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
+            if (expectedIsJust)
+            {
+                Assert.That(actual.FromJust, Is.EqualTo(expectedFromJust));
+            }
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests2")]
+        public void Sequence(Maybe<int>[] maybes, bool expectedIsJust, int[] expectedFromJust)
+        {
             var actual = Maybe.Sequence(maybes);
             Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
             if (expectedIsJust)
@@ -229,11 +261,9 @@ namespace MonadLibTests
             }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
-        public void Sequence_(Tuple<string, Maybe<int>[], bool, int[]> tuple)
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests2")]
+        public void Sequence_(Maybe<int>[] maybes, bool expectedIsJust, int[] expectedFromJust)
         {
-            var maybes = tuple.Item2;
-            var expectedIsJust = tuple.Item3;
             var actual = Maybe.Sequence_(maybes);
             Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
             if (expectedIsJust)
@@ -328,37 +358,70 @@ namespace MonadLibTests
             Assert.That(actual.IsNothing, Is.True);
         }
 
-        private static readonly object[] TestCaseSourceForSequenceTests =
-            {
-                Tuple.Create(
-                    "4 Justs",
-                    new[]
-                        {
-                            Maybe.Just(1),
-                            Maybe.Just(2),
-                            Maybe.Just(3),
-                            Maybe.Just(4)
-                        },
-                    true,
-                    new[] {1, 2, 3, 4}),
+        // ReSharper disable UnusedMethodReturnValue.Local
 
-                Tuple.Create(
-                    "3 Justs and 1 Nothing",
-                    new[]
-                        {
-                            Maybe.Just(1),
-                            Maybe.Just(2),
-                            Maybe.Nothing<int>(),
-                            Maybe.Just(4)
-                        },
-                    false,
-                    null as int[]),
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM()
+        {
+            yield return new TestCaseData(Maybe.Just(1), true, 1).SetName("1 Just");
+            yield return new TestCaseData(Maybe.Nothing<int>(), false, default(int)).SetName("1 Nothing");
+        }
 
-                Tuple.Create(
-                    "Empty list of maybes",
-                    new Maybe<int>[] {},
-                    true,
-                    new int[] {})
-            };
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM2()
+        {
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), true, 3).SetName("2 Justs");
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Nothing<int>(), false, default(int)).SetName("1 Just and 1 Nothing");
+            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("2 Nothings");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM3()
+        {
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), true, 6).SetName("3 Justs");
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Nothing<int>(), false, default(int)).SetName("2 Justs and 1 Nothing");
+            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("3 Nothings");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM4()
+        {
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4), true, 10).SetName("4 Justs");
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Nothing<int>(), false, default(int)).SetName("3 Justs and 1 Nothing");
+            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("4 Nothings");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM5()
+        {
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4), Maybe.Just(5), true, 15).SetName("5 Justs");
+            yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4), Maybe.Nothing<int>(), false, default(int)).SetName("4 Justs and 1 Nothing");
+            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("5 Nothings");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForSequenceTests2()
+        {
+            yield return new TestCaseData(
+                new[]
+                    {
+                        Maybe.Just(1),
+                        Maybe.Just(2),
+                        Maybe.Just(3),
+                        Maybe.Just(4)
+                    },
+                true,
+                new[] {1, 2, 3, 4}).SetName("4 Justs");
+
+            yield return new TestCaseData(
+                new[]
+                    {
+                        Maybe.Just(1),
+                        Maybe.Just(2),
+                        Maybe.Nothing<int>(),
+                        Maybe.Just(4)
+                    },
+                false,
+                null).SetName("3 Justs and 1 Nothing");
+
+            yield return new TestCaseData(
+                new Maybe<int>[] {},
+                true,
+                new int[] {}).SetName("Empty list of maybes");
+        }
     }
 }
