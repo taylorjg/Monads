@@ -68,6 +68,26 @@ namespace MonadLib
             return (State<TS, TD>)MonadCombinators<TS>.LiftM3(f, ma, mb, mc);
         }
 
+        public static State<TS, TE> LiftM4<TS, TA, TB, TC, TD, TE>(this State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, Func<TA, TB, TC, TD, TE> f)
+        {
+            return (State<TS, TE>)MonadCombinators<TS>.LiftM4(f, ma, mb, mc, md);
+        }
+
+        public static State<TS, TE> LiftM4<TS, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md)
+        {
+            return (State<TS, TE>)MonadCombinators<TS>.LiftM4(f, ma, mb, mc, md);
+        }
+
+        public static State<TS, TF> LiftM5<TS, TA, TB, TC, TD, TE, TF>(this State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, State<TS, TE> me, Func<TA, TB, TC, TD, TE, TF> f)
+        {
+            return (State<TS, TF>)MonadCombinators<TS>.LiftM5(f, ma, mb, mc, md, me);
+        }
+
+        public static State<TS, TF> LiftM5<TS, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, State<TS, TE> me)
+        {
+            return (State<TS, TF>)MonadCombinators<TS>.LiftM5(f, ma, mb, mc, md, me);
+        }
+
         public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms)
         {
             return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new EitherMonadAdapter<TS>());

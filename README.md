@@ -20,6 +20,7 @@ am playing around with monads in C#.
 * Override Equals() and GetHashCode() on:
  * Maybe<TA>
  * Either<TE, TA>
+* Add an example to MonadApp showing the State monad in use
 * Implement more monad combinators e.g.:
  * ~~sequence~~
  * ~~sequence&#95;~~
@@ -35,8 +36,8 @@ am playing around with monads in C#.
  * ~~mapM&#95;~~
  * forM
  * forM&#95;
- * liftM4
- * liftM5
+ * ~~liftM4~~
+ * ~~liftM5~~
  * guard
  * when
  * unless
