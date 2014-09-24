@@ -195,7 +195,7 @@ namespace MonadLibTests
         // Maybe.Bind
         // Maybe.BindIgnoringLeft
 
-        [Test, TestCaseSource("TestCaseSourceForLiftM")]
+        [Test, TestCaseSource("TestCaseSourceForLiftMTests")]
         public void LiftM(Maybe<int> ma, bool expectedIsJust, int expectedFromJust)
         {
             var actual = Maybe.LiftM(a => a, ma);
@@ -206,7 +206,7 @@ namespace MonadLibTests
             }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForLiftM2")]
+        [Test, TestCaseSource("TestCaseSourceForLiftM2Tests")]
         public void LiftM2(Maybe<int> ma, Maybe<int> mb, bool expectedIsJust, int expectedFromJust)
         {
             var actual = Maybe.LiftM2((a, b) => a + b, ma, mb);
@@ -217,7 +217,7 @@ namespace MonadLibTests
             }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForLiftM3")]
+        [Test, TestCaseSource("TestCaseSourceForLiftM3Tests")]
         public void LiftM3(Maybe<int> ma, Maybe<int> mb, Maybe<int> mc, bool expectedIsJust, int expectedFromJust)
         {
             var actual = Maybe.LiftM3((a, b, c) => a + b + c, ma, mb, mc);
@@ -228,7 +228,7 @@ namespace MonadLibTests
             }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForLiftM4")]
+        [Test, TestCaseSource("TestCaseSourceForLiftM4Tests")]
         public void LiftM4(Maybe<int> ma, Maybe<int> mb, Maybe<int> mc, Maybe<int> md, bool expectedIsJust, int expectedFromJust)
         {
             var actual = Maybe.LiftM4((a, b, c, d) => a + b + c + d, ma, mb, mc, md);
@@ -239,7 +239,7 @@ namespace MonadLibTests
             }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForLiftM5")]
+        [Test, TestCaseSource("TestCaseSourceForLiftM5Tests")]
         public void LiftM5(Maybe<int> ma, Maybe<int> mb, Maybe<int> mc, Maybe<int> md, Maybe<int> me, bool expectedIsJust, int expectedFromJust)
         {
             var actual = Maybe.LiftM5((a, b, c, d, e) => a + b + c + d + e, ma, mb, mc, md, me);
@@ -250,7 +250,7 @@ namespace MonadLibTests
             }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForSequenceTests2")]
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
         public void Sequence(Maybe<int>[] maybes, bool expectedIsJust, int[] expectedFromJust)
         {
             var actual = Maybe.Sequence(maybes);
@@ -261,7 +261,7 @@ namespace MonadLibTests
             }
         }
 
-        [Test, TestCaseSource("TestCaseSourceForSequenceTests2")]
+        [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
         public void Sequence_(Maybe<int>[] maybes, bool expectedIsJust, int[] expectedFromJust)
         {
             var actual = Maybe.Sequence_(maybes);
@@ -360,41 +360,41 @@ namespace MonadLibTests
 
         // ReSharper disable UnusedMethodReturnValue.Local
 
-        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM()
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftMTests()
         {
             yield return new TestCaseData(Maybe.Just(1), true, 1).SetName("1 Just");
             yield return new TestCaseData(Maybe.Nothing<int>(), false, default(int)).SetName("1 Nothing");
         }
 
-        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM2()
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM2Tests()
         {
             yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), true, 3).SetName("2 Justs");
             yield return new TestCaseData(Maybe.Just(1), Maybe.Nothing<int>(), false, default(int)).SetName("1 Just and 1 Nothing");
             yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("2 Nothings");
         }
 
-        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM3()
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM3Tests()
         {
             yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), true, 6).SetName("3 Justs");
             yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Nothing<int>(), false, default(int)).SetName("2 Justs and 1 Nothing");
             yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("3 Nothings");
         }
 
-        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM4()
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM4Tests()
         {
             yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4), true, 10).SetName("4 Justs");
             yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Nothing<int>(), false, default(int)).SetName("3 Justs and 1 Nothing");
             yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("4 Nothings");
         }
 
-        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM5()
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM5Tests()
         {
             yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4), Maybe.Just(5), true, 15).SetName("5 Justs");
             yield return new TestCaseData(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3), Maybe.Just(4), Maybe.Nothing<int>(), false, default(int)).SetName("4 Justs and 1 Nothing");
             yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), Maybe.Nothing<int>(), false, default(int)).SetName("5 Nothings");
         }
 
-        private static IEnumerable<ITestCaseData> TestCaseSourceForSequenceTests2()
+        private static IEnumerable<ITestCaseData> TestCaseSourceForSequenceTests()
         {
             yield return new TestCaseData(
                 new[]

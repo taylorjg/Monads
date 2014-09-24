@@ -1,6 +1,4 @@
-﻿#pragma warning disable 168
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using MonadLib;
 using NUnit.Framework;
@@ -47,14 +45,18 @@ namespace MonadLibTests
         public void LeftAppliedToRightThrowsException()
         {
             var either = Either<string>.Right(42);
+#pragma warning disable 168
             Assert.Throws<InvalidOperationException>(() => { var dummy = either.Left; });
+#pragma warning restore 168
         }
 
         [Test]
         public void RightAppliedToLeftThrowsException()
         {
             var either = Either<string>.Left<int>("error");
+#pragma warning disable 168
             Assert.Throws<InvalidOperationException>(() => { var dummy = either.Right; });
+#pragma warning restore 168
         }
 
         [Test]
@@ -146,36 +148,85 @@ namespace MonadLibTests
         // Either.Return
         // Either.Bind
         // Either.BindIgnoringLeft
-        // Either.LiftM2
-        // Either.LiftM3
-        // Either.LiftM4
-        // Either.LiftM5
 
-        [Test]
-        public void LiftMAppliedToLeft()
+        [Test, TestCaseSource("TestCaseSourceForLiftMTests")]
+        public void LiftM(Either<string, int> ma, bool expectedIsRight, string expectedLeft, int expectedRight)
         {
-            var either = Either<string>.Left<int>("error").LiftM(a => a * a > 50);
-            Assert.That(either.IsLeft, Is.True);
-            Assert.That(either.IsRight, Is.False);
-            Assert.That(either.Left, Is.EqualTo("error"));
+            var actual = Either.LiftM(a => a, ma);
+            Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
+            if (expectedIsRight)
+            {
+                Assert.That(actual.Right, Is.EqualTo(expectedRight));
+            }
+            else
+            {
+                Assert.That(actual.Left, Is.EqualTo(expectedLeft));
+            }
         }
 
-        [Test]
-        public void LiftMAppliedToRight()
+        [Test, TestCaseSource("TestCaseSourceForLiftM2Tests")]
+        public void LiftM2(Either<string, int> ma, Either<string, int> mb, bool expectedIsRight, string expectedLeft, int expectedRight)
         {
-            var either = Either<string>.Right(10).LiftM(a => a * a > 50);
-            Assert.That(either.IsLeft, Is.False);
-            Assert.That(either.IsRight, Is.True);
-            Assert.That(either.Right, Is.True);
+            var actual = Either.LiftM2((a, b) => a + b, ma, mb);
+            Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
+            if (expectedIsRight)
+            {
+                Assert.That(actual.Right, Is.EqualTo(expectedRight));
+            }
+            else
+            {
+                Assert.That(actual.Left, Is.EqualTo(expectedLeft));
+            }
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForLiftM3Tests")]
+        public void LiftM3(Either<string, int> ma, Either<string, int> mb, Either<string, int> mc, bool expectedIsRight, string expectedLeft, int expectedRight)
+        {
+            var actual = Either.LiftM3((a, b, c) => a + b + c, ma, mb, mc);
+            Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
+            if (expectedIsRight)
+            {
+                Assert.That(actual.Right, Is.EqualTo(expectedRight));
+            }
+            else
+            {
+                Assert.That(actual.Left, Is.EqualTo(expectedLeft));
+            }
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForLiftM4Tests")]
+        public void LiftM4(Either<string, int> ma, Either<string, int> mb, Either<string, int> mc, Either<string, int> md, bool expectedIsRight, string expectedLeft, int expectedRight)
+        {
+            var actual = Either.LiftM4((a, b, c, d) => a + b + c + d, ma, mb, mc, md);
+            Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
+            if (expectedIsRight)
+            {
+                Assert.That(actual.Right, Is.EqualTo(expectedRight));
+            }
+            else
+            {
+                Assert.That(actual.Left, Is.EqualTo(expectedLeft));
+            }
+        }
+
+        [Test, TestCaseSource("TestCaseSourceForLiftM5Tests")]
+        public void LiftM5(Either<string, int> ma, Either<string, int> mb, Either<string, int> mc, Either<string, int> md, Either<string, int> me, bool expectedIsRight, string expectedLeft, int expectedRight)
+        {
+            var actual = Either.LiftM5((a, b, c, d, e) => a + b + c + d + e, ma, mb, mc, md, me);
+            Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
+            if (expectedIsRight)
+            {
+                Assert.That(actual.Right, Is.EqualTo(expectedRight));
+            }
+            else
+            {
+                Assert.That(actual.Left, Is.EqualTo(expectedLeft));
+            }
         }
 
         [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
-        public void Sequence(Tuple<string, Either<string, int>[], bool, string, int[]> tuple)
+        public void Sequence(Either<string, int>[] eithers, bool expectedIsRight, string expectedLeft, int[] expectedRight)
         {
-            var eithers = tuple.Item2;
-            var expectedIsRight = tuple.Item3;
-            var expectedLeft = tuple.Item4;
-            var expectedRight = tuple.Item5;
             var actual = Either.Sequence(eithers);
             Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
             if (expectedIsRight)
@@ -189,11 +240,8 @@ namespace MonadLibTests
         }
 
         [Test, TestCaseSource("TestCaseSourceForSequenceTests")]
-        public void Sequence_(Tuple<string, Either<string, int>[], bool, string, int[]> tuple)
+        public void Sequence_(Either<string, int>[] eithers, bool expectedIsRight, string expectedLeft, int[] expectedRight)
         {
-            var eithers = tuple.Item2;
-            var expectedIsRight = tuple.Item3;
-            var expectedLeft = tuple.Item4;
             var actual = Either.Sequence_(eithers);
             Assert.That(actual.IsRight, Is.EqualTo(expectedIsRight));
             if (expectedIsRight)
@@ -298,40 +346,73 @@ namespace MonadLibTests
             Assert.That(actual.Left, Is.EqualTo("error"));
         }
 
-        private static readonly object[] TestCaseSourceForSequenceTests =
-            {
-                Tuple.Create(
-                    "4 Rights",
-                    new[]
-                        {
-                            Either<string>.Right(1),
-                            Either<string>.Right(2),
-                            Either<string>.Right(3),
-                            Either<string>.Right(4)
-                        },
-                    true,
-                    null as string,
-                    new[] {1, 2, 3, 4}),
+        // ReSharper disable UnusedMethodReturnValue.Local
 
-                Tuple.Create(
-                    "3 Rights and 1 Left",
-                    new[]
-                        {
-                            Either<string>.Right(1),
-                            Either<string>.Right(2),
-                            Either<string>.Left<int>("error"),
-                            Either<string>.Right(4)
-                        },
-                    false,
-                    "error",
-                    null as int[]),
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftMTests()
+        {
+            yield return new TestCaseData(Either<string>.Right(1), true, null, 1).SetName("1 Right");
+            yield return new TestCaseData(Either<string>.Left<int>("error"), false, "error", default(int)).SetName("1 Left");
+        }
 
-                Tuple.Create(
-                    "Empty list of eithers",
-                    new Either<string, int>[] {},
-                    true,
-                    null as string,
-                    new int[] {})
-            };
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM2Tests()
+        {
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Right(2), true, null, 3).SetName("2 Rights");
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Left<int>("error"), false, "error", default(int)).SetName("1 Right and 1 Left");
+            yield return new TestCaseData(Either<string>.Left<int>("error 1"), Either<string>.Left<int>("error 2"), false, "error 1", default(int)).SetName("2 Lefts");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM3Tests()
+        {
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Right(2), Either<string>.Right(3), true, null, 6).SetName("3 Rights");
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Right(2), Either<string>.Left<int>("error"), false, "error", default(int)).SetName("2 Rights and 1 Left");
+            yield return new TestCaseData(Either<string>.Left<int>("error 1"), Either<string>.Left<int>("error 2"), Either<string>.Left<int>("error 3"), false, "error 1", default(int)).SetName("3 Lefts");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM4Tests()
+        {
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Right(2), Either<string>.Right(3), Either<string>.Right(4), true, null, 10).SetName("4 Rights");
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Right(2), Either<string>.Right(3), Either<string>.Left<int>("error"), false, "error", default(int)).SetName("3 Rights and 1 Left");
+            yield return new TestCaseData(Either<string>.Left<int>("error 1"), Either<string>.Left<int>("error 2"), Either<string>.Left<int>("error 3"), Either<string>.Left<int>("error 4"), false, "error 1", default(int)).SetName("4 Lefts");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM5Tests()
+        {
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Right(2), Either<string>.Right(3), Either<string>.Right(4), Either<string>.Right(5), true, null, 15).SetName("5 Rights");
+            yield return new TestCaseData(Either<string>.Right(1), Either<string>.Right(2), Either<string>.Right(3), Either<string>.Right(4), Either<string>.Left<int>("error"), false, "error", default(int)).SetName("4 Rights and 1 Left");
+            yield return new TestCaseData(Either<string>.Left<int>("error 1"), Either<string>.Left<int>("error 2"), Either<string>.Left<int>("error 3"), Either<string>.Left<int>("error 4"), Either<string>.Left<int>("error 5"), false, "error 1", default(int)).SetName("5 Lefts");
+        }
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForSequenceTests()
+        {
+            yield return new TestCaseData(
+                new[]
+                    {
+                        Either<string>.Right(1),
+                        Either<string>.Right(2),
+                        Either<string>.Right(3),
+                        Either<string>.Right(4)
+                    },
+                true,
+                null as string,
+                new[] {1, 2, 3, 4}).SetName("4 Rights");
+
+            yield return new TestCaseData(
+                new[]
+                    {
+                        Either<string>.Right(1),
+                        Either<string>.Right(2),
+                        Either<string>.Left<int>("error"),
+                        Either<string>.Right(4)
+                    },
+                false,
+                "error",
+                null as int[]).SetName("3 Rights and 1 Left");
+
+            yield return new TestCaseData(
+                new Either<string, int>[] {},
+                true,
+                null as string,
+                new int[] {}).SetName("Empty list of eithers");
+        }
     }
 }
