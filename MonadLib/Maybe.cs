@@ -70,14 +70,12 @@ namespace MonadLib
         private readonly TA _a;
         private readonly bool _isNothing;
 
-        private MonadAdapter _monadAdapter;
+        private MonadPlusAdapter<TA> _monadPlusAdapter;
 
         public MonadAdapter GetMonadAdapter()
         {
-            return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
+            return GetMonadPlusAdapter();
         }
-
-        private MonadPlusAdapter<TA> _monadPlusAdapter;
 
         public MonadPlusAdapter<TA> GetMonadPlusAdapter()
         {
@@ -167,28 +165,48 @@ namespace MonadLib
             return (Maybe<TD>)MonadCombinators.LiftM3(f, ma, mb, mc);
         }
 
+        public static Maybe<TE> LiftM4<TA, TB, TC, TD, TE>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Func<TA, TB, TC, TD, TE> f)
+        {
+            return (Maybe<TE>)MonadCombinators.LiftM4(f, ma, mb, mc, md);
+        }
+
+        public static Maybe<TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md)
+        {
+            return (Maybe<TE>)MonadCombinators.LiftM4(f, ma, mb, mc, md);
+        }
+
+        public static Maybe<TF> LiftM5<TA, TB, TC, TD, TE, TF>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Maybe<TE> me, Func<TA, TB, TC, TD, TE, TF> f)
+        {
+            return (Maybe<TF>)MonadCombinators.LiftM5(f, ma, mb, mc, md, me);
+        }
+
+        public static Maybe<TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Maybe<TE> me)
+        {
+            return (Maybe<TF>)MonadCombinators.LiftM5(f, ma, mb, mc, md, me);
+        }
+
         public static Maybe<IEnumerable<TA>> Sequence<TA>(IEnumerable<Maybe<TA>> ms)
         {
-            return (Maybe<IEnumerable<TA>>)MonadCombinators.SequenceInternal(ms, new MaybeMonadAdapter());
+            return (Maybe<IEnumerable<TA>>)MonadCombinators.SequenceInternal(ms, new MaybeMonadPlusAdapter<TA>());
         }
 
         // ReSharper disable InconsistentNaming
         public static Maybe<Unit> Sequence_<TA>(IEnumerable<Maybe<TA>> ms)
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.SequenceInternal_(ms, new MaybeMonadAdapter());
+            return (Maybe<Unit>)MonadCombinators.SequenceInternal_(ms, new MaybeMonadPlusAdapter<TA>());
         }
 
         public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as)
         {
-            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapMInternal(f, @as, new MaybeMonadAdapter());
+            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapMInternal(f, @as, new MaybeMonadPlusAdapter<TA>());
         }
 
         // ReSharper disable InconsistentNaming
         public static Maybe<Unit> MapM_<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as)
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadAdapter());
+            return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadPlusAdapter<TA>());
         }
 
         public static Maybe<IEnumerable<TA>> ReplicateM<TA>(int n, Maybe<TA> ma)
@@ -222,33 +240,30 @@ namespace MonadLib
         }
     }
 
-    internal class MaybeMonadAdapter : MonadAdapter
+    internal class MaybeMonadPlusAdapter<TAOuter> : MonadPlusAdapter<TAOuter>
     {
-        public override IMonad<TA> Return<TA>(TA a)
+        public override IMonad<TAInner> Return<TAInner>(TAInner a)
         {
             return Maybe.Just(a);
         }
 
-        public override IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
+        public override IMonad<TBInner> Bind<TAInner, TBInner>(IMonad<TAInner> ma, Func<TAInner, IMonad<TBInner>> f)
         {
-            var maybeA = (Maybe<TA>)ma;
-            return maybeA.IsJust ? f(maybeA.FromJust) : Maybe.Nothing<TB>();
+            var maybeA = (Maybe<TAInner>)ma;
+            return maybeA.IsJust ? f(maybeA.FromJust) : Maybe.Nothing<TBInner>();
         }
-    }
 
-    internal class MaybeMonadPlusAdapter<TA> : MonadPlusAdapter<TA>
-    {
-        public override IMonadPlus<TA> MZero
+        public override IMonadPlus<TAOuter> MZero
         {
             get
             {
-                return Maybe.Nothing<TA>();
+                return Maybe.Nothing<TAOuter>();
             }
         }
 
-        public override IMonadPlus<TA> MPlus(IMonadPlus<TA> xs, IMonadPlus<TA> ys)
+        public override IMonadPlus<TAOuter> MPlus(IMonadPlus<TAOuter> xs, IMonadPlus<TAOuter> ys)
         {
-            return ((Maybe<TA>) xs).Match(_ => xs, () => ys);
+            return ((Maybe<TAOuter>) xs).Match(_ => xs, () => ys);
         }
     }
 }

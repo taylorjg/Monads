@@ -37,12 +37,6 @@ namespace MonadLib
         MonadPlusAdapter<TA> GetMonadPlusAdapter();
     }
 
-    public abstract class MonadPlusAdapter<TA>
-    {
-        public abstract IMonadPlus<TA> MZero { get; }
-        public abstract IMonadPlus<TA> MPlus(IMonadPlus<TA> xs, IMonadPlus<TA> ys);
-    }
-
     public abstract class MonadAdapter
     {
         public abstract IMonad<TA> Return<TA>(TA a);
@@ -52,6 +46,12 @@ namespace MonadLib
         {
             return Bind(ma, _ => mb);
         }
+    }
+
+    public abstract class MonadPlusAdapter<TA> : MonadAdapter
+    {
+        public abstract IMonadPlus<TA> MZero { get; }
+        public abstract IMonadPlus<TA> MPlus(IMonadPlus<TA> xs, IMonadPlus<TA> ys);
     }
 
     public abstract class MonadAdapter<T1>
@@ -164,9 +164,8 @@ namespace MonadLib
     {
         public static IMonadPlus<TA> MFilter<TA>(Func<TA, bool> p, IMonadPlus<TA> ma)
         {
-            var monadAdapter = ma.GetMonadAdapter();
             var monadPlusAdapter = ma.GetMonadPlusAdapter();
-            return (IMonadPlus<TA>)monadAdapter.Bind(ma, a => p(a) ? monadAdapter.Return(a) : monadPlusAdapter.MZero);
+            return (IMonadPlus<TA>)monadPlusAdapter.Bind(ma, a => p(a) ? monadPlusAdapter.Return(a) : monadPlusAdapter.MZero);
         }
     }
 
