@@ -50,7 +50,7 @@ am playing around with monads in C#.
  * Writer
  * ~~State~~
  * IO
-* Implement MonadPlus
+* ~~Implement MonadPlus~~
 * Implement some monad transformers ?
  * MaybeT
  * ReaderT
