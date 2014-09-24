@@ -5,22 +5,22 @@ using Flinq;
 
 namespace MonadLib
 {
-    public sealed class Either<TE, TA> : IMonad<TE, TA>
+    public sealed class Either<TLeft, TA> : IMonad<TLeft, TA>
     {
-        private Either(LeftOrRight leftOrRight, TE e, TA a)
+        private Either(LeftOrRight leftOrRight, TLeft left, TA right)
         {
             _leftOrRight = leftOrRight;
-            _e = e;
-            _a = a;
+            _left = left;
+            _right = right;
         }
 
-        internal Either(TE e)
-            : this(LeftOrRight.Left, e, default(TA))
+        internal Either(TLeft left)
+            : this(LeftOrRight.Left, left, default(TA))
         {
         }
 
-        internal Either(TA a)
-            : this(LeftOrRight.Right, default(TE), a)
+        internal Either(TA right)
+            : this(LeftOrRight.Right, default(TLeft), right)
         {
         }
 
@@ -32,12 +32,12 @@ namespace MonadLib
             get { return _leftOrRight == LeftOrRight.Right; }
         }
 
-        public TE Left
+        public TLeft Left
         {
             get
             {
                 if (!IsLeft) throw new InvalidOperationException("Left called on Either that is Right.");
-                return _e;
+                return _left;
             }
         }
 
@@ -46,11 +46,11 @@ namespace MonadLib
             get
             {
                 if (!IsRight) throw new InvalidOperationException("Right called on Either that is Left.");
-                return _a;
+                return _right;
             }
         }
 
-        public void Match(Action<TE> leftAction, Action<TA> rightAction)
+        public void Match(Action<TLeft> leftAction, Action<TA> rightAction)
         {
             if (IsLeft)
                 leftAction(Left);
@@ -58,7 +58,7 @@ namespace MonadLib
                 rightAction(Right);
         }
 
-        public T Match<T>(Func<TE, T> leftFunc, Func<TA, T> rightFunc)
+        public T Match<T>(Func<TLeft, T> leftFunc, Func<TA, T> rightFunc)
         {
             return IsLeft ? leftFunc(Left) : rightFunc(Right);
         }
@@ -70,155 +70,175 @@ namespace MonadLib
         }
 
         private readonly LeftOrRight _leftOrRight;
-        private readonly TE _e;
-        private readonly TA _a;
+        private readonly TLeft _left;
+        private readonly TA _right;
 
-        private MonadAdapter<TE> _monadAdapter;
+        private MonadAdapter<TLeft> _monadAdapter;
 
-        public MonadAdapter<TE> GetMonadAdapter()
+        public MonadAdapter<TLeft> GetMonadAdapter()
         {
-            return _monadAdapter ?? (_monadAdapter = new EitherMonadAdapter<TE>());
+            return _monadAdapter ?? (_monadAdapter = new EitherMonadAdapter<TLeft>());
         }
     }
 
     public static class Either
     {
-        public static IEnumerable<TE> Lefts<TE, TA>(IEnumerable<Either<TE, TA>> eithers)
+        public static IEnumerable<TLeft> Lefts<TLeft, TA>(IEnumerable<Either<TLeft, TA>> eithers)
         {
             return eithers.Where(e => e.IsLeft).Select(e => e.Left);
         }
 
-        public static IEnumerable<TA> Rights<TE, TA>(IEnumerable<Either<TE, TA>> eithers)
+        public static IEnumerable<TA> Rights<TLeft, TA>(IEnumerable<Either<TLeft, TA>> eithers)
         {
             return eithers.Where(e => e.IsRight).Select(e => e.Right);
         }
 
-        public static Tuple<IEnumerable<TE>, IEnumerable<TA>> PartitionEithers<TE, TA>(IEnumerable<Either<TE, TA>> eithers)
+        public static Tuple<IEnumerable<TLeft>, IEnumerable<TA>> PartitionEithers<TLeft, TA>(IEnumerable<Either<TLeft, TA>> eithers)
         {
             var z = Tuple.Create(
-                System.Linq.Enumerable.Empty<TE>(),
+                System.Linq.Enumerable.Empty<TLeft>(),
                 System.Linq.Enumerable.Empty<TA>());
 
             return eithers.FoldRight(z, (either, acc) => either.Match(
-                e => Tuple.Create(MonadHelpers.Cons(e, acc.Item1), acc.Item2),
-                a => Tuple.Create(acc.Item1, MonadHelpers.Cons(a, acc.Item2))));
+                left => Tuple.Create(MonadHelpers.Cons(left, acc.Item1), acc.Item2),
+                right => Tuple.Create(acc.Item1, MonadHelpers.Cons(right, acc.Item2))));
         }
 
-        public static TB Match<TE, TA, TB>(Func<TE, TB> f, Func<TA, TB> g, Either<TE, TA> either)
+        public static TB Match<TLeft, TA, TB>(Func<TLeft, TB> f, Func<TA, TB> g, Either<TLeft, TA> either)
         {
             return either.Match(f, g);
         }
 
-        public static Either<TE, TB> Bind<TE, TA, TB>(this Either<TE, TA> ma, Func<TA, Either<TE, TB>> f)
+        public static Either<TLeft, TB> Bind<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
-            return (Either<TE, TB>)monadAdapter.Bind(ma, f);
+            return (Either<TLeft, TB>)monadAdapter.Bind(ma, f);
         }
 
-        public static Either<TE, TB> LiftM<TE, TA, TB>(this Either<TE, TA> ma, Func<TA, TB> f)
+        public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f)
         {
-            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, ma);
+            return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
         }
 
-        public static Either<TE, TB> LiftM<TE, TA, TB>(Func<TA, TB> f, Either<TE, TA> ma)
+        public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(Func<TA, TB> f, Either<TLeft, TA> ma)
         {
-            return (Either<TE, TB>)MonadCombinators<TE>.LiftM(f, ma);
+            return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
         }
 
-        public static Either<TE, TC> LiftM2<TE, TA, TB, TC>(this Either<TE, TA> ma, Either<TE, TB> mb, Func<TA, TB, TC> f)
+        public static Either<TLeft, TC> LiftM2<TLeft, TA, TB, TC>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Func<TA, TB, TC> f)
         {
-            return (Either<TE, TC>)MonadCombinators<TE>.LiftM2(f, ma, mb);
+            return (Either<TLeft, TC>)MonadCombinators<TLeft>.LiftM2(f, ma, mb);
         }
 
-        public static Either<TE, TC> LiftM2<TE, TA, TB, TC>(Func<TA, TB, TC> f, Either<TE, TA> ma, Either<TE, TB> mb)
+        public static Either<TLeft, TC> LiftM2<TLeft, TA, TB, TC>(Func<TA, TB, TC> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb)
         {
-            return (Either<TE, TC>)MonadCombinators<TE>.LiftM2(f, ma, mb);
+            return (Either<TLeft, TC>)MonadCombinators<TLeft>.LiftM2(f, ma, mb);
         }
 
-        public static Either<TE, TD> LiftM3<TE, TA, TB, TC, TD>(this Either<TE, TA> ma, Either<TE, TB> mb, Either<TE, TC> mc, Func<TA, TB, TC, TD> f)
+        public static Either<TLeft, TD> LiftM3<TLeft, TA, TB, TC, TD>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Func<TA, TB, TC, TD> f)
         {
-            return (Either<TE, TD>)MonadCombinators<TE>.LiftM3(f, ma, mb, mc);
+            return (Either<TLeft, TD>)MonadCombinators<TLeft>.LiftM3(f, ma, mb, mc);
         }
 
-        public static Either<TE, TD> LiftM3<TE, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Either<TE, TA> ma, Either<TE, TB> mb, Either<TE, TC> mc)
+        public static Either<TLeft, TD> LiftM3<TLeft, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc)
         {
-            return (Either<TE, TD>)MonadCombinators<TE>.LiftM3(f, ma, mb, mc);
+            return (Either<TLeft, TD>)MonadCombinators<TLeft>.LiftM3(f, ma, mb, mc);
         }
 
-        public static Either<TE, IEnumerable<TA>> Sequence<TE, TA>(IEnumerable<Either<TE, TA>> ms)
+        public static Either<TLeft, TE> LiftM4<TLeft, TA, TB, TC, TD, TE>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Func<TA, TB, TC, TD, TE> f)
         {
-            return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.SequenceInternal(ms, new EitherMonadAdapter<TE>());
+            return (Either<TLeft, TE>)MonadCombinators<TLeft>.LiftM4(f, ma, mb, mc, md);
         }
 
-        // ReSharper disable InconsistentNaming
-        public static Either<TE, Unit> Sequence_<TE, TA>(IEnumerable<Either<TE, TA>> ms)
-        // ReSharper restore InconsistentNaming
+        public static Either<TLeft, TE> LiftM4<TLeft, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md)
         {
-            return (Either<TE, Unit>)MonadCombinators<TE>.SequenceInternal_(ms, new EitherMonadAdapter<TE>());
+            return (Either<TLeft, TE>)MonadCombinators<TLeft>.LiftM4(f, ma, mb, mc, md);
         }
 
-        public static Either<TE, IEnumerable<TB>> MapM<TE, TA, TB>(Func<TA, Either<TE, TB>> f, IEnumerable<TA> @as)
+        public static Either<TLeft, TF> LiftM5<TLeft, TA, TB, TC, TD, TE, TF>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Either<TLeft, TE> me, Func<TA, TB, TC, TD, TE, TF> f)
         {
-            return (Either<TE, IEnumerable<TB>>)MonadCombinators<TE>.MapMInternal(f, @as, new EitherMonadAdapter<TE>());
+            return (Either<TLeft, TF>)MonadCombinators<TLeft>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        // ReSharper disable InconsistentNaming
-        public static Either<TE, Unit> MapM_<TE, TA, TB>(Func<TA, Either<TE, TB>> f, IEnumerable<TA> @as)
-        // ReSharper restore InconsistentNaming
+        public static Either<TLeft, TF> LiftM5<TLeft, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Either<TLeft, TE> me)
         {
-            return (Either<TE, Unit>)MonadCombinators<TE>.MapMInternal_(f, @as, new EitherMonadAdapter<TE>());
+            return (Either<TLeft, TF>)MonadCombinators<TLeft>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Either<TE, IEnumerable<TA>> ReplicateM<TE, TA>(int n, Either<TE, TA> ma)
+        public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms)
         {
-            return (Either<TE, IEnumerable<TA>>)MonadCombinators<TE>.ReplicateM(n, ma);
+            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.SequenceInternal(ms, new EitherMonadAdapter<TLeft>());
         }
 
         // ReSharper disable InconsistentNaming
-        public static Either<TE, Unit> ReplicateM_<TE, TA>(int n, Either<TE, TA> ma)
+        public static Either<TLeft, Unit> Sequence_<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms)
         // ReSharper restore InconsistentNaming
         {
-            return (Either<TE, Unit>)MonadCombinators<TE>.ReplicateM_(n, ma);
+            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.SequenceInternal_(ms, new EitherMonadAdapter<TLeft>());
         }
 
-        public static Either<TE, TA> Join<TE, TA>(Either<TE, Either<TE, TA>> mma)
+        public static Either<TLeft, IEnumerable<TB>> MapM<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, IEnumerable<TA> @as)
         {
-            // Ideally, we would like to use MonadCombinators<TE>.Join(mma) but there
+            return (Either<TLeft, IEnumerable<TB>>)MonadCombinators<TLeft>.MapMInternal(f, @as, new EitherMonadAdapter<TLeft>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Either<TLeft, Unit> MapM_<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, IEnumerable<TA> @as)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.MapMInternal_(f, @as, new EitherMonadAdapter<TLeft>());
+        }
+
+        public static Either<TLeft, IEnumerable<TA>> ReplicateM<TLeft, TA>(int n, Either<TLeft, TA> ma)
+        {
+            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.ReplicateM(n, ma);
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Either<TLeft, Unit> ReplicateM_<TLeft, TA>(int n, Either<TLeft, TA> ma)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.ReplicateM_(n, ma);
+        }
+
+        public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma)
+        {
+            // Ideally, we would like to use MonadCombinators<TLeft>.Join(mma) but there
             // is a casting issue that I have figured out how to fix.
             var monadAdapter = mma.GetMonadAdapter();
-            return (Either<TE, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+            return (Either<TLeft, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
     }
 
-    public static class Either<TE>
+    public static class Either<TLeft>
     {
-        public static Either<TE, TA> Left<TA>(TE e)
+        public static Either<TLeft, TA> Left<TA>(TLeft left)
         {
-            return new Either<TE, TA>(e);
+            return new Either<TLeft, TA>(left);
         }
 
-        public static Either<TE, TA> Right<TA>(TA a)
+        public static Either<TLeft, TA> Right<TA>(TA right)
         {
-            return new Either<TE, TA>(a);
+            return new Either<TLeft, TA>(right);
         }
 
-        public static Either<TE, TA> Return<TA>(TA a)
+        public static Either<TLeft, TA> Return<TA>(TA right)
         {
-            return Right(a);
+            return Right(right);
         }
     }
 
-    internal class EitherMonadAdapter<TE> : MonadAdapter<TE>
+    internal class EitherMonadAdapter<TLeft> : MonadAdapter<TLeft>
     {
-        public override IMonad<TE, TA> Return<TA>(TA a)
+        public override IMonad<TLeft, TA> Return<TA>(TA right)
         {
-            return Either<TE>.Right(a);
+            return Either<TLeft>.Right(right);
         }
 
-        public override IMonad<TE, TB> Bind<TA, TB>(IMonad<TE, TA> ma, Func<TA, IMonad<TE, TB>> f)
+        public override IMonad<TLeft, TB> Bind<TA, TB>(IMonad<TLeft, TA> ma, Func<TA, IMonad<TLeft, TB>> f)
         {
-            var eitherA = (Either<TE, TA>)ma;
-            return eitherA.IsRight ? f(eitherA.Right) : Either<TE>.Left<TB>(eitherA.Left);
+            var eitherA = (Either<TLeft, TA>)ma;
+            return eitherA.IsRight ? f(eitherA.Right) : Either<TLeft>.Left<TB>(eitherA.Left);
         }
     }
 }
