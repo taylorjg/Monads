@@ -32,6 +32,17 @@ namespace MonadLib
     }
     // ReSharper restore UnusedTypeParameter
 
+    public interface IMonadPlus<TA> : IMonad<TA>
+    {
+        MonadPlusAdapter<TA> GetMonadPlusAdapter();
+    }
+
+    public abstract class MonadPlusAdapter<TA>
+    {
+        public abstract IMonadPlus<TA> MZero { get; }
+        public abstract IMonadPlus<TA> MPlus(IMonadPlus<TA> xs, IMonadPlus<TA> ys);
+    }
+
     public abstract class MonadAdapter
     {
         public abstract IMonad<TA> Return<TA>(TA a);

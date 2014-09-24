@@ -5,7 +5,7 @@ using Flinq;
 
 namespace MonadLib
 {
-    public sealed class Maybe<TA> : IMonad<TA>
+    public sealed class Maybe<TA> : IMonadPlus<TA>
     {
         private Maybe(TA a, bool isNothing)
         {
@@ -75,6 +75,13 @@ namespace MonadLib
         public MonadAdapter GetMonadAdapter()
         {
             return _monadAdapter ?? (_monadAdapter = new MaybeMonadAdapter());
+        }
+
+        private MonadPlusAdapter<TA> _monadPlusAdapter;
+
+        public MonadPlusAdapter<TA> GetMonadPlusAdapter()
+        {
+            return _monadPlusAdapter ?? (_monadPlusAdapter = new MaybeMonadPlusAdapter<TA>());
         }
     }
 
@@ -216,6 +223,22 @@ namespace MonadLib
         {
             var maybeA = (Maybe<TA>)ma;
             return maybeA.IsJust ? f(maybeA.FromJust) : Maybe.Nothing<TB>();
+        }
+    }
+
+    internal class MaybeMonadPlusAdapter<TA> : MonadPlusAdapter<TA>
+    {
+        public override IMonadPlus<TA> MZero
+        {
+            get
+            {
+                return Maybe.Nothing<TA>();
+            }
+        }
+
+        public override IMonadPlus<TA> MPlus(IMonadPlus<TA> xs, IMonadPlus<TA> ys)
+        {
+            return ((Maybe<TA>) xs).Match(_ => xs, () => ys);
         }
     }
 }
