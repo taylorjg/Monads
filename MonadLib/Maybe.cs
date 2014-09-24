@@ -142,7 +142,17 @@ namespace MonadLib
             return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
         }
 
+        public static Maybe<TB> LiftM<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
+        {
+            return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
+        }
+
         public static Maybe<TC> LiftM2<TA, TB, TC>(this Maybe<TA> ma, Maybe<TB> mb, Func<TA, TB, TC> f)
+        {
+            return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
+        }
+
+        public static Maybe<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, Maybe<TA> ma, Maybe<TB> mb)
         {
             return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
         }
@@ -150,16 +160,6 @@ namespace MonadLib
         public static Maybe<TD> LiftM3<TA, TB, TC, TD>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Func<TA, TB, TC, TD> f)
         {
             return (Maybe<TD>)MonadCombinators.LiftM3(f, ma, mb, mc);
-        }
-
-        public static Maybe<TB> LiftM<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
-        {
-            return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
-        }
-
-        public static Maybe<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, Maybe<TA> ma, Maybe<TB> mb)
-        {
-            return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
         }
 
         public static Maybe<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc)
@@ -209,6 +209,16 @@ namespace MonadLib
             // is a casting issue that I have figured out how to fix.
             var monadAdapter = mma.GetMonadAdapter();
             return (Maybe<TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
+        public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p)
+        {
+            return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
+        }
+
+        public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma)
+        {
+            return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
         }
     }
 

@@ -41,9 +41,7 @@ namespace Monads
 
         private static Maybe<string> Lookup(AssociationList alist, string key)
         {
-            return alist.GetValue(key).Bind(
-                v => v.Bind(
-                    s => !string.IsNullOrEmpty(s) ? v : Maybe.Nothing<string>()));
+            return alist.GetValue(key).Bind(v => v.MFilter(s => !string.IsNullOrEmpty(s)));
         }
     }
 }

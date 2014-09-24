@@ -160,6 +160,16 @@ namespace MonadLib
         }
     }
 
+    internal static class MonadPlusCombinators
+    {
+        public static IMonadPlus<TA> MFilter<TA>(Func<TA, bool> p, IMonadPlus<TA> ma)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            var monadPlusAdapter = ma.GetMonadPlusAdapter();
+            return (IMonadPlus<TA>)monadAdapter.Bind(ma, a => p(a) ? monadAdapter.Return(a) : monadPlusAdapter.MZero);
+        }
+    }
+
     internal static class MonadCombinators<T1>
     {
         public static IMonad<T1, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
