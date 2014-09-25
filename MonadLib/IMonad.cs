@@ -181,6 +181,18 @@ namespace MonadLib
             var unit = monadAdapter.Return(new Unit());
             return monadAdapter.BindIgnoringLeft(m, unit);
         }
+
+        public static IMonad<IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter monadAdapter)
+        {
+            return SequenceInternal(@as.Zip(bs, f), monadAdapter);
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static IMonad<Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter monadAdapter)
+        // ReSharper restore InconsistentNaming
+        {
+            return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
+        }
     }
 
     internal static class MonadPlusCombinators
@@ -309,6 +321,18 @@ namespace MonadLib
             var m = FoldMInternal(f, a, bs, monadAdapter);
             var unit = monadAdapter.Return(new Unit());
             return monadAdapter.BindIgnoringLeft(m, unit);
+        }
+
+        public static IMonad<T1, IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
+        {
+            return SequenceInternal(@as.Zip(bs, f), monadAdapter);
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static IMonad<T1, Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
+        // ReSharper restore InconsistentNaming
+        {
+            return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
         }
     }
 

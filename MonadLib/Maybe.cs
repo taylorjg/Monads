@@ -262,6 +262,18 @@ namespace MonadLib
         {
             return (Maybe<Unit>)MonadCombinators.FoldMInternal_(f, a, bs, new MaybeMonadPlusAdapter<TA>());
         }
+
+        public static Maybe<IEnumerable<TC>> ZipWithM<TA, TB, TC>(Func<TA, TB, Maybe<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+        {
+            return (Maybe<IEnumerable<TC>>)MonadCombinators.ZipWithMInternal(f, @as, bs, new MaybeMonadPlusAdapter<TA>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Maybe<Unit> ZipWithM_<TA, TB, TC>(Func<TA, TB, Maybe<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Maybe<Unit>)MonadCombinators.ZipWithMInternal_(f, @as, bs, new MaybeMonadPlusAdapter<TA>());
+        }
     }
 
     internal class MaybeMonadPlusAdapter<TAOuter> : MonadPlusAdapter<TAOuter>

@@ -27,10 +27,10 @@ am playing around with monads in C#.
  * ~~replicateM~~
  * ~~replicateM&#95;~~
  * filterM
- * foldM
- * foldM&#95;
- * zipWithM
- * zipWithM_
+ * ~~foldM~~
+ * ~~foldM&#95;~~
+ * ~~zipWithM~~
+ * ~~zipWithM&#95;~~
  * mapAndUnzipM
  * ~~mapM~~
  * ~~mapM&#95;~~
