@@ -26,7 +26,7 @@ am playing around with monads in C#.
  * ~~sequence&#95;~~
  * ~~replicateM~~
  * ~~replicateM&#95;~~
- * filterM
+ * ~~filterM~~
  * ~~foldM~~
  * ~~foldM&#95;~~
  * ~~zipWithM~~
@@ -34,8 +34,8 @@ am playing around with monads in C#.
  * mapAndUnzipM
  * ~~mapM~~
  * ~~mapM&#95;~~
- * forM
- * forM&#95;
+ * ~~forM~~
+ * ~~forM&#95;~~
  * ~~liftM4~~
  * ~~liftM5~~
  * guard

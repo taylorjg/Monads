@@ -95,9 +95,7 @@ namespace MonadLib
 
         public static Tuple<IEnumerable<TLeft>, IEnumerable<TA>> PartitionEithers<TLeft, TA>(IEnumerable<Either<TLeft, TA>> eithers)
         {
-            var z = Tuple.Create(
-                System.Linq.Enumerable.Empty<TLeft>(),
-                System.Linq.Enumerable.Empty<TA>());
+            var z = Tuple.Create(MonadHelpers.Nil<TLeft>(), MonadHelpers.Nil<TA>());
 
             return eithers.FoldRight(z, (either, acc) => either.Match(
                 left => Tuple.Create(MonadHelpers.Cons(left, acc.Item1), acc.Item2),
@@ -243,6 +241,11 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return (Either<TLeft, Unit>)MonadCombinators<TLeft>.ZipWithMInternal_(f, @as, bs, new EitherMonadAdapter<TLeft>());
+        }
+
+        public static Either<TLeft, IEnumerable<TA>> FilterM<TLeft, TA>(Func<TA, Either<TLeft, bool>> p, IEnumerable<TA> @as)
+        {
+            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.FilterMInternal(p, @as, new EitherMonadAdapter<TLeft>());
         }
     }
 

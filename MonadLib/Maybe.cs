@@ -49,9 +49,7 @@ namespace MonadLib
 
         public IEnumerable<TA> ToList()
         {
-            return Match(
-                a => System.Linq.Enumerable.Repeat(a, 1),
-                System.Linq.Enumerable.Empty<TA>);
+            return Match(MonadHelpers.One, () => MonadHelpers.Nil<TA>());
         }
 
         public void Match(Action<TA> justAction, Action nothingAction)
@@ -273,6 +271,11 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return (Maybe<Unit>)MonadCombinators.ZipWithMInternal_(f, @as, bs, new MaybeMonadPlusAdapter<TA>());
+        }
+
+        public static Maybe<IEnumerable<TA>> FilterM<TA>(Func<TA, Maybe<bool>> p, IEnumerable<TA> @as)
+        {
+            return (Maybe<IEnumerable<TA>>)MonadCombinators.FilterMInternal(p, @as, new MaybeMonadPlusAdapter<TA>());
         }
     }
 

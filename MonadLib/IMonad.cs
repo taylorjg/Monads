@@ -114,7 +114,7 @@ namespace MonadLib
 
         public static IMonad<IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<TA>> ms, MonadAdapter monadAdapter)
         {
-            var z = monadAdapter.Return(System.Linq.Enumerable.Empty<TA>());
+            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
                 z, (m, mtick) => monadAdapter.Bind(
                     m, x => monadAdapter.Bind(
@@ -193,6 +193,22 @@ namespace MonadLib
         {
             return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
         }
+
+        public static IMonad<IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<bool>> p, IEnumerable<TA> @as, MonadAdapter monadAdapter)
+        {
+            // TODO: fix ReSharper grumble: Implicitly captured closure: f
+            return @as.HeadAndTail().Match(
+                tuple =>
+                    {
+                        var x = tuple.Item1;
+                        var xs = tuple.Item2;
+                        return monadAdapter.Bind(
+                            p(x), flg => monadAdapter.Bind(
+                                FilterMInternal(p, xs, monadAdapter),
+                                ys => monadAdapter.Return(flg ? MonadHelpers.Cons(x, ys) : ys)));
+                    },
+                () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
+        }
     }
 
     internal static class MonadPlusCombinators
@@ -255,7 +271,7 @@ namespace MonadLib
         public static IMonad<T1, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, TA>> ms, MonadAdapter<T1> monadAdapter)
         // ReSharper restore InconsistentNaming
         {
-            var z = monadAdapter.Return(System.Linq.Enumerable.Empty<TA>());
+            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
                 z, (m, mtick) => monadAdapter.Bind(
                     m, x => monadAdapter.Bind(
@@ -334,6 +350,22 @@ namespace MonadLib
         {
             return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
         }
+
+        public static IMonad<T1, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1> monadAdapter)
+        {
+            // TODO: fix ReSharper grumble: Implicitly captured closure: f
+            return @as.HeadAndTail().Match(
+                tuple =>
+                {
+                    var x = tuple.Item1;
+                    var xs = tuple.Item2;
+                    return monadAdapter.Bind(
+                        p(x), flg => monadAdapter.Bind(
+                            FilterMInternal(p, xs, monadAdapter),
+                            ys => monadAdapter.Return(flg ? MonadHelpers.Cons(x, ys) : ys)));
+                },
+                () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
+        }
     }
 
     internal static class MonadHelpers
@@ -345,7 +377,17 @@ namespace MonadLib
 
         public static IEnumerable<TA> Cons<TA>(TA x, IEnumerable<TA> xs)
         {
-            return System.Linq.Enumerable.Repeat(x, 1).Concat(xs);
+            return One(x).Concat(xs);
+        }
+
+        public static IEnumerable<TA> Nil<TA>()
+        {
+            return System.Linq.Enumerable.Empty<TA>();
+        }
+
+        public static IEnumerable<TA> One<TA>(TA a)
+        {
+            return System.Linq.Enumerable.Repeat(a, 1);
         }
 
         public static Maybe<Tuple<T, IEnumerable<T>>> HeadAndTail<T>(this IEnumerable<T> source)
