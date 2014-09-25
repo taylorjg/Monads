@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Flinq;
@@ -196,7 +197,7 @@ namespace MonadLib
 
         public static IMonad<IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<bool>> p, IEnumerable<TA> @as, MonadAdapter monadAdapter)
         {
-            // TODO: fix ReSharper grumble: Implicitly captured closure: f
+            // TODO: fix ReSharper grumble: Implicitly captured closure: p
             return @as.HeadAndTail().Match(
                 tuple =>
                     {
@@ -353,7 +354,7 @@ namespace MonadLib
 
         public static IMonad<T1, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1> monadAdapter)
         {
-            // TODO: fix ReSharper grumble: Implicitly captured closure: f
+            // TODO: fix ReSharper grumble: Implicitly captured closure: p
             return @as.HeadAndTail().Match(
                 tuple =>
                 {
@@ -392,15 +393,59 @@ namespace MonadLib
 
         public static Maybe<Tuple<T, IEnumerable<T>>> HeadAndTail<T>(this IEnumerable<T> source)
         {
-            // TODO: avoid the multiple enumeration of 'source' by doing something clever...
             using (var enumerator = source.GetEnumerator())
             {
-                if (!enumerator.MoveNext())
-                {
-                    return Maybe.Nothing<Tuple<T, IEnumerable<T>>>();
-                }
+                if (!enumerator.MoveNext()) return Maybe.Nothing<Tuple<T, IEnumerable<T>>>();
+                var head = enumerator.Current;
+                var tail = new TailIterator<T>(enumerator) as IEnumerable<T>;
+                return Maybe.Just(Tuple.Create(head, tail));
+            }
+        }
 
-                return Maybe.Just(Tuple.Create(enumerator.Current, source.Skip(1)));
+        private class TailIterator<T> : IEnumerable<T>, IEnumerator<T>
+        {
+            private readonly IEnumerator<T> _enumerator;
+
+            public TailIterator(IEnumerator<T> enumerator)
+            {
+                _enumerator = enumerator;
+            }
+
+            public IEnumerator<T> GetEnumerator()
+            {
+                return this;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                throw new InvalidOperationException("Unexpected call to IEnumerable.GetEnumerator() in TailIterator<T>");
+            }
+
+            public void Dispose()
+            {
+                _enumerator.Dispose();
+            }
+
+            public bool MoveNext()
+            {
+                return _enumerator.MoveNext();
+            }
+
+            public void Reset()
+            {
+                throw new InvalidOperationException("Unexpected call to Reset() in TailIterator<T>");
+            }
+
+            public T Current {
+                get { return _enumerator.Current; }
+            }
+
+            object IEnumerator.Current
+            {
+                get
+                {
+                    throw new InvalidOperationException("Unexpected call to IEnumerator.Current() in TailIterator<T>");
+                }
             }
         }
     }
