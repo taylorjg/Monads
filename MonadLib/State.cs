@@ -172,6 +172,26 @@ namespace MonadLib
         {
             return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.FilterMInternal(p, @as, new StateMonadAdapter<TS>());
         }
+
+        public static State<TS, Unit> When<TS>(bool b, State<TS, Unit> m)
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.When(b, m);
+        }
+
+        public static State<TS, Unit> Unless<TS>(bool b, State<TS, Unit> m)
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.Unless(b, m);
+        }
+
+        public static State<TS, TB> Forever<TS, TA, TB>(State<TS, TA> m)
+        {
+            return (State<TS, TB>)MonadCombinators<TS>.Forever<TA, TB>(m);
+        }
+
+        public static State<TS, Unit> Void<TS, TA>(Either<TS, TA> m)
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.Void(m);
+        }
     }
 
     public static class State<TS>

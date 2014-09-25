@@ -277,6 +277,26 @@ namespace MonadLib
         {
             return (Maybe<IEnumerable<TA>>)MonadCombinators.FilterMInternal(p, @as, new MaybeMonadPlusAdapter<TA>());
         }
+
+        public static Maybe<Unit> When(bool b, Maybe<Unit> m)
+        {
+            return (Maybe<Unit>) MonadCombinators.When(b, m);
+        }
+
+        public static Maybe<Unit> Unless(bool b, Maybe<Unit> m)
+        {
+            return (Maybe<Unit>)MonadCombinators.Unless(b, m);
+        }
+
+        public static Maybe<TB> Forever<TA, TB>(Maybe<TA> m)
+        {
+            return (Maybe<TB>)MonadCombinators.Forever<TA, TB>(m);
+        }
+
+        public static Maybe<Unit> Void<TA>(Maybe<TA> m)
+        {
+            return (Maybe<Unit>)MonadCombinators.Void(m);
+        }
     }
 
     internal class MaybeMonadPlusAdapter<TAOuter> : MonadPlusAdapter<TAOuter>

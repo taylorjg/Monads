@@ -247,6 +247,26 @@ namespace MonadLib
         {
             return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.FilterMInternal(p, @as, new EitherMonadAdapter<TLeft>());
         }
+
+        public static Either<TLeft, Unit> When<TLeft>(bool b, Either<TLeft, Unit> m)
+        {
+            return (Either<TLeft, Unit>) MonadCombinators<TLeft>.When(b, m);
+        }
+
+        public static Either<TLeft, Unit> Unless<TLeft>(bool b, Either<TLeft, Unit> m)
+        {
+            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.Unless(b, m);
+        }
+
+        public static Either<TLeft, TB> Forever<TLeft, TA, TB>(Either<TLeft, TA> m)
+        {
+            return (Either<TLeft, TB>)MonadCombinators<TLeft>.Forever<TA, TB>(m);
+        }
+
+        public static Either<TLeft, Unit> Void<TLeft, TA>(Either<TLeft, TA> m)
+        {
+            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.Void(m);
+        }
     }
 
     public static class Either<TLeft>

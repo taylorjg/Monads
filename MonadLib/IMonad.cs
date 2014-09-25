@@ -210,6 +210,31 @@ namespace MonadLib
                     },
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
         }
+
+        public static IMonad<Unit> When(bool b, IMonad<Unit> m)
+        {
+            var monadAdapter = m.GetMonadAdapter();
+            return b ? m : monadAdapter.Return(new Unit());
+        }
+
+        public static IMonad<Unit> Unless(bool b, IMonad<Unit> m)
+        {
+            return When(!b, m);
+        }
+
+        // ReSharper disable FunctionRecursiveOnAllPaths
+        public static IMonad<TB> Forever<TA, TB>(IMonad<TA> m)
+        {
+            var monadAdapter = m.GetMonadAdapter();
+            return monadAdapter.BindIgnoringLeft(m, Forever<TA, TB>(m));
+        }
+        // ReSharper restore FunctionRecursiveOnAllPaths
+
+        public static IMonad<Unit> Void<TA>(IMonad<TA> m)
+        {
+            var monadAdapter = m.GetMonadAdapter();
+            return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
+        }
     }
 
     internal static class MonadPlusCombinators
@@ -366,6 +391,28 @@ namespace MonadLib
                             ys => monadAdapter.Return(flg ? MonadHelpers.Cons(x, ys) : ys)));
                 },
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
+        }
+
+        public static IMonad<T1, Unit> When(bool b, IMonad<T1, Unit> m)
+        {
+            var monadAdapter = m.GetMonadAdapter();
+            return b ? m : monadAdapter.Return(new Unit());
+        }
+
+        public static IMonad<T1, Unit> Unless(bool b, IMonad<T1, Unit> m)
+        {
+            return When(!b, m);
+        }
+
+        public static IMonad<T1, TB> Forever<TA, TB>(IMonad<T1, TA> m)
+        {
+            return null;
+        }
+
+        public static IMonad<T1, Unit> Void<TA>(IMonad<T1, TA> m)
+        {
+            var monadAdapter = m.GetMonadAdapter();
+            return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
     }
 
