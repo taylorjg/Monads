@@ -189,6 +189,18 @@ namespace MonadLib
             return (Either<TLeft, Unit>)MonadCombinators<TLeft>.MapMInternal_(f, @as, new EitherMonadAdapter<TLeft>());
         }
 
+        public static Either<TLeft, IEnumerable<TB>> ForM<TLeft, TA, TB>(IEnumerable<TA> @as, Func<TA, Either<TLeft, TB>> f)
+        {
+            return (Either<TLeft, IEnumerable<TB>>)MonadCombinators<TLeft>.MapMInternal(f, @as, new EitherMonadAdapter<TLeft>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Either<TLeft, Unit> ForM_<TLeft, TA, TB>(IEnumerable<TA> @as, Func<TA, Either<TLeft, TB>> f)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.MapMInternal_(f, @as, new EitherMonadAdapter<TLeft>());
+        }
+
         public static Either<TLeft, IEnumerable<TA>> ReplicateM<TLeft, TA>(int n, Either<TLeft, TA> ma)
         {
             return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.ReplicateM(n, ma);
@@ -207,6 +219,18 @@ namespace MonadLib
             // is a casting issue that I have figured out how to fix.
             var monadAdapter = mma.GetMonadAdapter();
             return (Either<TLeft, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
+        public static Either<TLeft, TA> FoldM<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, IEnumerable<TB> bs)
+        {
+            return (Either<TLeft, TA>)MonadCombinators<TLeft>.FoldMInternal(f, a, bs, new EitherMonadAdapter<TLeft>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Either<TLeft, Unit> FoldM_<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, IEnumerable<TB> bs)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.FoldMInternal_(f, a, bs, new EitherMonadAdapter<TLeft>());
         }
     }
 

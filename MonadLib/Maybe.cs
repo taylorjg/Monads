@@ -209,6 +209,18 @@ namespace MonadLib
             return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadPlusAdapter<TA>());
         }
 
+        public static Maybe<IEnumerable<TB>> ForM<TA, TB>(IEnumerable<TA> @as, Func<TA, Maybe<TB>> f)
+        {
+            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapMInternal(f, @as, new MaybeMonadPlusAdapter<TA>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Maybe<Unit> ForM_<TA, TB>(IEnumerable<TA> @as, Func<TA, Maybe<TB>> f)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadPlusAdapter<TA>());
+        }
+
         public static Maybe<IEnumerable<TA>> ReplicateM<TA>(int n, Maybe<TA> ma)
         {
             return (Maybe<IEnumerable<TA>>)MonadCombinators.ReplicateM(n, ma);
@@ -237,6 +249,18 @@ namespace MonadLib
         public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma)
         {
             return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
+        }
+
+        public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs)
+        {
+            return (Maybe<TA>)MonadCombinators.FoldMInternal(f, a, bs, new MaybeMonadPlusAdapter<TA>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static Maybe<Unit> FoldM_<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs)
+        // ReSharper restore InconsistentNaming
+        {
+            return (Maybe<Unit>)MonadCombinators.FoldMInternal_(f, a, bs, new MaybeMonadPlusAdapter<TA>());
         }
     }
 

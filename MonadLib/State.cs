@@ -112,6 +112,18 @@ namespace MonadLib
             return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new EitherMonadAdapter<TS>());
         }
 
+        public static State<TS, IEnumerable<TB>> ForM<TS, TA, TB>(IEnumerable<TA> @as, Func<TA, State<TS, TB>> f)
+        {
+            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new EitherMonadAdapter<TS>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static State<TS, Unit> ForM_<TS, TA, TB>(IEnumerable<TA> @as, Func<TA, State<TS, TB>> f)
+        // ReSharper restore InconsistentNaming
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new EitherMonadAdapter<TS>());
+        }
+
         public static State<TS, IEnumerable<TA>> ReplicateM<TS, TA>(int n, State<TS, TA> ma)
         {
             return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.ReplicateM(n, ma);
@@ -130,6 +142,18 @@ namespace MonadLib
             // is a casting issue that I have figured out how to fix.
             var monadAdapter = mma.GetMonadAdapter();
             return (State<TS, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
+        public static State<TS, TA> FoldM<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, IEnumerable<TB> bs)
+        {
+            return (State<TS, TA>)MonadCombinators<TS>.FoldMInternal(f, a, bs, new StateMonadAdapter<TS>());
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static State<TS, Unit> FoldM_<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, IEnumerable<TB> bs)
+        // ReSharper restore InconsistentNaming
+        {
+            return (State<TS, Unit>)MonadCombinators<TS>.FoldMInternal_(f, a, bs, new StateMonadAdapter<TS>());
         }
     }
 

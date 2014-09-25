@@ -158,6 +158,29 @@ namespace MonadLib
             var monadAdapter = mma.GetMonadAdapter();
             return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
+
+        public static IMonad<TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter monadAdapter)
+        {
+            // TODO: fix ReSharper grumble: Implicitly captured closure: f
+            return bs.HeadAndTail().Match(
+                tuple =>
+                    {
+                        var x = tuple.Item1;
+                        var xs = tuple.Item2;
+                        var m = f(a, x);
+                        return monadAdapter.Bind(m, acc => FoldMInternal(f, acc, xs, monadAdapter));
+                    },
+                () => monadAdapter.Return(a));
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static IMonad<Unit> FoldMInternal_<TA, TB>(Func<TA, TB, IMonad<TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter monadAdapter)
+        // ReSharper restore InconsistentNaming
+        {
+            var m = FoldMInternal(f, a, bs, monadAdapter);
+            var unit = monadAdapter.Return(new Unit());
+            return monadAdapter.BindIgnoringLeft(m, unit);
+        }
     }
 
     internal static class MonadPlusCombinators
@@ -264,6 +287,29 @@ namespace MonadLib
             var monadAdapter = mma.GetMonadAdapter();
             return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
+
+        public static IMonad<T1, TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<T1, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
+        {
+            // TODO: fix ReSharper grumble: Implicitly captured closure: f
+            return bs.HeadAndTail().Match(
+                tuple =>
+                {
+                    var x = tuple.Item1;
+                    var xs = tuple.Item2;
+                    var m = f(a, x);
+                    return monadAdapter.Bind(m, acc => FoldMInternal(f, acc, xs, monadAdapter));
+                },
+                () => monadAdapter.Return(a));
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static IMonad<T1, Unit> FoldMInternal_<TA, TB>(Func<TA, TB, IMonad<T1, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
+        // ReSharper restore InconsistentNaming
+        {
+            var m = FoldMInternal(f, a, bs, monadAdapter);
+            var unit = monadAdapter.Return(new Unit());
+            return monadAdapter.BindIgnoringLeft(m, unit);
+        }
     }
 
     internal static class MonadHelpers
@@ -276,6 +322,20 @@ namespace MonadLib
         public static IEnumerable<TA> Cons<TA>(TA x, IEnumerable<TA> xs)
         {
             return System.Linq.Enumerable.Repeat(x, 1).Concat(xs);
+        }
+
+        public static Maybe<Tuple<T, IEnumerable<T>>> HeadAndTail<T>(this IEnumerable<T> source)
+        {
+            // TODO: avoid the multiple enumeration of 'source' by doing something clever...
+            using (var enumerator = source.GetEnumerator())
+            {
+                if (!enumerator.MoveNext())
+                {
+                    return Maybe.Nothing<Tuple<T, IEnumerable<T>>>();
+                }
+
+                return Maybe.Just(Tuple.Create(enumerator.Current, source.Skip(1)));
+            }
         }
     }
 }
