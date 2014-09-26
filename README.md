@@ -39,11 +39,11 @@ am playing around with monads in C#.
  * ~~liftM4~~
  * ~~liftM5~~
  * guard
- * when
- * unless
+ * ~~when~~
+ * ~~unless~~
  * ~~join~~
- * forever
- * void
+ * ~~forever~~
+ * ~~void~~
  * ap
 * Implement more monads e.g.:
  * Reader
