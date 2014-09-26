@@ -194,5 +194,10 @@ namespace MonadLib
             var monadAdapter = m.GetMonadAdapter();
             return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
+
+        public static IMonad<T1, TB> Ap<TA, TB>(IMonad<T1, Func<TA, TB>> mf, IMonad<T1, TA> ma)
+        {
+            return LiftM2((f, a) => f(a), mf, ma);
+        }
     }
 }

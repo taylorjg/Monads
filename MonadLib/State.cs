@@ -192,6 +192,11 @@ namespace MonadLib
         {
             return (State<TS, Unit>)MonadCombinators<TS>.Void(m);
         }
+
+        public static State<TS, TB> Ap<TS, TA, TB>(State<TS, Func<TA, TB>> mf, State<TS, TA> ma)
+        {
+            return (State<TS, TB>)MonadCombinators<TS>.Ap(mf, ma);
+        }
     }
 
     public static class State<TS>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>Jonathan Taylor</authors>
+    <owners>Jonathan Taylor</owners>
+    <licenseUrl>https://github.com/taylorjg/Monads/blob/master/license.txt</licenseUrl>
+    <projectUrl>https://github.com/taylorjg/Monads</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>First version</releaseNotes>
+    <copyright>Copyright 2014</copyright>
+    <tags>C# monad monads maybe either LiftM functional</tags>
+  </metadata>
+</package>

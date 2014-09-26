@@ -297,6 +297,11 @@ namespace MonadLib
         {
             return (Maybe<Unit>)MonadCombinators.Void(m);
         }
+
+        public static Maybe<TB> Ap<TA, TB>(Maybe<Func<TA, TB>> mf, Maybe<TA> ma)
+        {
+            return (Maybe<TB>) MonadCombinators.Ap(mf, ma);
+        }
     }
 
     internal class MaybeMonadPlusAdapter<TAOuter> : MonadPlusAdapter<TAOuter>

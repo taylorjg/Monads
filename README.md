@@ -44,11 +44,12 @@ am playing around with monads in C#.
  * ~~join~~
  * ~~forever~~
  * ~~void~~
- * ap
+ * ~~ap~~
 * Implement more monads e.g.:
  * Reader
  * Writer
  * ~~State~~
+ * Error
  * IO
 * ~~Implement MonadPlus~~
 * Implement some monad transformers ?

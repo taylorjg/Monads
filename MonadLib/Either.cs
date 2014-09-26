@@ -267,6 +267,11 @@ namespace MonadLib
         {
             return (Either<TLeft, Unit>)MonadCombinators<TLeft>.Void(m);
         }
+
+        public static Either<TLeft, TB> Ap<TLeft, TA, TB>(Either<TLeft, Func<TA, TB>> mf, Either<TLeft, TA> ma)
+        {
+            return (Either<TLeft, TB>)MonadCombinators<TLeft>.Ap(mf, ma);
+        }
     }
 
     public static class Either<TLeft>
