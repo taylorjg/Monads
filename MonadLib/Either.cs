@@ -214,7 +214,7 @@ namespace MonadLib
         public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma)
         {
             // Ideally, we would like to use MonadCombinators<TLeft>.Join(mma) but there
-            // is a casting issue that I have figured out how to fix.
+            // is a casting issue that I have not figured out how to fix.
             var monadAdapter = mma.GetMonadAdapter();
             return (Either<TLeft, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
         }

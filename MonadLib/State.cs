@@ -138,8 +138,8 @@ namespace MonadLib
 
         public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma)
         {
-            // Ideally, we would like to use MonadCombinators<TE>.Join(mma) but there
-            // is a casting issue that I have figured out how to fix.
+            // Ideally, we would like to use MonadCombinators<TS>.Join(mma) but there
+            // is a casting issue that I have not figured out how to fix.
             var monadAdapter = mma.GetMonadAdapter();
             return (State<TS, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
