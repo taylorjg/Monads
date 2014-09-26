@@ -133,6 +133,12 @@ namespace MonadLib
             return (Maybe<TB>)monadAdapter.Bind(ma, f);
         }
 
+        public static Maybe<TB> BindIgnoringLeft<TA, TB>(this Maybe<TA> ma, Maybe<TB> mb)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return (Maybe<TB>)monadAdapter.BindIgnoringLeft(ma, mb);
+        }
+
         public static Maybe<TB> LiftM<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
         {
             return (Maybe<TB>)MonadCombinators.LiftM(f, ma);

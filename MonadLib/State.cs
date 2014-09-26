@@ -38,6 +38,12 @@ namespace MonadLib
             return (State<TS, TB>)monadAdapter.Bind(ma, f);
         }
 
+        public static State<TS, TB> BindIgnoringLeft<TS, TA, TB>(this State<TS, TA> ma, State<TS, TB> mb)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return (State<TS, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
+        }
+
         public static State<TS, TB> LiftM<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f)
         {
             return (State<TS, TB>)MonadCombinators<TS>.LiftM(f, ma);

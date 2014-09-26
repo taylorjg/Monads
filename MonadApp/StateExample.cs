@@ -19,10 +19,9 @@ namespace Monads
 
         public static Tick Tick()
         {
-            return new Tick(
-                s => TickState.Get().Bind(
-                    n => TickState.Put(n + 1).Bind(
-                        _ => TickState.Return(n))).RunState(s));
+            return TickState.Get().Bind(
+                n => TickState.Put(n + 1).BindIgnoringLeft(
+                    TickState.Return(n)));
         }
     }
 }

@@ -113,6 +113,12 @@ namespace MonadLib
             return (Either<TLeft, TB>)monadAdapter.Bind(ma, f);
         }
 
+        public static Either<TLeft, TB> BindIgnoringLeft<TLeft, TA, TB>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb)
+        {
+            var monadAdapter = ma.GetMonadAdapter();
+            return (Either<TLeft, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
+        }
+
         public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f)
         {
             return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
