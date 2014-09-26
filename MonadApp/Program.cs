@@ -6,6 +6,7 @@
         {
             MaybeExample.Demo();
             EitherExample.Demo();
+            StateExample.Demo();
         }
     }
 }

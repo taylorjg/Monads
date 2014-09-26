@@ -46,17 +46,16 @@ am playing around with monads in C#.
  * ~~void~~
  * ~~ap~~
 * Implement more monads e.g.:
+ * ~~State~~
  * Reader
  * Writer
- * ~~State~~
- * Error
- * IO
 * ~~Implement MonadPlus~~
 * Implement some monad transformers ?
  * MaybeT
+ * EitherT
+ * StateT
  * ReaderT
  * WriterT
- * StateT
 * Documentation
  * Add XML Documentation comments
  * Create Sandcastle documentation from the XML Documentation comments
