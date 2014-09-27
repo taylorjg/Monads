@@ -5,7 +5,7 @@ namespace MonadLib
 {
     public sealed class State<TS, TA> : IMonad<TS, TA>
     {
-        public State(Func<TS, Tuple<TA, TS>> runState)
+        internal State(Func<TS, Tuple<TA, TS>> runState)
         {
             RunState = runState;
         }
