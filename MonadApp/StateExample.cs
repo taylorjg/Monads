@@ -8,8 +8,6 @@ namespace Monads
 
     public class StateExample
     {
-        // https://hackage.haskell.org/package/mtl-1.1.0.2/docs/src/Control-Monad-State-Lazy.html#State
-
         public static void Demo()
         {
             var tick = Tick();

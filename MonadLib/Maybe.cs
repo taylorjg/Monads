@@ -122,6 +122,11 @@ namespace MonadLib
             return dictionary.TryGetValue(key, out value) ? Just(value) : Nothing<TValue>();
         }
 
+        public static Maybe<TA> ToMaybe<TA>(this TA? nullable) where TA : struct
+        {
+            return nullable.HasValue ? Just(nullable.Value) : Nothing<TA>();
+        }
+
         public static Maybe<TA> Return<TA>(TA a)
         {
             return Just(a);

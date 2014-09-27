@@ -18,7 +18,8 @@ namespace MonadLib
         public static IMonadPlus<TA> MFilter<TA>(Func<TA, bool> p, IMonadPlus<TA> ma)
         {
             var monadPlusAdapter = ma.GetMonadPlusAdapter();
-            return (IMonadPlus<TA>)monadPlusAdapter.Bind(ma, a => p(a) ? monadPlusAdapter.Return(a) : monadPlusAdapter.MZero);
+            return (IMonadPlus<TA>)monadPlusAdapter.Bind(
+                ma, a => p(a) ? monadPlusAdapter.Return(a) : monadPlusAdapter.MZero);
         }
     }
 }
