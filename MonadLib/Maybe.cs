@@ -127,6 +127,11 @@ namespace MonadLib
             return nullable.HasValue ? Just(nullable.Value) : Nothing<TA>();
         }
 
+        public static TA? ToNullable<TA>(this Maybe<TA> ma) where TA : struct
+        {
+            return ma.Match(a => new TA?(a), () => null);
+        }
+
         public static Maybe<TA> Return<TA>(TA a)
         {
             return Just(a);

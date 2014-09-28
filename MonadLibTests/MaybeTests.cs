@@ -235,6 +235,25 @@ namespace MonadLibTests
             Assert.That(actual.IsNothing, Is.True);
         }
 
+        [Test]
+        public void ToNullableAppliedToJust()
+        {
+            var maybe = Maybe.Just(10);
+            var n = maybe.ToNullable();
+            Assert.That(n.HasValue, Is.True);
+            // ReSharper disable PossibleInvalidOperationException
+            Assert.That(n.Value, Is.EqualTo(10));
+            // ReSharper restore PossibleInvalidOperationException
+        }
+
+        [Test]
+        public void ToNullableAppliedToNothing()
+        {
+            var maybe = Maybe.Nothing<int>();
+            var n = maybe.ToNullable();
+            Assert.That(n.HasValue, Is.False);
+        }
+
         // TODO: add tests to cover the following:
         // Maybe.Return
         // Maybe.Bind
