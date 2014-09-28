@@ -7,6 +7,7 @@
             MaybeExample.Demo();
             EitherExample.Demo();
             StateExample.Demo();
+            ReaderExample.Demo();
         }
     }
 }

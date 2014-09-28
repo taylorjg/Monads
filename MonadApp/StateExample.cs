@@ -6,7 +6,7 @@ namespace Monads
     using TickState = State<int>;
     using Tick = State<int, int>;
 
-    public class StateExample
+    public static class StateExample
     {
         public static void Demo()
         {

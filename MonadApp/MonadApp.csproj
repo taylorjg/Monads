@@ -46,6 +46,7 @@
     <Compile Include="MovieReview.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReaderExample.cs" />
     <Compile Include="StateExample.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,7 @@ namespace Monads
 {
     using AssociationList = Dictionary<string, Maybe<string>>;
 
-    public class EitherExample
+    public static class EitherExample
     {
         public static void Demo()
         {
