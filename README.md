@@ -1,8 +1,97 @@
 
 ## Description
 
-I am currently learning Haskell and trying to understand monads. As part of this learning process, I
-am playing around with monads in C#.
+I am currently learning Haskell and trying to understand monads. As part of this learning process, I am started playing around with monads in C#. 
+
+Although it wasn't really the original intention, it occurred to me that what I had implemented might actually form a useful monad library. I have implemented the following monads:
+
+* Maybe
+* Either
+* State
+* Reader
+
+I have also implemented some of the common monad functions:
+
+* Sequence and Sequence_
+* ReplicateM and ReplicateM_
+* FoldM and FoldM_
+* MapM and MapM_
+* ZipWithM and ZipWithM_
+* ForM
+* FilterM
+* LiftM through LiftM5
+* Join
+* When
+* Unless
+* Forever
+* Void
+
+## Design
+
+I have tried to use the Haskell names as much as possible. I have tweaked these slightly
+to match C# conventions e.g. <code>Sequence</code> instead of <code>sequence</code>. I have used the name <code>Bind</code> because C# does not allow me to use <code>(>>=)</code>.
+
+Whilst I have an <code>IMonad</code> interface, it does not have the expected <code>Return</code> and <code>Bind</code>
+members. Instead, these methods, along with the other common monad functions, are available
+as extension methods. This allows these methods to take and return the correct types e.g.
+<code>Maybe&lt;TA&gt;.Bind(...)</code> returns a <code>Maybe&lt;TA&gt;</code> rather than an <code>IMonad&lt;TA&gt;</code>. Internally, these extension methods are actually wrappers around
+common implementations of the monad functions with appropriate casting. Whilst it is tedious for me to write these wrappers, the hope is that this results in a convenient API.
+
+
+## Usage Examples
+
+### Maybe
+
+```C#
+// Just and Nothing
+var justInt = Maybe.Just(10);
+var nothingString = Maybe.Nothing<string>();
+
+// FromJust
+var x = justInt.FromJust;
+
+// Conversion from/to Nullable<T>
+int? n1 = 10;
+var mn = n1.ToMaybe();
+var n2 = mn.ToNullable();
+
+// Dictionary lookup
+var dict = new Dictionary<int, string>
+    {
+        {1, "one"},
+        {3, "three"}
+    };
+var mvJust = dict.GetValue(1);
+var mvNothing = dict.GetValue(2);
+
+// Basic pattern matching
+Console.WriteLine("mvJust: {0}", mvJust.Match(a => a, () => "Nothing"));
+Console.WriteLine("mvNothing: {0}", mvNothing.Match(a => a, () => "Nothing"));
+
+// Bind
+var ma = Maybe.Just(42);
+var mb = ma.Bind(a => Maybe.Just(Convert.ToString(a * a)));
+
+// LiftM
+var mc = Maybe.Just(12);
+var md = mc.LiftM(a => Convert.ToString(a * a));
+```
+
+### Either
+
+
+
+### State
+
+
+
+### Reader
+
+
+
+## Documentation
+
+It is on my TODO list to add XML documentation comments to the source code and then subsequently to generate Web-based MSDN-style documentation using Sandcastle.
 
 ## TODO
 

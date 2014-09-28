@@ -8,6 +8,7 @@
             EitherExample.Demo();
             StateExample.Demo();
             ReaderExample.Demo();
+            Scrapbook.MaybeScrapbook();
         }
     }
 }
