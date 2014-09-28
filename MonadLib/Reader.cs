@@ -20,10 +20,18 @@ namespace MonadLib
         }
     }
 
-    // TODO: add 'Local' method
-
     public static class Reader
     {
+        public static Reader<TR, TA> Local<TR, TA>(Func<TR, TR> f, Reader<TR, TA> ma)
+        {
+            return new Reader<TR, TA>(r => ma.RunReader(f(r)));
+        }
+
+        public static Reader<TR, TA> Local<TR, TA>(this Reader<TR, TA> ma, Func<TR, TR> f)
+        {
+            return new Reader<TR, TA>(r => ma.RunReader(f(r)));
+        }
+
         public static Reader<TR, TB> Bind<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
