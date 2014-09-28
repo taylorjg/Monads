@@ -33,14 +33,13 @@ I have also implemented some of the common monad functions:
 ## Design
 
 I have tried to use the Haskell names as much as possible. I have tweaked these slightly
-to match C# conventions e.g. <code>Sequence</code> instead of <code>sequence</code>. I have used the name <code>Bind</code> because C# does not allow me to use <code>(>>=)</code>.
+to match C# conventions e.g. <code>Sequence</code> instead of <code>sequence</code>. I have used the name <code>Bind</code> because C# does not allow me to use <code>>>=</code>.
 
 Whilst I have an <code>IMonad</code> interface, it does not have the expected <code>Return</code> and <code>Bind</code>
 members. Instead, these methods, along with the other common monad functions, are available
 as extension methods. This allows these methods to take and return the correct types e.g.
-<code>Maybe&lt;TA&gt;.Bind(...)</code> returns a <code>Maybe&lt;TA&gt;</code> rather than an <code>IMonad&lt;TA&gt;</code>. Internally, these extension methods are actually wrappers around
-common implementations of the monad functions with appropriate casting. Whilst it is tedious for me to write these wrappers, the hope is that this results in a convenient API.
-
+<code>Maybe</code>'s <code>Bind</code> method returns a <code>Maybe</code> rather than an <code>IMonad</code>. Internally, these extension methods are actually wrappers around
+common implementations of the monad functions with appropriate casting. Whilst it is tedious for me to write these wrappers, the hope is that this results in an API that is convenient and easy to use.
 
 ## Usage Examples
 
