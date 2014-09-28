@@ -87,6 +87,11 @@ var md2 = mc.LiftM(a => Convert.ToString(a * a)); // returns Maybe<string>
 ### Either
 
 ```C#
+// Either has two type parameters - TLeft and TA.
+// This is a little trick to make EitherString an alias for Either<String>.
+// EitherString is then a monad with a single type parameter - TA.
+using EitherString = Either<String>;
+
 // Creating a Left and Right
 var eitherLeft = EitherString.Left<int>("an error message");
 var eitherRight = EitherString.Right(10);

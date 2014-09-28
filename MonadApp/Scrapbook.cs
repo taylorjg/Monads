@@ -6,6 +6,9 @@ using MonadLib;
 
 namespace Monads
 {
+    // Either has two type parameters - TLeft and TA.
+    // This is a little trick to make EitherString an alias for Either<String>.
+    // EitherString is then a monad with a single type parameter - TA.
     using EitherString = Either<String>;
 
     public static class Scrapbook
