@@ -144,6 +144,22 @@ namespace MonadLibTests
             Assert.That(actual.Item2, Is.EqualTo(new[] {1, 2, 4, 6}));
         }
 
+        [Test]
+        public void MapEitherAppliedToLeft()
+        {
+            var either = Either<string>.Left<int>("error");
+            var actual = either.MapEither(l => l + l, null);
+            Assert.That(actual, Is.EqualTo("errorerror"));
+        }
+
+        [Test]
+        public void MapEitherAppliedToRight()
+        {
+            var either = Either<string>.Right(42);
+            var actual = either.MapEither(null, r => r + r);
+            Assert.That(actual, Is.EqualTo(84));
+        }
+
         // TODO: add tests to cover the following:
         // Either.Return
         // Either.Bind

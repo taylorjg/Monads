@@ -102,7 +102,12 @@ namespace MonadLib
                 right => Tuple.Create(acc.Item1, MonadHelpers.Cons(right, acc.Item2))));
         }
 
-        public static TB Match<TLeft, TA, TB>(Func<TLeft, TB> f, Func<TA, TB> g, Either<TLeft, TA> either)
+        public static TB MapEither<TLeft, TA, TB>(Func<TLeft, TB> f, Func<TA, TB> g, Either<TLeft, TA> either)
+        {
+            return either.Match(f, g);
+        }
+
+        public static TB MapEither<TLeft, TA, TB>(this Either<TLeft, TA> either, Func<TLeft, TB> f, Func<TA, TB> g)
         {
             return either.Match(f, g);
         }

@@ -47,7 +47,7 @@ namespace MonadLib
             return IsJust ? _a : defaultValue;
         }
 
-        public IEnumerable<TA> ToList()
+        public IEnumerable<TA> ToEnumerable()
         {
             return Match(MonadHelpers.One, () => MonadHelpers.Nil<TA>());
         }

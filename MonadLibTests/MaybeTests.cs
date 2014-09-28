@@ -175,18 +175,18 @@ namespace MonadLibTests
         }
 
         [Test]
-        public void ToListAppliedToJust()
+        public void ToEnumerableAppliedToJust()
         {
             var maybe = Maybe.Nothing<int>();
-            var actual = maybe.ToList();
+            var actual = maybe.ToEnumerable();
             Assert.That(actual, Is.Empty);
         }
 
         [Test]
-        public void ToListAppliedToNothing()
+        public void ToEnumerableAppliedToNothing()
         {
             var maybe = Maybe.Just(42);
-            var actual = maybe.ToList();
+            var actual = maybe.ToEnumerable();
             Assert.That(actual, Is.EqualTo(new[] {42}));
         }
 

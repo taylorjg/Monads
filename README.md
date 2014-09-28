@@ -41,9 +41,23 @@ as extension methods. This allows these methods to take and return the correct t
 <code>Maybe</code>'s <code>Bind</code> method returns a <code>Maybe</code> rather than an <code>IMonad</code>. Internally, these extension methods are actually wrappers around
 common implementations of the monad functions with appropriate casting. Whilst it is tedious for me to write these wrappers, the hope is that this results in an API that is convenient and easy to use.
 
+Most of my implementations of the common monad functions are noticably very similar to the
+Haskell implementations. This was a deliberate goal - I view this as vindicating my design choices.
+
 ## Usage Examples
 
+This section is a "work in progress". I hope to add more examples.
+
 ### Maybe
+
+The following Maybe methods exist but are not yet covered by the examples below. The Haskell function names are show in parentheses.
+
+* FromMaybe (fromMaybe)
+* ToEnumerable (maybeToList)
+* ListToMaybe (listToMaybe)
+* MapMaybe (mapMaybe)
+* CatMaybes (catMaybes)
+* MapOrDefault (maybe)
 
 ```C#
 // Just and Nothing
@@ -85,6 +99,13 @@ var md2 = mc.LiftM(a => Convert.ToString(a * a)); // returns Maybe<string>
 ```
 
 ### Either
+
+The following Either methods exist but are not yet covered by the examples below. The Haskell function names are show in parentheses.
+
+* Lefts (lefts)
+* Rights (rights)
+* PartitionEithers (partitionEithers)
+* MapEither (either)
 
 ```C#
 // Either has two type parameters - TLeft and TA.
