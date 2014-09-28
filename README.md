@@ -1,14 +1,18 @@
 
 ## Description
 
-I am currently learning Haskell and trying to understand monads. As part of this learning process, I am started playing around with monads in C#. 
+I am currently learning Haskell and trying to understand monads. As part of this learning process, I started playing around with monads in C#. 
 
-Although it wasn't really the original intention, it occurred to me that what I had implemented might actually form a useful monad library. I have implemented the following monads:
+Although it wasn't the original intention, it occurred to me that what I had implemented might actually form a useful monad library.
+
+I have implemented the following monads:
 
 * Maybe
 * Either
 * State
 * Reader
+
+I created my own simple <code>Unit</code> type to represent Haskell's <code>()</code> type.
 
 I have also implemented some of the common monad functions:
 
@@ -70,24 +74,47 @@ Console.WriteLine("mvNothing: {0}", mvNothing.Match(a => a, () => "Nothing"));
 
 // Bind
 var ma = Maybe.Just(42);
-var mb = ma.Bind(a => Maybe.Just(Convert.ToString(a * a)));
+var mb1 = ma.Bind(a => Maybe.Just(a * a)); // returns Maybe<int>
+var mb2 = ma.Bind(a => Maybe.Return(a * a)); // returns Maybe<int>
+var mb3 = ma.Bind(a => Maybe.Just(Convert.ToString(a * a))); // returns Maybe<string>
+var mb4 = ma.Bind(a => Maybe.Return(Convert.ToString(a * a))); // returns Maybe<string>
 
 // LiftM
 var mc = Maybe.Just(12);
-var md = mc.LiftM(a => Convert.ToString(a * a));
+var md1 = mc.LiftM(a => a * a); // returns Maybe<int>
+var md2 = mc.LiftM(a => Convert.ToString(a * a)); // returns Maybe<string>
 ```
 
 ### Either
 
+```C#
+// Creating a Left and Right
+var eitherLeft = EitherString.Left<int>("an error message");
+var eitherRight = EitherString.Right(10);
 
+// Extracting values via Left and Right
+var left = eitherLeft.Left;
+var right = eitherRight.Right;
+
+// Basic pattern matching
+Console.WriteLine("eitherLeft: {0}", eitherLeft.Match(l => Convert.ToString(l), r => Convert.ToString(r)));
+Console.WriteLine("eitherRight: {0}", eitherRight.Match(l => Convert.ToString(l), r => Convert.ToString(r)));
+
+// Bind
+var eitherRightSquared1 = eitherRight.Bind(r => EitherString.Right(r * r));
+var eitherRightSquared2 = eitherRight.Bind(r => EitherString.Return(r * r));
+
+// LiftM
+var eitherRightSquared3 = eitherRight.LiftM(r => r * r);
+```
 
 ### State
 
-
+(To be completed)
 
 ### Reader
 
-
+(To be completed)
 
 ## Documentation
 
