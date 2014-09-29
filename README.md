@@ -46,7 +46,7 @@ Haskell implementations. This was a deliberate goal - I view this as vindicating
 
 ## Usage Examples
 
-This section is a "work in progress". I hope to add more examples.
+This section is a "work in progress". I hope to add more examples. The unit tests also provide usage examples.
 
 ### Maybe
 
