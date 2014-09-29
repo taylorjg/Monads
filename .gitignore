@@ -1,4 +1,5 @@
 !.nuget/NuGet.exe
+!ReleasedNuGetPackages/*.nupkg
 *.nupkg
 
 ## Ignore Visual Studio temporary files, build results, and

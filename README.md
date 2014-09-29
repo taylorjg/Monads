@@ -135,11 +135,33 @@ var eitherRightSquared3 = eitherRight.LiftM(r => r * r);
 
 ### State
 
-(To be completed)
+```C#
+var config = new Config(2);
+
+var reader1 = ReaderConfig
+    .Ask()
+    .Bind(c1 => ReaderConfig.Return(c1.Multiplier * 3));
+Console.WriteLine("reader1.RunReader(config): {0}", reader1.RunReader(config));
+
+var reader2 = ReaderConfig
+    .Ask()
+    .Local(c1 => new Config(c1.Multiplier * 2))
+    .Bind(c2 => ReaderConfig.Return(c2.Multiplier * 3));
+Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
+```
 
 ### Reader
 
-(To be completed)
+```C#
+var tick = TickState
+    .Get()
+    .Bind(n => TickState
+                    .Put(n + 1)
+                    .BindIgnoringLeft(TickState.Return(n)));
+
+Console.WriteLine("tick.EvalState(5): {0}", tick.EvalState(5));
+Console.WriteLine("tick.ExecState(5): {0}", tick.ExecState(5));
+```
 
 ## Documentation
 

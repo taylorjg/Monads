@@ -11,6 +11,16 @@ namespace Monads
     // EitherString is then a monad with a single type parameter - TA.
     using EitherString = Either<String>;
 
+    // Reader has two type parameters - TR and TA.
+    // This is a little trick to make ReaderConfig an alias for Reader<Config>.
+    // ReaderConfig is then a monad with a single type parameter - TA.
+    using ReaderConfig = Reader<Config>;
+
+    // State has two type parameters - TS and TA.
+    // This is a little trick to make StateString an alias for State<string>.
+    // StateString is then a monad with a single type parameter - TA.
+    using TickState = State<int>;
+
     public static class Scrapbook
     {
         public static void MaybeScrapbook()
@@ -73,6 +83,34 @@ namespace Monads
 
             // LiftM
             var eitherRightSquared3 = eitherRight.LiftM(r => r * r);
+        }
+
+        public static void StateScrapbook()
+        {
+            var tick = TickState
+                .Get()
+                .Bind(n => TickState
+                               .Put(n + 1)
+                               .BindIgnoringLeft(TickState.Return(n)));
+
+            Console.WriteLine("tick.EvalState(5): {0}", tick.EvalState(5));
+            Console.WriteLine("tick.ExecState(5): {0}", tick.ExecState(5));
+        }
+
+        public static void ReaderScrapbook()
+        {
+            var config = new Config(2);
+
+            var reader1 = ReaderConfig
+                .Ask()
+                .Bind(c1 => ReaderConfig.Return(c1.Multiplier * 3));
+            Console.WriteLine("reader1.RunReader(config): {0}", reader1.RunReader(config));
+
+            var reader2 = ReaderConfig
+                .Ask()
+                .Local(c1 => new Config(c1.Multiplier * 2))
+                .Bind(c2 => ReaderConfig.Return(c2.Multiplier * 3));
+            Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
         }
     }
 }

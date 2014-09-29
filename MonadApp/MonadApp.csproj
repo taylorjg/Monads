@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="EitherExample.cs" />
     <Compile Include="MaybeExample.cs" />
     <Compile Include="MovieReview.cs" />
