@@ -50,7 +50,7 @@ This section is a "work in progress". I hope to add more examples.
 
 ### Maybe
 
-The following Maybe methods exist but are not yet covered by the examples below. The Haskell function names are show in parentheses.
+The following Maybe methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
 
 * FromMaybe (fromMaybe)
 * ToEnumerable (maybeToList)
@@ -100,7 +100,7 @@ var md2 = mc.LiftM(a => Convert.ToString(a * a)); // returns Maybe<string>
 
 ### Either
 
-The following Either methods exist but are not yet covered by the examples below. The Haskell function names are show in parentheses.
+The following Either methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
 
 * Lefts (lefts)
 * Rights (rights)
