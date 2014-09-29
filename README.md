@@ -146,7 +146,9 @@ namespace Monads
 
         private static Maybe<string> Lookup(AssociationList alist, string key)
         {
-            return alist.GetValue(key).Bind(v => v.MFilter(s => !string.IsNullOrEmpty(s)));
+            return alist
+                .GetValue(key)
+                .Bind(v => v.MFilter(s => !string.IsNullOrEmpty(s)));
         }
     }
 }
