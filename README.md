@@ -98,6 +98,60 @@ var md1 = mc.LiftM(a => a * a); // returns Maybe<int>
 var md2 = mc.LiftM(a => Convert.ToString(a * a)); // returns Maybe<string>
 ```
 
+The following example is my version of an example in the early part of
+[chapter 15](http://book.realworldhaskell.org/read/programming-with-monads.html)
+of [Real World Haskell](http://book.realworldhaskell.org/) (search for "liftedReview"):
+
+```C#
+using System;
+using System.Collections.Generic;
+using MonadLib;
+
+namespace Monads
+{
+    using AssociationList = Dictionary<string, Maybe<string>>;
+
+    public static class MaybeExample
+    {
+        public static void Demo()
+        {
+            var alist = new AssociationList
+                {
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Just("Jon")},
+                    {"review", Maybe.Just("A film about a shark")}
+                };
+
+            // Using void Maybe.Match()
+            GetMovieReview(alist).Match(
+                movieReview => Console.WriteLine("GetMovieReview returned {0}.", MovieReview.Format(movieReview)),
+                () => Console.WriteLine("GetMovieReview returned Nothing."));
+
+            // Using T Maybe.Match<T>()
+            Console.WriteLine(
+                "GetMovieReview returned {0}.",
+                GetMovieReview(alist).Match(
+                    MovieReview.Format,
+                    () => "Nothing"));
+        }
+
+        private static Maybe<MovieReview> GetMovieReview(AssociationList alist)
+        {
+            return Maybe.LiftM3(
+                MovieReview.MakeMovieReview,
+                Lookup(alist, "title"),
+                Lookup(alist, "user"),
+                Lookup(alist, "review"));
+        }
+
+        private static Maybe<string> Lookup(AssociationList alist, string key)
+        {
+            return alist.GetValue(key).Bind(v => v.MFilter(s => !string.IsNullOrEmpty(s)));
+        }
+    }
+}
+```
+
 ### Either
 
 The following Either methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
