@@ -30,6 +30,12 @@ I have also implemented some of the common monad functions:
 * Forever
 * Void
 
+# NuGet
+
+MonadLib is available as a NuGet package:
+
+* http://www.nuget.org/packages/MonadLib/
+
 ## Design
 
 I have tried to use the Haskell names as much as possible. I have tweaked these slightly
