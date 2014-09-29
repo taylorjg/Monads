@@ -239,7 +239,8 @@ It is on my TODO list to add XML documentation comments to the source code and t
 * Override Equals() and GetHashCode() on:
  * Maybe<TA>
  * Either<TE, TA>
-* Add an example to MonadApp showing the State monad in use
+* ~~Add an example to MonadApp showing the State monad in use~~
+* ~~Add an example to MonadApp showing the Reader monad in use~~
 * Implement more monad combinators e.g.:
  * ~~sequence~~
  * ~~sequence&#95;~~
@@ -266,7 +267,7 @@ It is on my TODO list to add XML documentation comments to the source code and t
  * ~~ap~~
 * Implement more monads e.g.:
  * ~~State~~
- * Reader
+ * ~~Reader~~
  * Writer
 * ~~Implement MonadPlus~~
 * Implement some monad transformers ?
@@ -279,7 +280,7 @@ It is on my TODO list to add XML documentation comments to the source code and t
  * Add XML Documentation comments
  * Create Sandcastle documentation from the XML Documentation comments
  * Make the Sandcastle documentation available via a gh-pages branch of this repo - like the [Flinq documentation](http://taylorjg.github.io/Flinq/)
-* Make MonadLib available as a NuGet package
+* ~~Make MonadLib available as a NuGet package~~
 
 ## Links
 
