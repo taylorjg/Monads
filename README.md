@@ -42,7 +42,7 @@ as extension methods. This allows these methods to take and return the correct t
 common implementations of the monad functions with appropriate casting. Whilst it is tedious for me to write these wrappers, the hope is that this results in an API that is convenient and easy to use.
 
 Most of my implementations of the common monad functions are noticably very similar to the
-Haskell implementations. This was a deliberate goal - I view this as vindicating my design choices.
+Haskell implementations. This was a deliberate goal and trying to achieve it guided my design choices.
 
 ## Usage Examples
 
