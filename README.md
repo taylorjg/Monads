@@ -30,7 +30,7 @@ I have also implemented some of the common monad functions:
 * Forever
 * Void
 
-# NuGet
+## NuGet
 
 MonadLib is available as a NuGet package:
 
@@ -198,6 +198,29 @@ var eitherRightSquared3 = eitherRight.LiftM(r => r * r);
 ### State
 
 ```C#
+// State has two type parameters - TS and TA.
+// This is a little trick to make StateString an alias for State<string>.
+// StateString is then a monad with a single type parameter - TA.
+using TickState = State<int>;
+
+var tick = TickState
+    .Get()
+    .Bind(n => TickState
+                    .Put(n + 1)
+                    .BindIgnoringLeft(TickState.Return(n)));
+
+Console.WriteLine("tick.EvalState(5): {0}", tick.EvalState(5));
+Console.WriteLine("tick.ExecState(5): {0}", tick.ExecState(5));
+```
+
+### Reader
+
+```C#
+// Reader has two type parameters - TR and TA.
+// This is a little trick to make ReaderConfig an alias for Reader<Config>.
+// ReaderConfig is then a monad with a single type parameter - TA.
+using ReaderConfig = Reader<Config>;
+
 var config = new Config(2);
 
 var reader1 = ReaderConfig
@@ -210,19 +233,6 @@ var reader2 = ReaderConfig
     .Local(c1 => new Config(c1.Multiplier * 2))
     .Bind(c2 => ReaderConfig.Return(c2.Multiplier * 3));
 Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
-```
-
-### Reader
-
-```C#
-var tick = TickState
-    .Get()
-    .Bind(n => TickState
-                    .Put(n + 1)
-                    .BindIgnoringLeft(TickState.Return(n)));
-
-Console.WriteLine("tick.EvalState(5): {0}", tick.EvalState(5));
-Console.WriteLine("tick.ExecState(5): {0}", tick.ExecState(5));
 ```
 
 ## Documentation
