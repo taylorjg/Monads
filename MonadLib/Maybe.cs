@@ -65,6 +65,26 @@ namespace MonadLib
             return IsJust ? justFunc(FromJust) : nothingFunc();
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            var other = obj as Maybe<TA>;
+            if (other == null) return false;
+
+            if (IsNothing == other.IsNothing)
+            {
+                return IsNothing || EqualityComparer<TA>.Default.Equals(FromJust, other.FromJust);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Match(a => a.GetHashCode(), () => 0);
+        }
+
         private readonly TA _a;
         private readonly bool _isNothing;
 

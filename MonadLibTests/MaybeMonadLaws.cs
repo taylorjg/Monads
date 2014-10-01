@@ -13,11 +13,7 @@ namespace MonadLibTests
             // (return x) >>= f == f x
             const int x = 5;
             Func<int, Maybe<int>> f = n => Maybe.Just(n * n);
-            var actual1 = Maybe.Return(x).Bind(f);
-            var actual2 = f(x);
-            Assert.That(actual1.IsJust, Is.True);
-            Assert.That(actual2.IsJust, Is.True);
-            Assert.That(actual1.FromJust, Is.EqualTo(actual2.FromJust));
+            Assert.That(Maybe.Return(x).Bind(f), Is.EqualTo(f(x)));
         }
 
         [Test]
@@ -25,11 +21,7 @@ namespace MonadLibTests
         {
             // m >>= return == m
             var m = Maybe.Return(5);
-            var actual1 = m.Bind(Maybe.Return);
-            var actual2 = m;
-            Assert.That(actual1.IsJust, Is.True);
-            Assert.That(actual2.IsJust, Is.True);
-            Assert.That(actual1.FromJust, Is.EqualTo(actual2.FromJust));
+            Assert.That(m.Bind(Maybe.Return), Is.EqualTo(m));
         }
 
         [Test]
@@ -39,11 +31,7 @@ namespace MonadLibTests
             Func<int, Maybe<int>> f = n => Maybe.Just(n * n);
             Func<int, Maybe<string>> g = n => Maybe.Just(Convert.ToString(n));
             var m = Maybe.Return(5);
-            var actual1 = m.Bind(f).Bind(g);
-            var actual2 = m.Bind(x => f(x).Bind(g));
-            Assert.That(actual1.IsJust, Is.True);
-            Assert.That(actual2.IsJust, Is.True);
-            Assert.That(actual1.FromJust, Is.EqualTo(actual2.FromJust));
+            Assert.That(m.Bind(f).Bind(g), Is.EqualTo(m.Bind(x => f(x).Bind(g))));
         }
     }
 }
