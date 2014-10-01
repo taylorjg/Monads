@@ -69,6 +69,31 @@ namespace MonadLib
             Right
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+
+            var other = obj as Either<TLeft, TA>;
+            if (other == null) return false;
+
+            if (IsLeft && other.IsLeft)
+            {
+                return EqualityComparer<TLeft>.Default.Equals(Left, other.Left);
+            }
+
+            if (IsRight && other.IsRight)
+            {
+                return EqualityComparer<TA>.Default.Equals(Right, other.Right);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Match(l => l.GetHashCode(), r  => r.GetHashCode());
+        }
+
         private readonly LeftOrRight _leftOrRight;
         private readonly TLeft _left;
         private readonly TA _right;

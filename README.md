@@ -252,9 +252,9 @@ It is on my TODO list to add XML documentation comments to the source code and t
  * ~~Data.Either.lefts :: [Either a b] -> [a]~~
  * ~~Data.Either.rights :: [Either a b] -> [b]~~
  * ~~Data.Either.partitionEithers :: [Either a b] -> ([a], [b])~~
-* Override Equals() and GetHashCode() on:
- * Maybe<TA>
- * Either<TE, TA>
+* ~~Override Equals() and GetHashCode() on:~~
+ * ~~Maybe<TA>~~
+ * ~~Either<TE, TA>~~
 * ~~Add an example to MonadApp showing the State monad in use~~
 * ~~Add an example to MonadApp showing the Reader monad in use~~
 * Implement more monad combinators e.g.:
