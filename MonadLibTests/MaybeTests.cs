@@ -174,6 +174,26 @@ namespace MonadLibTests
             Assert.That(actual, Is.EqualTo("42"));
         }
 
+        [Test, TestCaseSource("TestCaseSourceForEquals")]
+        public void Equals(Maybe<int> m1, Maybe<int> m2, bool expected)
+        {
+            var actual1 = m1.Equals(m2);
+            Assert.That(actual1, Is.EqualTo(expected));
+
+            var actual2 = m2.Equals(m1);
+            Assert.That(actual2, Is.EqualTo(expected));
+        }
+
+        // ReSharper disable UnusedMethodReturnValue.Local
+        private static IEnumerable<ITestCaseData> TestCaseSourceForEquals()
+        {
+            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), true).SetName("Nothing and Nothing");
+            yield return new TestCaseData(Maybe.Just(42), Maybe.Just(42), true).SetName("Just(42) and Just(42)");
+            yield return new TestCaseData(Maybe.Just(42), Maybe.Just(43), false).SetName("Just(42) and Just(43)");
+            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Just(42), false).SetName("Nothing and Just(43)");
+        }
+        // ReSharper restore UnusedMethodReturnValue.Local
+
         [Test]
         public void ToEnumerableAppliedToJust()
         {

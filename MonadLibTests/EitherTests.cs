@@ -160,6 +160,42 @@ namespace MonadLibTests
             Assert.That(actual, Is.EqualTo(84));
         }
 
+        [Test, TestCaseSource("TestCaseSourceForEquals")]
+        public void Equals(Either<string, int> e1, Either<string, int> e2, bool expected)
+        {
+            var actual1 = e1.Equals(e2);
+            Assert.That(actual1, Is.EqualTo(expected));
+
+            var actual2 = e2.Equals(e1);
+            Assert.That(actual2, Is.EqualTo(expected));
+        }
+
+        // ReSharper disable SuspiciousTypeConversion.Global
+        [Test]
+        public void EqualsOfEithersWithDifferentLeftTypes()
+        {
+            var e1 = Either<string>.Right(42);
+            var e2 = Either<bool>.Right(42);
+
+            var actual1 = e1.Equals(e2);
+            Assert.That(actual1, Is.EqualTo(false));
+
+            var actual2 = e2.Equals(e1);
+            Assert.That(actual2, Is.EqualTo(false));
+        }
+        // ReSharper restore SuspiciousTypeConversion.Global
+
+        // ReSharper disable UnusedMethodReturnValue.Local
+        private static IEnumerable<ITestCaseData> TestCaseSourceForEquals()
+        {
+            yield return new TestCaseData(Either<string>.Left<int>("error"), Either<string>.Left<int>("error"), true).SetName("Left(\"error\") and Left(\"error\")");
+            yield return new TestCaseData(Either<string>.Left<int>("error1"), Either<string>.Left<int>("error2"), false).SetName("Left(\"error1\") and Left(\"error2\")");
+            yield return new TestCaseData(Either<string>.Right(42), Either<string>.Right(42), true).SetName("Right(42) and Right(42)");
+            yield return new TestCaseData(Either<string>.Right(42), Either<string>.Right(43), false).SetName("Right(42) and Right(43)");
+            yield return new TestCaseData(Either<string>.Left<int>("error"), Either<string>.Right(42), false).SetName("Left(\"error\") and Right(42)");
+        }
+        // ReSharper restore UnusedMethodReturnValue.Local
+
         // TODO: add tests to cover the following:
         // Either.Return
         // Either.Bind
