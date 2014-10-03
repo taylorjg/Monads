@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using MonadLib;
 
 namespace Monads
@@ -61,6 +62,22 @@ namespace Monads
             var mc = Maybe.Just(12);
             var md1 = mc.LiftM(a => a * a); // returns Maybe<int>
             var md2 = mc.LiftM(a => Convert.ToString(a * a)); // returns Maybe<string>
+
+            var nameValueCollection = new NameValueCollection
+                {
+                    {"REF", "12345678"},
+                    {"SR", "AOL1234567"},
+                    {"Status", "S"}
+                };
+
+            Func<string, string, string, bool> f = (r, sr, status) => true;
+
+            var mresult = Maybe.LiftM3(
+                f,
+                nameValueCollection.GetValue("REF"),
+                nameValueCollection.GetValue("SR"),
+                nameValueCollection.GetValue("Status"));
+            Console.WriteLine("mresult: {0}", mresult.Match(b => b.ToString(), () => "Nothing"));
         }
 
         public static void EitherScrapbook()
