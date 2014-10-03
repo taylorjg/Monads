@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using MonadLib;
 using NUnit.Framework;
@@ -234,6 +235,31 @@ namespace MonadLibTests
                     {4, "four"}
                 };
             var actual = dictionary.GetValue(3);
+            Assert.That(actual.IsNothing, Is.True);
+        }
+
+        [Test]
+        public void GetValueWhenNameIsInNameValueCollection()
+        {
+            var nameValueCollection = new NameValueCollection
+                {
+                    {"Go", "Green"},
+                    {"Stop", "Red"},
+                };
+            var actual = nameValueCollection.GetValue("Go");
+            Assert.That(actual.IsJust, Is.True);
+            Assert.That(actual.FromJust, Is.EqualTo("Green"));
+        }
+
+        [Test]
+        public void GetValueWhenNameIsNotInNameValueCollection()
+        {
+            var nameValueCollection = new NameValueCollection
+                {
+                    {"Go", "Green"},
+                    {"Stop", "Red"},
+                };
+            var actual = nameValueCollection.GetValue("GetSet");
             Assert.That(actual.IsNothing, Is.True);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using Flinq;
 
@@ -140,6 +141,12 @@ namespace MonadLib
         {
             TValue value;
             return dictionary.TryGetValue(key, out value) ? Just(value) : Nothing<TValue>();
+        }
+
+        public static Maybe<string> GetValue(this NameValueCollection nameValueCollection, string name)
+        {
+            var value = nameValueCollection[name];
+            return value != null ? Just(value) : Nothing<string>();
         }
 
         public static Maybe<TA> ToMaybe<TA>(this TA? nullable) where TA : struct
