@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using Flinq;
 using MonadLib;
 
 namespace Monads
@@ -21,6 +22,8 @@ namespace Monads
     // This is a little trick to make StateString an alias for State<string>.
     // StateString is then a monad with a single type parameter - TA.
     using TickState = State<int>;
+
+    using IntState = State<int>;
 
     public static class Scrapbook
     {
@@ -128,6 +131,31 @@ namespace Monads
                 .Local(c1 => new Config(c1.Multiplier * 2))
                 .Bind(c2 => ReaderConfig.Return(c2.Multiplier * 3));
             Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
+        }
+
+        public static void FunctionalProgrammingInScalaListing11Dot8()
+        {
+            var xs = new[] {"a", "b", "c", "d", "e"};
+            var ys = ZipWithIndex(xs);
+            foreach (var y in ys)
+            {
+                Console.WriteLine("y: {0}", y);
+            }
+        }
+
+        public static IEnumerable<Tuple<int, TA>> ZipWithIndex<TA>(IEnumerable<TA> @as)
+        {
+            var z = IntState.Return(System.Linq.Enumerable.Empty<Tuple<int, TA>>());
+            var m = @as.FoldLeft(z, (acc, a) => acc.Bind(
+                xs => IntState.Get().Bind(
+                    n => IntState.Put(n + 1).BindIgnoringLeft(
+                        IntState.Return(Cons(Tuple.Create(n, a), xs))))));
+            return System.Linq.Enumerable.Reverse(m.EvalState(0));
+        }
+
+        private static IEnumerable<T> Cons<T>(T t, IEnumerable<T> ts)
+        {
+            return System.Linq.Enumerable.Concat(System.Linq.Enumerable.Repeat(t, 1), ts);
         }
     }
 }

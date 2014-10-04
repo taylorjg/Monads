@@ -13,6 +13,8 @@
             Scrapbook.EitherScrapbook();
             Scrapbook.StateScrapbook();
             Scrapbook.ReaderScrapbook();
+
+            Scrapbook.FunctionalProgrammingInScalaListing11Dot8();
         }
     }
 }
