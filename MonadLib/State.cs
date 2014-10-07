@@ -224,7 +224,7 @@ namespace MonadLib
 
         public static State<TS, Unit> Modify(Func<TS, TS> f)
         {
-            return new State<TS, Unit>(s => Get().Bind(a => Put(f(a))).RunState(s));
+            return Get().Bind(s => Put(f(s)));
         }
     }
 
