@@ -49,6 +49,7 @@
     <Compile Include="IMonadPlus.cs" />
     <Compile Include="IMonadT1.cs" />
     <Compile Include="Maybe.cs" />
+    <Compile Include="MaybeCombinatorWrappers.cs" />
     <Compile Include="MonadHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reader.cs" />
