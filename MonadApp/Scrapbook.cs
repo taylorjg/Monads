@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Flinq;
 using MonadLib;
 
 namespace Monads
@@ -115,6 +114,49 @@ namespace Monads
 
             Console.WriteLine("tick.EvalState(5): {0}", tick.EvalState(5));
             Console.WriteLine("tick.ExecState(5): {0}", tick.ExecState(5));
+
+            F1();
+            F2();
+            F3();
+            F4();
+        }
+
+        public static void F1()
+        {
+            var stateMonad = IntState.Return("abc");
+            var result = stateMonad.RunState(4);
+            Console.WriteLine("result: {0}", result);
+            // Output: result: (abc, 4)
+        }
+
+        public static void F2()
+        {
+            var stateMonad = IntState.Return("abc").Bind(
+                s => IntState.Return(s + s));
+            var result = stateMonad.RunState(4);
+            Console.WriteLine("result: {0}", result);
+            // Output: result: (abcabc, 4)
+        }
+
+        public static void F3()
+        {
+            var stateMonad = IntState.Return("abc").Bind(
+                s => IntState.Get().Bind(
+                    _ => IntState.Return(s + s)));
+            var result = stateMonad.RunState(4);
+            Console.WriteLine("result: {0}", result);
+            // Output: result: (abcabc, 4)
+        }
+
+        public static void F4()
+        {
+            var stateMonad = IntState.Return("abc").Bind(
+                s => IntState.Get().Bind(
+                    n => IntState.Put(n + 1).BindIgnoringLeft(
+                        IntState.Return(s + s))));
+            var result = stateMonad.RunState(4);
+            Console.WriteLine("result: {0}", result);
+            // Output: result: (abcabc, 5)
         }
 
         public static void ReaderScrapbook()
@@ -131,31 +173,6 @@ namespace Monads
                 .Local(c1 => new Config(c1.Multiplier * 2))
                 .Bind(c2 => ReaderConfig.Return(c2.Multiplier * 3));
             Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
-        }
-
-        public static void FunctionalProgrammingInScalaListing11Dot8()
-        {
-            var xs = new[] {"a", "b", "c", "d", "e"};
-            var ys = ZipWithIndex(xs);
-            foreach (var y in ys)
-            {
-                Console.WriteLine("y: {0}", y);
-            }
-        }
-
-        public static IEnumerable<Tuple<int, TA>> ZipWithIndex<TA>(IEnumerable<TA> @as)
-        {
-            var z = IntState.Return(System.Linq.Enumerable.Empty<Tuple<int, TA>>());
-            var m = @as.FoldLeft(z, (acc, a) => acc.Bind(
-                xs => IntState.Get().Bind(
-                    n => IntState.Put(n + 1).BindIgnoringLeft(
-                        IntState.Return(Cons(Tuple.Create(n, a), xs))))));
-            return System.Linq.Enumerable.Reverse(m.EvalState(0));
-        }
-
-        private static IEnumerable<T> Cons<T>(T t, IEnumerable<T> ts)
-        {
-            return System.Linq.Enumerable.Concat(System.Linq.Enumerable.Repeat(t, 1), ts);
         }
     }
 }
