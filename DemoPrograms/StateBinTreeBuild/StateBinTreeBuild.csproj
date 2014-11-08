@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinTree.cs" />
+    <Compile Include="NonMonadicBuilder2.cs" />
     <Compile Include="MonadicBuilder.cs" />
     <Compile Include="MonadicBuilder2.cs" />
     <Compile Include="NonMonadicBuilder.cs" />
