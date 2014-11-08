@@ -29,11 +29,12 @@ namespace StateBinTreeBuild
 
             var m = n / 2;
             return Build2<TA>(m).Bind(
-                u => Build2<TA>(n - m).Bind(v =>
-                    {
-                        BinTree fork = new Fork(u, v);
-                        return State<IImmutableList<TA>>.Return(fork);
-                    }));
+                u => Build2<TA>(n - m).Bind(
+                    v =>
+                        {
+                            BinTree fork = new Fork(u, v);
+                            return State<IImmutableList<TA>>.Return(fork);
+                        }));
         }
     }
 }
