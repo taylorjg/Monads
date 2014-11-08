@@ -54,8 +54,8 @@ Haskell implementations. This was a deliberate goal and trying to achieve it gui
 
 * [MaybeMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/MaybeMovieReview)
 * [EitherMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/EitherMovieReview)
-* [StateZipWithIndex](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateBinTreeBuild)
-* [StateBinTreeBuild](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateZipWithIndex)
+* [StateZipWithIndex](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateZipWithIndex)
+* [StateBinTreeBuild](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateBinTreeBuild)
 
 ## Usage Examples
 
