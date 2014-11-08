@@ -11,7 +11,7 @@ namespace StateBinTreeBuild
             return Build2<TA>(xs.Count).EvalState(xs);
         }
 
-        public static State<IImmutableList<TA>, BinTree> Build2<TA>(int n)
+        private static State<IImmutableList<TA>, BinTree> Build2<TA>(int n)
         {
             if (n == 1)
             {

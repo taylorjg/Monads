@@ -11,7 +11,7 @@ namespace StateBinTreeBuild
             return Build2<TA>(xs.Count).EvalState(Tuple.Create(xs, 0));
         }
 
-        public static State<Tuple<IReadOnlyList<TA>, int>, BinTree> Build2<TA>(int n)
+        private static State<Tuple<IReadOnlyList<TA>, int>, BinTree> Build2<TA>(int n)
         {
             if (n == 1)
             {
