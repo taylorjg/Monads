@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BinTreeBuild")]
+[assembly: AssemblyTitle("StateBinTreeBuild")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("BinTreeBuild")]
+[assembly: AssemblyProduct("StateBinTreeBuild")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("715ea69a-5fd6-4c19-976f-913fb7e0c728")]
+[assembly: Guid("2db95cec-90f9-4b59-a8af-9d968a87f439")]
 
 // Version information for an assembly consists of the following four values:
 //

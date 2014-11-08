@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using MonadLib;
 
-namespace BinTreeBuild
+namespace StateBinTreeBuild
 {
     public static class MonadicBuilder2
     {

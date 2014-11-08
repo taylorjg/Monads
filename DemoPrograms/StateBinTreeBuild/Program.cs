@@ -1,8 +1,8 @@
 ﻿using System.Collections.Immutable;
 
-namespace BinTreeBuild
+namespace StateBinTreeBuild
 {
-    public class Program
+    internal class Program
     {
         private static void Main()
         {

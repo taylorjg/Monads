@@ -1,4 +1,4 @@
-﻿namespace BinTreeBuild
+﻿namespace StateBinTreeBuild
 {
     public abstract class BinTree
     {

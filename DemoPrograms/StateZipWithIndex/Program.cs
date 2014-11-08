@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MonadLib;
 
-namespace ZipWithIndex
+namespace StateZipWithIndex
 {
     internal class Program
     {

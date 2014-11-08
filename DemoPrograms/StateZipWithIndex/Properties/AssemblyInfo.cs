@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ZipWithIndex")]
+[assembly: AssemblyTitle("StateZipWithIndex")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("ZipWithIndex")]
+[assembly: AssemblyProduct("StateZipWithIndex")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cb55cf7a-fb3e-4bc0-9a84-bd7257192642")]
+[assembly: Guid("76c0dc9a-5852-4efb-8d35-6aff4c21b662")]
 
 // Version information for an assembly consists of the following four values:
 //

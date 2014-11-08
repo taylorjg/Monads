@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace BinTreeBuild
+namespace StateBinTreeBuild
 {
     public static class NonMonadicBuilder
     {

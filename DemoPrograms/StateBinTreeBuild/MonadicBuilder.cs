@@ -2,7 +2,7 @@
 using System.Linq;
 using MonadLib;
 
-namespace BinTreeBuild
+namespace StateBinTreeBuild
 {
     public static class MonadicBuilder
     {
