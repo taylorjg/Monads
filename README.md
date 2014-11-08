@@ -50,6 +50,13 @@ common implementations of the monad functions with appropriate casting. Whilst i
 Most of my implementations of the common monad functions are noticably very similar to the
 Haskell implementations. This was a deliberate goal and trying to achieve it guided my design choices.
 
+## Demo Programs
+
+* [MaybeMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/MaybeMovieReview)
+* [EitherMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/EitherMovieReview)
+* [StateZipWithIndex](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateBinTreeBuild)
+* [StateBinTreeBuild](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateZipWithIndex)
+
 ## Usage Examples
 
 This section is a "work in progress". I hope to add more examples. The unit tests also provide usage examples.

@@ -20,6 +20,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateBinTreeBuild", "DemoPr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateZipWithIndex", "DemoPrograms\StateZipWithIndex\StateZipWithIndex.csproj", "{1FF79A68-C3A5-4D44-867D-8BF68A3FE8FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaybeMovieReview", "DemoPrograms\MaybeMovieReview\MaybeMovieReview.csproj", "{E72F155A-6072-4049-9EFA-895D02C24B4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EitherMovieReview", "DemoPrograms\EitherMovieReview\EitherMovieReview.csproj", "{70286AA2-BB87-456D-B562-9997772BD8FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +50,14 @@ Global
 		{1FF79A68-C3A5-4D44-867D-8BF68A3FE8FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FF79A68-C3A5-4D44-867D-8BF68A3FE8FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FF79A68-C3A5-4D44-867D-8BF68A3FE8FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E72F155A-6072-4049-9EFA-895D02C24B4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E72F155A-6072-4049-9EFA-895D02C24B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E72F155A-6072-4049-9EFA-895D02C24B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E72F155A-6072-4049-9EFA-895D02C24B4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70286AA2-BB87-456D-B562-9997772BD8FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70286AA2-BB87-456D-B562-9997772BD8FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70286AA2-BB87-456D-B562-9997772BD8FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70286AA2-BB87-456D-B562-9997772BD8FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,5 +65,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{51E4F00E-E686-4888-9B74-A35AEBEE27E7} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 		{1FF79A68-C3A5-4D44-867D-8BF68A3FE8FB} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
+		{E72F155A-6072-4049-9EFA-895D02C24B4F} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
+		{70286AA2-BB87-456D-B562-9997772BD8FF} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 	EndGlobalSection
 EndGlobal
