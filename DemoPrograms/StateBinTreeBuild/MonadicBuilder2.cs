@@ -16,10 +16,10 @@ namespace StateBinTreeBuild
             if (n == 1)
             {
                 return State<Tuple<IReadOnlyList<TA>, int>>.Get().Bind(
-                    t1 =>
+                    t =>
                         {
-                            var xs = t1.Item1;
-                            var index = t1.Item2;
+                            var xs = t.Item1;
+                            var index = t.Item2;
                             var t2 = Tuple.Create(xs, index + 1);
                             var head = xs[index];
                             BinTree leaf = new Leaf<TA>(head);

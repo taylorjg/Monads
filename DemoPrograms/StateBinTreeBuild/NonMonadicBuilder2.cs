@@ -23,12 +23,12 @@ namespace StateBinTreeBuild
             }
 
             var m = n / 2;
-            var tuple1 = Build2(m, state);
-            var u = tuple1.Item1;
-            var state1 = tuple1.Item2;
-            var tuple2 = Build2(n - m, state1);
-            var v = tuple2.Item1;
-            var state2 = tuple2.Item2;
+            var t1 = Build2(m, state);
+            var u = t1.Item1;
+            var state1 = t1.Item2;
+            var t2 = Build2(n - m, state1);
+            var v = t2.Item1;
+            var state2 = t2.Item2;
             BinTree fork = new Fork(u, v);
             return Tuple.Create(fork, state2);
         }
