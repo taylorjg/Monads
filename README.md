@@ -29,6 +29,7 @@ I have also implemented some of the common monad functions:
 * Unless
 * Forever
 * Void
+* Compose (Left-to-right Kleisli composition of monads)
 
 ## NuGet
 
@@ -56,6 +57,10 @@ Haskell implementations. This was a deliberate goal and trying to achieve it gui
 * [EitherMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/EitherMovieReview)
 * [StateZipWithIndex](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateZipWithIndex)
 * [StateBinTreeBuild](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateBinTreeBuild)
+* [ReaderBasicAsk](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicAsk)
+* [ReaderBasicLocal](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicLocal)
+* [ReaderHaskellDocsExample1](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample1)
+* [ReaderHaskellDocsExample2](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample2)
 
 ## Usage Examples
 
