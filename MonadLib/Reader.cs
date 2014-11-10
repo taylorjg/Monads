@@ -32,6 +32,11 @@ namespace MonadLib
             return new Reader<TR, TA>(r => ma.RunReader(f(r)));
         }
 
+        public static Reader<TR, TA> Asks<TR, TA>(Func<TR, TA> f)
+        {
+            return Reader<TR>.Ask().Bind(r => Reader<TR>.Return(f(r)));
+        }
+
         public static Reader<TR, TB> Bind<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
