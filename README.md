@@ -57,6 +57,7 @@ Haskell implementations. This was a deliberate goal and trying to achieve it gui
 * [EitherMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/EitherMovieReview)
 * [StateZipWithIndex](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateZipWithIndex)
 * [StateBinTreeBuild](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateBinTreeBuild)
+* [StateGame](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateGame)
 * [ReaderBasicAsk](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicAsk)
 * [ReaderBasicLocal](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicLocal)
 * [ReaderHaskellDocsExample1](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample1)
