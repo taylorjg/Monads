@@ -54,9 +54,9 @@ namespace MonadLib
             return (Reader<TR, TB>)MonadCombinators<TR>.LiftM(f, ma);
         }
 
-        public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(Func<TA, TB> f, Either<TLeft, TA> ma)
+        public static Reader<TR, TB> LiftM<TR, TA, TB>(Func<TA, TB> f, Reader<TR, TA> ma)
         {
-            return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
+            return (Reader<TR, TB>)MonadCombinators<TR>.LiftM(f, ma);
         }
 
         public static Reader<TR, TC> LiftM2<TR, TA, TB, TC>(this Reader<TR, TA> ma, Reader<TR, TB> mb, Func<TA, TB, TC> f)

@@ -61,6 +61,7 @@ Haskell implementations. This was a deliberate goal and trying to achieve it gui
 * [ReaderBasicLocal](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicLocal)
 * [ReaderHaskellDocsExample1](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample1)
 * [ReaderHaskellDocsExample2](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample2)
+* [ReaderAllAboutMonadsExample](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderAllAboutMonadsExample)
 
 ## Usage Examples
 

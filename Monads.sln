@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReaderBasicAsk", "DemoProgr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReaderBasicLocal", "DemoPrograms\ReaderBasicLocal\ReaderBasicLocal.csproj", "{D7448D9B-F740-4581-9621-EDE097CCC74C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReaderAllAboutMonadsExample", "DemoPrograms\ReaderAllAboutMonadsExample\ReaderAllAboutMonadsExample.csproj", "{02CE9615-9D39-4C32-9DB5-D792DD9ABF48}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{D7448D9B-F740-4581-9621-EDE097CCC74C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7448D9B-F740-4581-9621-EDE097CCC74C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7448D9B-F740-4581-9621-EDE097CCC74C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02CE9615-9D39-4C32-9DB5-D792DD9ABF48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02CE9615-9D39-4C32-9DB5-D792DD9ABF48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02CE9615-9D39-4C32-9DB5-D792DD9ABF48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02CE9615-9D39-4C32-9DB5-D792DD9ABF48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,5 +101,6 @@ Global
 		{D8C0A72F-23E6-4FFA-A150-0900307E697D} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 		{722813BF-FA47-4FCF-B3D3-1638D9BA1A35} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 		{D7448D9B-F740-4581-9621-EDE097CCC74C} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
+		{02CE9615-9D39-4C32-9DB5-D792DD9ABF48} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 	EndGlobalSection
 EndGlobal
