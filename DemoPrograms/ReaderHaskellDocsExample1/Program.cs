@@ -29,9 +29,9 @@ namespace ReaderHaskellDocsExample1
 
         private static Reader<Bindings, bool> CalcIsCountCorrect()
         {
-            Func<Bindings, int> lookupVarPartiallyApplied = bindings => LookupVar("count", bindings);
+            Func<string, Func<Bindings, int>> partiallyAppliedLookupVar = name => bindings => LookupVar(name, bindings);
 
-            return Reader.Asks(lookupVarPartiallyApplied).Bind(
+            return Reader.Asks(partiallyAppliedLookupVar("count")).Bind(
                 count => Reader<Bindings>.Ask().Bind(
                     bindings => Reader<Bindings>.Return(
                         count == bindings.Count)));
