@@ -199,5 +199,15 @@ namespace MonadLib
         {
             return LiftM2((f, a) => f(a), mf, ma);
         }
+
+        public static Func<TA, IMonad<T1, TC>> Compose<TA, TB, TC>(Func<TA, IMonad<T1, TB>> f, Func<TB, IMonad<T1, TC>> g)
+        {
+            return a =>
+            {
+                var mb = f(a);
+                var monadAdapter = mb.GetMonadAdapter();
+                return monadAdapter.Bind(mb, g);
+            };
+        }
     }
 }
