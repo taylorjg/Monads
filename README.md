@@ -37,6 +37,20 @@ MonadLib is available as a NuGet package:
 
 * http://www.nuget.org/packages/MonadLib/
 
+## Demo Programs
+
+* [MaybeMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/MaybeMovieReview)
+* [EitherMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/EitherMovieReview)
+* [StateZipWithIndex](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateZipWithIndex)
+* [StateBinTreeBuild](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateBinTreeBuild)
+* [StateGame](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateGame)
+* [ReaderBasicAsk](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicAsk)
+* [ReaderBasicLocal](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicLocal)
+* [ReaderHaskellDocsExample1](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample1)
+* [ReaderHaskellDocsExample2](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample2)
+* [ReaderAllAboutMonadsExample](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderAllAboutMonadsExample)
+* [WadlerEvaluator](https://github.com/taylorjg/WadlerEvaluator)
+
 ## Design
 
 I have tried to use the Haskell names as much as possible. I have tweaked these slightly
@@ -50,19 +64,6 @@ common implementations of the monad functions with appropriate casting. Whilst i
 
 Most of my implementations of the common monad functions are noticably very similar to the
 Haskell implementations. This was a deliberate goal and trying to achieve it guided my design choices.
-
-## Demo Programs
-
-* [MaybeMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/MaybeMovieReview)
-* [EitherMovieReview](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/EitherMovieReview)
-* [StateZipWithIndex](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateZipWithIndex)
-* [StateBinTreeBuild](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateBinTreeBuild)
-* [StateGame](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/StateGame)
-* [ReaderBasicAsk](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicAsk)
-* [ReaderBasicLocal](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicLocal)
-* [ReaderHaskellDocsExample1](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample1)
-* [ReaderHaskellDocsExample2](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample2)
-* [ReaderAllAboutMonadsExample](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderAllAboutMonadsExample)
 
 ## Usage Examples
 
