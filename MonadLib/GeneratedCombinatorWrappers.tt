@@ -7,10 +7,10 @@
 <#
 var typesToGenerate = new[]
 {
-	Tuple.Create("Maybe", "", false),
-	Tuple.Create("Either", "TLeft", false),
-	Tuple.Create("State", "TS", false),
-	Tuple.Create("Reader", "TR", true)
+	Tuple.Create("Maybe", ""),
+	Tuple.Create("Either", "TLeft"),
+	Tuple.Create("State", "TS"),
+	Tuple.Create("Reader", "TR")
 };
 #>
 using System;
@@ -18,10 +18,11 @@ using System.Collections.Generic;
 
 namespace MonadLib.Generated
 {
-<# foreach (var typeToGenerate in typesToGenerate) { #>
+<# for (var index = 0; index < typesToGenerate.Length; index++) { #>
+<# var typeToGenerate = typesToGenerate[index]; #>
 <# var M = typeToGenerate.Item1; #>
-<# var T1 = typeToGenerate.Item2.Length > 0 ? typeToGenerate.Item2 + ", " : ""; #>
-<# var lastTypeToGenerate = typeToGenerate.Item3; #>
+<# var T1 = string.IsNullOrEmpty(typeToGenerate.Item2) ? string.Empty : typeToGenerate.Item2 + ", "; #>
+<# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
 	public static partial class <#= M #>
 	{
 		public static <#= M #><<#= T1 #>TB> Bind<<#= T1 #>TA, TB>(this <#= M #><<#= T1 #>TA> ma, Func<TA, <#= M #><<#= T1 #>TB>> f)
