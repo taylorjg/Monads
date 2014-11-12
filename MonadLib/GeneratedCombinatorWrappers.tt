@@ -19,15 +19,15 @@ using System.Collections.Generic;
 namespace MonadLib.Generated
 {
 <# foreach (var typeToGenerate in typesToGenerate) { #>
-<# var className = typeToGenerate.Item1; #>
-<# var typeName1Comma = typeToGenerate.Item2.Length > 0 ? typeToGenerate.Item2 + ", " : ""; #>
+<# var M = typeToGenerate.Item1; #>
+<# var T1 = typeToGenerate.Item2.Length > 0 ? typeToGenerate.Item2 + ", " : ""; #>
 <# var lastTypeToGenerate = typeToGenerate.Item3; #>
-	public static partial class <#= className #>
+	public static partial class <#= M #>
 	{
-		public static <#= className #><<#= typeName1Comma #>TB> Bind<<#= typeName1Comma #>TA, TB>(this <#= className #><<#= typeName1Comma #>TA> ma, Func<TA, <#= className #><<#= typeName1Comma #>TB>> f)
+		public static <#= M #><<#= T1 #>TB> Bind<<#= T1 #>TA, TB>(this <#= M #><<#= T1 #>TA> ma, Func<TA, <#= M #><<#= T1 #>TB>> f)
 		{
 			var monadAdapter = ma.GetMonadAdapter();
-			return (<#= className #><<#= typeName1Comma #>TB>)monadAdapter.Bind(ma, f);
+			return (<#= M #><<#= T1 #>TB>)monadAdapter.Bind(ma, f);
 		}
 	}
 <# if (!lastTypeToGenerate) WriteLine(string.Empty); #>
