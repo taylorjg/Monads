@@ -69,38 +69,38 @@ namespace MonadLib
 
         public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms)
         {
-            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new EitherMonadAdapter<TS>());
+            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new StateMonadAdapter<TS>());
         }
 
         // ReSharper disable InconsistentNaming
         public static State<TS, Unit> Sequence_<TS, TA>(IEnumerable<State<TS, TA>> ms)
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.SequenceInternal_(ms, new EitherMonadAdapter<TS>());
+            return (State<TS, Unit>)MonadCombinators<TS>.SequenceInternal_(ms, new StateMonadAdapter<TS>());
         }
 
         public static State<TS, IEnumerable<TB>> MapM<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as)
         {
-            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new EitherMonadAdapter<TS>());
+            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new StateMonadAdapter<TS>());
         }
 
         // ReSharper disable InconsistentNaming
         public static State<TS, Unit> MapM_<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as)
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new EitherMonadAdapter<TS>());
+            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new StateMonadAdapter<TS>());
         }
 
         public static State<TS, IEnumerable<TB>> ForM<TS, TA, TB>(IEnumerable<TA> @as, Func<TA, State<TS, TB>> f)
         {
-            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new EitherMonadAdapter<TS>());
+            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new StateMonadAdapter<TS>());
         }
 
         // ReSharper disable InconsistentNaming
         public static State<TS, Unit> ForM_<TS, TA, TB>(IEnumerable<TA> @as, Func<TA, State<TS, TB>> f)
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new EitherMonadAdapter<TS>());
+            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new StateMonadAdapter<TS>());
         }
 
         public static State<TS, IEnumerable<TA>> ReplicateM<TS, TA>(int n, State<TS, TA> ma)
@@ -167,7 +167,7 @@ namespace MonadLib
             return (State<TS, TB>)MonadCombinators<TS>.Forever<TA, TB>(m);
         }
 
-        public static State<TS, Unit> Void<TS, TA>(Either<TS, TA> m)
+        public static State<TS, Unit> Void<TS, TA>(State<TS, TA> m)
         {
             return (State<TS, Unit>)MonadCombinators<TS>.Void(m);
         }
