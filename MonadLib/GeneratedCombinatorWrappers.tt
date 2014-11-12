@@ -35,117 +35,117 @@ namespace MonadLib
 			return (<#= M #><<#= T1TypeList #>TB>)monadAdapter.Bind(ma, f);
 		}
 
-        public static <#= M #><<#= T1TypeList #>TB> BindIgnoringLeft<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb)
-        {
-            var monadAdapter = ma.GetMonadAdapter();
-            return (<#= M #><<#= T1TypeList #>TB>)monadAdapter.BindIgnoringLeft(ma, mb);
-        }
+		public static <#= M #><<#= T1TypeList #>TB> BindIgnoringLeft<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb)
+		{
+			var monadAdapter = ma.GetMonadAdapter();
+			return (<#= M #><<#= T1TypeList #>TB>)monadAdapter.BindIgnoringLeft(ma, mb);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TB> LiftM<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, TB> f)
-        {
-            return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.LiftM(f, ma);
-        }
+		public static <#= M #><<#= T1TypeList #>TB> LiftM<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, TB> f)
+		{
+			return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.LiftM(f, ma);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TB> LiftM<<#= T1TypeList #>TA, TB>(Func<TA, TB> f, <#= M #><<#= T1TypeList #>TA> ma)
-        {
-            return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.LiftM(f, ma);
-        }
+		public static <#= M #><<#= T1TypeList #>TB> LiftM<<#= T1TypeList #>TA, TB>(Func<TA, TB> f, <#= M #><<#= T1TypeList #>TA> ma)
+		{
+			return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.LiftM(f, ma);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TC> LiftM2<<#= T1TypeList #>TA, TB, TC>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, Func<TA, TB, TC> f)
-        {
-            return (<#= M #><<#= T1TypeList #>TC>)MonadCombinators<#= T1MonadCombinators #>.LiftM2(f, ma, mb);
-        }
+		public static <#= M #><<#= T1TypeList #>TC> LiftM2<<#= T1TypeList #>TA, TB, TC>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, Func<TA, TB, TC> f)
+		{
+			return (<#= M #><<#= T1TypeList #>TC>)MonadCombinators<#= T1MonadCombinators #>.LiftM2(f, ma, mb);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TC> LiftM2<<#= T1TypeList #>TA, TB, TC>(Func<TA, TB, TC> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb)
-        {
-            return (<#= M #><<#= T1TypeList #>TC>)MonadCombinators<#= T1MonadCombinators #>.LiftM2(f, ma, mb);
-        }
+		public static <#= M #><<#= T1TypeList #>TC> LiftM2<<#= T1TypeList #>TA, TB, TC>(Func<TA, TB, TC> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb)
+		{
+			return (<#= M #><<#= T1TypeList #>TC>)MonadCombinators<#= T1MonadCombinators #>.LiftM2(f, ma, mb);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TD> LiftM3<<#= T1TypeList #>TA, TB, TC, TD>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, Func<TA, TB, TC, TD> f)
-        {
-            return (<#= M #><<#= T1TypeList #>TD>)MonadCombinators<#= T1MonadCombinators #>.LiftM3(f, ma, mb, mc);
-        }
+		public static <#= M #><<#= T1TypeList #>TD> LiftM3<<#= T1TypeList #>TA, TB, TC, TD>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, Func<TA, TB, TC, TD> f)
+		{
+			return (<#= M #><<#= T1TypeList #>TD>)MonadCombinators<#= T1MonadCombinators #>.LiftM3(f, ma, mb, mc);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TD> LiftM3<<#= T1TypeList #>TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc)
-        {
-            return (<#= M #><<#= T1TypeList #>TD>)MonadCombinators<#= T1MonadCombinators #>.LiftM3(f, ma, mb, mc);
-        }
+		public static <#= M #><<#= T1TypeList #>TD> LiftM3<<#= T1TypeList #>TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc)
+		{
+			return (<#= M #><<#= T1TypeList #>TD>)MonadCombinators<#= T1MonadCombinators #>.LiftM3(f, ma, mb, mc);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TE> LiftM4<<#= T1TypeList #>TA, TB, TC, TD, TE>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md, Func<TA, TB, TC, TD, TE> f)
-        {
-            return (<#= M #><<#= T1TypeList #>TE>)MonadCombinators<#= T1MonadCombinators #>.LiftM4(f, ma, mb, mc, md);
-        }
+		public static <#= M #><<#= T1TypeList #>TE> LiftM4<<#= T1TypeList #>TA, TB, TC, TD, TE>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md, Func<TA, TB, TC, TD, TE> f)
+		{
+			return (<#= M #><<#= T1TypeList #>TE>)MonadCombinators<#= T1MonadCombinators #>.LiftM4(f, ma, mb, mc, md);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TE> LiftM4<<#= T1TypeList #>TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md)
-        {
-            return (<#= M #><<#= T1TypeList #>TE>)MonadCombinators<#= T1MonadCombinators #>.LiftM4(f, ma, mb, mc, md);
-        }
+		public static <#= M #><<#= T1TypeList #>TE> LiftM4<<#= T1TypeList #>TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md)
+		{
+			return (<#= M #><<#= T1TypeList #>TE>)MonadCombinators<#= T1MonadCombinators #>.LiftM4(f, ma, mb, mc, md);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TF> LiftM5<<#= T1TypeList #>TA, TB, TC, TD, TE, TF>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md, <#= M #><<#= T1TypeList #>TE> me, Func<TA, TB, TC, TD, TE, TF> f)
-        {
-            return (<#= M #><<#= T1TypeList #>TF>)MonadCombinators<#= T1MonadCombinators #>.LiftM5(f, ma, mb, mc, md, me);
-        }
+		public static <#= M #><<#= T1TypeList #>TF> LiftM5<<#= T1TypeList #>TA, TB, TC, TD, TE, TF>(this <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md, <#= M #><<#= T1TypeList #>TE> me, Func<TA, TB, TC, TD, TE, TF> f)
+		{
+			return (<#= M #><<#= T1TypeList #>TF>)MonadCombinators<#= T1MonadCombinators #>.LiftM5(f, ma, mb, mc, md, me);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TF> LiftM5<<#= T1TypeList #>TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md, <#= M #><<#= T1TypeList #>TE> me)
-        {
-            return (<#= M #><<#= T1TypeList #>TF>)MonadCombinators<#= T1MonadCombinators #>.LiftM5(f, ma, mb, mc, md, me);
-        }
+		public static <#= M #><<#= T1TypeList #>TF> LiftM5<<#= T1TypeList #>TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, <#= M #><<#= T1TypeList #>TA> ma, <#= M #><<#= T1TypeList #>TB> mb, <#= M #><<#= T1TypeList #>TC> mc, <#= M #><<#= T1TypeList #>TD> md, <#= M #><<#= T1TypeList #>TE> me)
+		{
+			return (<#= M #><<#= T1TypeList #>TF>)MonadCombinators<#= T1MonadCombinators #>.LiftM5(f, ma, mb, mc, md, me);
+		}
 
-        public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> Sequence<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms)
-        {
-            return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal(ms, new <#= MonadAdapter #>());
-        }
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> Sequence<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms)
+		{
+			return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal(ms, new <#= MonadAdapter #>());
+		}
 
-        // ReSharper disable InconsistentNaming
-        public static <#= M #><<#= T1TypeList #>Unit> Sequence_<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms)
-        // ReSharper restore InconsistentNaming
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal_(ms, new <#= MonadAdapter #>());
-        }
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> Sequence_<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms)
+		// ReSharper restore InconsistentNaming
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal_(ms, new <#= MonadAdapter #>());
+		}
 
-        public static <#= M #><<#= T1TypeList #>IEnumerable<TB>> MapM<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, IEnumerable<TA> @as)
-        {
-            return (<#= M #><<#= T1TypeList #>IEnumerable<TB>>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal(f, @as, new <#= MonadAdapter #>());
-        }
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TB>> MapM<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, IEnumerable<TA> @as)
+		{
+			return (<#= M #><<#= T1TypeList #>IEnumerable<TB>>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal(f, @as, new <#= MonadAdapter #>());
+		}
 
-        // ReSharper disable InconsistentNaming
-        public static <#= M #><<#= T1TypeList #>Unit> MapM_<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, IEnumerable<TA> @as)
-        // ReSharper restore InconsistentNaming
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal_(f, @as, new <#= MonadAdapter #>());
-        }
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> MapM_<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, IEnumerable<TA> @as)
+		// ReSharper restore InconsistentNaming
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal_(f, @as, new <#= MonadAdapter #>());
+		}
 
-        public static <#= M #><<#= T1TypeList #>IEnumerable<TB>> ForM<<#= T1TypeList #>TA, TB>(IEnumerable<TA> @as, Func<TA, <#= M #><<#= T1TypeList #>TB>> f)
-        {
-            return (<#= M #><<#= T1TypeList #>IEnumerable<TB>>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal(f, @as, new <#= MonadAdapter #>());
-        }
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TB>> ForM<<#= T1TypeList #>TA, TB>(IEnumerable<TA> @as, Func<TA, <#= M #><<#= T1TypeList #>TB>> f)
+		{
+			return (<#= M #><<#= T1TypeList #>IEnumerable<TB>>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal(f, @as, new <#= MonadAdapter #>());
+		}
 
-        // ReSharper disable InconsistentNaming
-        public static <#= M #><<#= T1TypeList #>Unit> ForM_<<#= T1TypeList #>TA, TB>(IEnumerable<TA> @as, Func<TA, <#= M #><<#= T1TypeList #>TB>> f)
-        // ReSharper restore InconsistentNaming
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal_(f, @as, new <#= MonadAdapter #>());
-        }
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> ForM_<<#= T1TypeList #>TA, TB>(IEnumerable<TA> @as, Func<TA, <#= M #><<#= T1TypeList #>TB>> f)
+		// ReSharper restore InconsistentNaming
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal_(f, @as, new <#= MonadAdapter #>());
+		}
 
-        public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> ReplicateM<<#= T1TypeList #>TA>(int n, <#= M #><<#= T1TypeList #>TA> ma)
-        {
-            return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.ReplicateM(n, ma);
-        }
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> ReplicateM<<#= T1TypeList #>TA>(int n, <#= M #><<#= T1TypeList #>TA> ma)
+		{
+			return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.ReplicateM(n, ma);
+		}
 
-        // ReSharper disable InconsistentNaming
-        public static <#= M #><<#= T1TypeList #>Unit> ReplicateM_<<#= T1TypeList #>TA>(int n, <#= M #><<#= T1TypeList #>TA> ma)
-        // ReSharper restore InconsistentNaming
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.ReplicateM_(n, ma);
-        }
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> ReplicateM_<<#= T1TypeList #>TA>(int n, <#= M #><<#= T1TypeList #>TA> ma)
+		// ReSharper restore InconsistentNaming
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.ReplicateM_(n, ma);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TA> Join<<#= T1TypeList #>TA>(<#= M #><<#= T1TypeList #><#= M #><<#= T1TypeList #>TA>> mma)
-        {
-            // Ideally, we would like to use MonadCombinators<#= T1MonadAdapter #>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (<#= M #><<#= T1TypeList #>TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
-        }
+		public static <#= M #><<#= T1TypeList #>TA> Join<<#= T1TypeList #>TA>(<#= M #><<#= T1TypeList #><#= M #><<#= T1TypeList #>TA>> mma)
+		{
+			// Ideally, we would like to use MonadCombinators<#= T1MonadAdapter #>.Join(mma) but there
+			// is a casting issue that I have not figured out how to fix.
+			var monadAdapter = mma.GetMonadAdapter();
+			return (<#= M #><<#= T1TypeList #>TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+		}
 
 <# if (isMonadPlus) { #>
 		public static <#= M #><<#= T1TypeList #>TA> MFilter<<#= T1TypeList #>TA>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, bool> p)
@@ -160,63 +160,63 @@ namespace MonadLib
 <# } #>
 
 		public static <#= M #><<#= T1TypeList #>TA> FoldM<<#= T1TypeList #>TA, TB>(Func<TA, TB, <#= M #><<#= T1TypeList #>TA>> f, TA a, IEnumerable<TB> bs)
-        {
-            return (<#= M #><<#= T1TypeList #>TA>)MonadCombinators<#= T1MonadCombinators #>.FoldMInternal(f, a, bs, new <#= MonadAdapter #>());
-        }
+		{
+			return (<#= M #><<#= T1TypeList #>TA>)MonadCombinators<#= T1MonadCombinators #>.FoldMInternal(f, a, bs, new <#= MonadAdapter #>());
+		}
 
-        // ReSharper disable InconsistentNaming
-        public static <#= M #><<#= T1TypeList #>Unit> FoldM_<<#= T1TypeList #>TA, TB>(Func<TA, TB, <#= M #><<#= T1TypeList #>TA>> f, TA a, IEnumerable<TB> bs)
-        // ReSharper restore InconsistentNaming
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.FoldMInternal_(f, a, bs, new <#= MonadAdapter #>());
-        }
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> FoldM_<<#= T1TypeList #>TA, TB>(Func<TA, TB, <#= M #><<#= T1TypeList #>TA>> f, TA a, IEnumerable<TB> bs)
+		// ReSharper restore InconsistentNaming
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.FoldMInternal_(f, a, bs, new <#= MonadAdapter #>());
+		}
 
-        public static <#= M #><<#= T1TypeList #>IEnumerable<TC>> ZipWithM<<#= T1TypeList #>TA, TB, TC>(Func<TA, TB, <#= M #><<#= T1TypeList #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-        {
-            return (<#= M #><<#= T1TypeList #>IEnumerable<TC>>)MonadCombinators<#= T1MonadCombinators #>.ZipWithMInternal(f, @as, bs, new <#= MonadAdapter #>());
-        }
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TC>> ZipWithM<<#= T1TypeList #>TA, TB, TC>(Func<TA, TB, <#= M #><<#= T1TypeList #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+		{
+			return (<#= M #><<#= T1TypeList #>IEnumerable<TC>>)MonadCombinators<#= T1MonadCombinators #>.ZipWithMInternal(f, @as, bs, new <#= MonadAdapter #>());
+		}
 
-        // ReSharper disable InconsistentNaming
-        public static <#= M #><<#= T1TypeList #>Unit> ZipWithM_<<#= T1TypeList #>TA, TB, TC>(Func<TA, TB, <#= M #><<#= T1TypeList #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-        // ReSharper restore InconsistentNaming
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.ZipWithMInternal_(f, @as, bs, new <#= MonadAdapter #>());
-        }
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> ZipWithM_<<#= T1TypeList #>TA, TB, TC>(Func<TA, TB, <#= M #><<#= T1TypeList #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+		// ReSharper restore InconsistentNaming
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.ZipWithMInternal_(f, @as, bs, new <#= MonadAdapter #>());
+		}
 
-        public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> FilterM<<#= T1TypeList #>TA>(Func<TA, <#= M #><<#= T1TypeList #>bool>> p, IEnumerable<TA> @as)
-        {
-            return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.FilterMInternal(p, @as, new <#= MonadAdapter #>());
-        }
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> FilterM<<#= T1TypeList #>TA>(Func<TA, <#= M #><<#= T1TypeList #>bool>> p, IEnumerable<TA> @as)
+		{
+			return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.FilterMInternal(p, @as, new <#= MonadAdapter #>());
+		}
 
-        public static <#= M #><<#= T1TypeList #>Unit> When<#= T1MonadAdapter #>(bool b, <#= M #><<#= T1TypeList #>Unit> m)
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.When(b, m);
-        }
+		public static <#= M #><<#= T1TypeList #>Unit> When<#= T1MonadAdapter #>(bool b, <#= M #><<#= T1TypeList #>Unit> m)
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.When(b, m);
+		}
 
-        public static <#= M #><<#= T1TypeList #>Unit> Unless<#= T1MonadAdapter #>(bool b, <#= M #><<#= T1TypeList #>Unit> m)
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.Unless(b, m);
-        }
+		public static <#= M #><<#= T1TypeList #>Unit> Unless<#= T1MonadAdapter #>(bool b, <#= M #><<#= T1TypeList #>Unit> m)
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.Unless(b, m);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TB> Forever<<#= T1TypeList #>TA, TB>(<#= M #><<#= T1TypeList #>TA> m)
-        {
-            return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.Forever<TA, TB>(m);
-        }
+		public static <#= M #><<#= T1TypeList #>TB> Forever<<#= T1TypeList #>TA, TB>(<#= M #><<#= T1TypeList #>TA> m)
+		{
+			return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.Forever<TA, TB>(m);
+		}
 
-        public static <#= M #><<#= T1TypeList #>Unit> Void<<#= T1TypeList #>TA>(<#= M #><<#= T1TypeList #>TA> m)
-        {
-            return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.Void(m);
-        }
+		public static <#= M #><<#= T1TypeList #>Unit> Void<<#= T1TypeList #>TA>(<#= M #><<#= T1TypeList #>TA> m)
+		{
+			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.Void(m);
+		}
 
-        public static <#= M #><<#= T1TypeList #>TB> Ap<<#= T1TypeList #>TA, TB>(<#= M #><<#= T1TypeList #>Func<TA, TB>> mf, <#= M #><<#= T1TypeList #>TA> ma)
-        {
-            return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.Ap(mf, ma);
-        }
+		public static <#= M #><<#= T1TypeList #>TB> Ap<<#= T1TypeList #>TA, TB>(<#= M #><<#= T1TypeList #>Func<TA, TB>> mf, <#= M #><<#= T1TypeList #>TA> ma)
+		{
+			return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.Ap(mf, ma);
+		}
 
 		public static Func<TA, <#= M #><<#= T1TypeList #>TC>> Compose<<#= T1TypeList #>TA, TB, TC>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, Func<TB, <#= M #><<#= T1TypeList #>TC>> g)
-        {
-            return a => (<#= M #><<#= T1TypeList #>TC>)MonadCombinators<#= T1MonadCombinators #>.Compose(f, g)(a);
-        }
+		{
+			return a => (<#= M #><<#= T1TypeList #>TC>)MonadCombinators<#= T1MonadCombinators #>.Compose(f, g)(a);
+		}
 	}
 <# if (!lastTypeToGenerate) WriteLine(string.Empty); #>
 <# } #>
