@@ -17,6 +17,26 @@ namespace MonadLib
 			return (Maybe<TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static Maybe<TB> Map<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static Maybe<TB> Map<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static Maybe<TB> FlatMap<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+        public static Maybe<TB> FlatMap<TA, TB>(Func<TA, Maybe<TB>> f, Maybe<TA> ma)
+        {
+            return ma.Bind(f);
+        }
+
 		public static Maybe<TB> LiftM<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
 		{
 			return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
@@ -207,6 +227,26 @@ namespace MonadLib
 			return (Either<TLeft, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static Either<TLeft, TB> Map<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static Either<TLeft, TB> Map<TLeft, TA, TB>(Func<TA, TB> f, Either<TLeft, TA> ma)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static Either<TLeft, TB> FlatMap<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+        public static Either<TLeft, TB> FlatMap<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, Either<TLeft, TA> ma)
+        {
+            return ma.Bind(f);
+        }
+
 		public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f)
 		{
 			return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
@@ -388,6 +428,26 @@ namespace MonadLib
 			return (State<TS, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static State<TS, TB> Map<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static State<TS, TB> Map<TS, TA, TB>(Func<TA, TB> f, State<TS, TA> ma)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static State<TS, TB> FlatMap<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+        public static State<TS, TB> FlatMap<TS, TA, TB>(Func<TA, State<TS, TB>> f, State<TS, TA> ma)
+        {
+            return ma.Bind(f);
+        }
+
 		public static State<TS, TB> LiftM<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f)
 		{
 			return (State<TS, TB>)MonadCombinators<TS>.LiftM(f, ma);
@@ -568,6 +628,26 @@ namespace MonadLib
 			var monadAdapter = ma.GetMonadAdapter();
 			return (Reader<TR, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
+
+        public static Reader<TR, TB> Map<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static Reader<TR, TB> Map<TR, TA, TB>(Func<TA, TB> f, Reader<TR, TA> ma)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static Reader<TR, TB> FlatMap<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+        public static Reader<TR, TB> FlatMap<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, Reader<TR, TA> ma)
+        {
+            return ma.Bind(f);
+        }
 
 		public static Reader<TR, TB> LiftM<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f)
 		{

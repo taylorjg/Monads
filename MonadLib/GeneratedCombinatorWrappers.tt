@@ -41,6 +41,26 @@ namespace MonadLib
 			return (<#= M #><<#= T1TypeList #>TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static <#= M #><<#= T1TypeList #>TB> Map<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, TB> f)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static <#= M #><<#= T1TypeList #>TB> Map<<#= T1TypeList #>TA, TB>(Func<TA, TB> f, <#= M #><<#= T1TypeList #>TA> ma)
+        {
+            return ma.LiftM(f);
+        }
+		
+        public static <#= M #><<#= T1TypeList #>TB> FlatMap<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, <#= M #><<#= T1TypeList #>TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+        public static <#= M #><<#= T1TypeList #>TB> FlatMap<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, <#= M #><<#= T1TypeList #>TA> ma)
+        {
+            return ma.Bind(f);
+        }
+
 		public static <#= M #><<#= T1TypeList #>TB> LiftM<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, TB> f)
 		{
 			return (<#= M #><<#= T1TypeList #>TB>)MonadCombinators<#= T1MonadCombinators #>.LiftM(f, ma);
