@@ -23,7 +23,7 @@ namespace MonadLib
     {
         public static Reader<TR, TA> Local<TR, TA>(Func<TR, TR> f, Reader<TR, TA> ma)
         {
-            return new Reader<TR, TA>(r => ma.RunReader(f(r)));
+            return ma.Local(f);
         }
 
         public static Reader<TR, TA> Local<TR, TA>(this Reader<TR, TA> ma, Func<TR, TR> f)

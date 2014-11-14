@@ -17,19 +17,14 @@ namespace MonadLib
 			return (Maybe<TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static Maybe<TB> Map<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
+        {
+            return ma.Map(f);
+        }
+		
         public static Maybe<TB> Map<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
         {
             return ma.LiftM(f);
-        }
-		
-        public static Maybe<TB> Map<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
-        {
-            return ma.LiftM(f);
-        }
-		
-        public static Maybe<TB> FlatMap<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f)
-        {
-            return ma.Bind(f);
         }
 		
         public static Maybe<TB> FlatMap<TA, TB>(Func<TA, Maybe<TB>> f, Maybe<TA> ma)
@@ -37,14 +32,24 @@ namespace MonadLib
             return ma.Bind(f);
         }
 
+        public static Maybe<TB> FlatMap<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+		public static Maybe<TB> LiftM<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
+		{
+			return ma.LiftM(f);
+		}
+
 		public static Maybe<TB> LiftM<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f)
 		{
 			return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
 		}
 
-		public static Maybe<TB> LiftM<TA, TB>(Func<TA, TB> f, Maybe<TA> ma)
+		public static Maybe<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, Maybe<TA> ma, Maybe<TB> mb)
 		{
-			return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
+			return ma.LiftM2(mb, f);
 		}
 
 		public static Maybe<TC> LiftM2<TA, TB, TC>(this Maybe<TA> ma, Maybe<TB> mb, Func<TA, TB, TC> f)
@@ -52,9 +57,9 @@ namespace MonadLib
 			return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
 		}
 
-		public static Maybe<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, Maybe<TA> ma, Maybe<TB> mb)
+		public static Maybe<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc)
 		{
-			return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
+			return ma.LiftM3(mb, mc, f);
 		}
 
 		public static Maybe<TD> LiftM3<TA, TB, TC, TD>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Func<TA, TB, TC, TD> f)
@@ -62,9 +67,9 @@ namespace MonadLib
 			return (Maybe<TD>)MonadCombinators.LiftM3(f, ma, mb, mc);
 		}
 
-		public static Maybe<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc)
+		public static Maybe<TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md)
 		{
-			return (Maybe<TD>)MonadCombinators.LiftM3(f, ma, mb, mc);
+			return ma.LiftM4(mb, mc, md, f);
 		}
 
 		public static Maybe<TE> LiftM4<TA, TB, TC, TD, TE>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Func<TA, TB, TC, TD, TE> f)
@@ -72,17 +77,12 @@ namespace MonadLib
 			return (Maybe<TE>)MonadCombinators.LiftM4(f, ma, mb, mc, md);
 		}
 
-		public static Maybe<TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md)
+		public static Maybe<TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Maybe<TE> me)
 		{
-			return (Maybe<TE>)MonadCombinators.LiftM4(f, ma, mb, mc, md);
+			return ma.LiftM5(mb, mc, md, me, f);
 		}
 
 		public static Maybe<TF> LiftM5<TA, TB, TC, TD, TE, TF>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Maybe<TE> me, Func<TA, TB, TC, TD, TE, TF> f)
-		{
-			return (Maybe<TF>)MonadCombinators.LiftM5(f, ma, mb, mc, md, me);
-		}
-
-		public static Maybe<TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Maybe<TE> me)
 		{
 			return (Maybe<TF>)MonadCombinators.LiftM5(f, ma, mb, mc, md, me);
 		}
@@ -143,12 +143,12 @@ namespace MonadLib
 			return (Maybe<TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
 		}
 
-		public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p)
+		public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma)
 		{
 			return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
 		}
 
-		public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma)
+		public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p)
 		{
 			return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
 		}
@@ -227,19 +227,14 @@ namespace MonadLib
 			return (Either<TLeft, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static Either<TLeft, TB> Map<TLeft, TA, TB>(Func<TA, TB> f, Either<TLeft, TA> ma)
+        {
+            return ma.Map(f);
+        }
+		
         public static Either<TLeft, TB> Map<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f)
         {
             return ma.LiftM(f);
-        }
-		
-        public static Either<TLeft, TB> Map<TLeft, TA, TB>(Func<TA, TB> f, Either<TLeft, TA> ma)
-        {
-            return ma.LiftM(f);
-        }
-		
-        public static Either<TLeft, TB> FlatMap<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f)
-        {
-            return ma.Bind(f);
         }
 		
         public static Either<TLeft, TB> FlatMap<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, Either<TLeft, TA> ma)
@@ -247,14 +242,24 @@ namespace MonadLib
             return ma.Bind(f);
         }
 
+        public static Either<TLeft, TB> FlatMap<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+		public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(Func<TA, TB> f, Either<TLeft, TA> ma)
+		{
+			return ma.LiftM(f);
+		}
+
 		public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f)
 		{
 			return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
 		}
 
-		public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(Func<TA, TB> f, Either<TLeft, TA> ma)
+		public static Either<TLeft, TC> LiftM2<TLeft, TA, TB, TC>(Func<TA, TB, TC> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb)
 		{
-			return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
+			return ma.LiftM2(mb, f);
 		}
 
 		public static Either<TLeft, TC> LiftM2<TLeft, TA, TB, TC>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Func<TA, TB, TC> f)
@@ -262,9 +267,9 @@ namespace MonadLib
 			return (Either<TLeft, TC>)MonadCombinators<TLeft>.LiftM2(f, ma, mb);
 		}
 
-		public static Either<TLeft, TC> LiftM2<TLeft, TA, TB, TC>(Func<TA, TB, TC> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb)
+		public static Either<TLeft, TD> LiftM3<TLeft, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc)
 		{
-			return (Either<TLeft, TC>)MonadCombinators<TLeft>.LiftM2(f, ma, mb);
+			return ma.LiftM3(mb, mc, f);
 		}
 
 		public static Either<TLeft, TD> LiftM3<TLeft, TA, TB, TC, TD>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Func<TA, TB, TC, TD> f)
@@ -272,9 +277,9 @@ namespace MonadLib
 			return (Either<TLeft, TD>)MonadCombinators<TLeft>.LiftM3(f, ma, mb, mc);
 		}
 
-		public static Either<TLeft, TD> LiftM3<TLeft, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc)
+		public static Either<TLeft, TE> LiftM4<TLeft, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md)
 		{
-			return (Either<TLeft, TD>)MonadCombinators<TLeft>.LiftM3(f, ma, mb, mc);
+			return ma.LiftM4(mb, mc, md, f);
 		}
 
 		public static Either<TLeft, TE> LiftM4<TLeft, TA, TB, TC, TD, TE>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Func<TA, TB, TC, TD, TE> f)
@@ -282,17 +287,12 @@ namespace MonadLib
 			return (Either<TLeft, TE>)MonadCombinators<TLeft>.LiftM4(f, ma, mb, mc, md);
 		}
 
-		public static Either<TLeft, TE> LiftM4<TLeft, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md)
+		public static Either<TLeft, TF> LiftM5<TLeft, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Either<TLeft, TE> me)
 		{
-			return (Either<TLeft, TE>)MonadCombinators<TLeft>.LiftM4(f, ma, mb, mc, md);
+			return ma.LiftM5(mb, mc, md, me, f);
 		}
 
 		public static Either<TLeft, TF> LiftM5<TLeft, TA, TB, TC, TD, TE, TF>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Either<TLeft, TE> me, Func<TA, TB, TC, TD, TE, TF> f)
-		{
-			return (Either<TLeft, TF>)MonadCombinators<TLeft>.LiftM5(f, ma, mb, mc, md, me);
-		}
-
-		public static Either<TLeft, TF> LiftM5<TLeft, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Either<TLeft, TE> me)
 		{
 			return (Either<TLeft, TF>)MonadCombinators<TLeft>.LiftM5(f, ma, mb, mc, md, me);
 		}
@@ -428,19 +428,14 @@ namespace MonadLib
 			return (State<TS, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static State<TS, TB> Map<TS, TA, TB>(Func<TA, TB> f, State<TS, TA> ma)
+        {
+            return ma.Map(f);
+        }
+		
         public static State<TS, TB> Map<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f)
         {
             return ma.LiftM(f);
-        }
-		
-        public static State<TS, TB> Map<TS, TA, TB>(Func<TA, TB> f, State<TS, TA> ma)
-        {
-            return ma.LiftM(f);
-        }
-		
-        public static State<TS, TB> FlatMap<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f)
-        {
-            return ma.Bind(f);
         }
 		
         public static State<TS, TB> FlatMap<TS, TA, TB>(Func<TA, State<TS, TB>> f, State<TS, TA> ma)
@@ -448,14 +443,24 @@ namespace MonadLib
             return ma.Bind(f);
         }
 
+        public static State<TS, TB> FlatMap<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+		public static State<TS, TB> LiftM<TS, TA, TB>(Func<TA, TB> f, State<TS, TA> ma)
+		{
+			return ma.LiftM(f);
+		}
+
 		public static State<TS, TB> LiftM<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f)
 		{
 			return (State<TS, TB>)MonadCombinators<TS>.LiftM(f, ma);
 		}
 
-		public static State<TS, TB> LiftM<TS, TA, TB>(Func<TA, TB> f, State<TS, TA> ma)
+		public static State<TS, TC> LiftM2<TS, TA, TB, TC>(Func<TA, TB, TC> f, State<TS, TA> ma, State<TS, TB> mb)
 		{
-			return (State<TS, TB>)MonadCombinators<TS>.LiftM(f, ma);
+			return ma.LiftM2(mb, f);
 		}
 
 		public static State<TS, TC> LiftM2<TS, TA, TB, TC>(this State<TS, TA> ma, State<TS, TB> mb, Func<TA, TB, TC> f)
@@ -463,9 +468,9 @@ namespace MonadLib
 			return (State<TS, TC>)MonadCombinators<TS>.LiftM2(f, ma, mb);
 		}
 
-		public static State<TS, TC> LiftM2<TS, TA, TB, TC>(Func<TA, TB, TC> f, State<TS, TA> ma, State<TS, TB> mb)
+		public static State<TS, TD> LiftM3<TS, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc)
 		{
-			return (State<TS, TC>)MonadCombinators<TS>.LiftM2(f, ma, mb);
+			return ma.LiftM3(mb, mc, f);
 		}
 
 		public static State<TS, TD> LiftM3<TS, TA, TB, TC, TD>(this State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, Func<TA, TB, TC, TD> f)
@@ -473,9 +478,9 @@ namespace MonadLib
 			return (State<TS, TD>)MonadCombinators<TS>.LiftM3(f, ma, mb, mc);
 		}
 
-		public static State<TS, TD> LiftM3<TS, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc)
+		public static State<TS, TE> LiftM4<TS, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md)
 		{
-			return (State<TS, TD>)MonadCombinators<TS>.LiftM3(f, ma, mb, mc);
+			return ma.LiftM4(mb, mc, md, f);
 		}
 
 		public static State<TS, TE> LiftM4<TS, TA, TB, TC, TD, TE>(this State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, Func<TA, TB, TC, TD, TE> f)
@@ -483,17 +488,12 @@ namespace MonadLib
 			return (State<TS, TE>)MonadCombinators<TS>.LiftM4(f, ma, mb, mc, md);
 		}
 
-		public static State<TS, TE> LiftM4<TS, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md)
+		public static State<TS, TF> LiftM5<TS, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, State<TS, TE> me)
 		{
-			return (State<TS, TE>)MonadCombinators<TS>.LiftM4(f, ma, mb, mc, md);
+			return ma.LiftM5(mb, mc, md, me, f);
 		}
 
 		public static State<TS, TF> LiftM5<TS, TA, TB, TC, TD, TE, TF>(this State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, State<TS, TE> me, Func<TA, TB, TC, TD, TE, TF> f)
-		{
-			return (State<TS, TF>)MonadCombinators<TS>.LiftM5(f, ma, mb, mc, md, me);
-		}
-
-		public static State<TS, TF> LiftM5<TS, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, State<TS, TE> me)
 		{
 			return (State<TS, TF>)MonadCombinators<TS>.LiftM5(f, ma, mb, mc, md, me);
 		}
@@ -629,19 +629,14 @@ namespace MonadLib
 			return (Reader<TR, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
+        public static Reader<TR, TB> Map<TR, TA, TB>(Func<TA, TB> f, Reader<TR, TA> ma)
+        {
+            return ma.Map(f);
+        }
+		
         public static Reader<TR, TB> Map<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f)
         {
             return ma.LiftM(f);
-        }
-		
-        public static Reader<TR, TB> Map<TR, TA, TB>(Func<TA, TB> f, Reader<TR, TA> ma)
-        {
-            return ma.LiftM(f);
-        }
-		
-        public static Reader<TR, TB> FlatMap<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f)
-        {
-            return ma.Bind(f);
         }
 		
         public static Reader<TR, TB> FlatMap<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, Reader<TR, TA> ma)
@@ -649,14 +644,24 @@ namespace MonadLib
             return ma.Bind(f);
         }
 
+        public static Reader<TR, TB> FlatMap<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f)
+        {
+            return ma.Bind(f);
+        }
+		
+		public static Reader<TR, TB> LiftM<TR, TA, TB>(Func<TA, TB> f, Reader<TR, TA> ma)
+		{
+			return ma.LiftM(f);
+		}
+
 		public static Reader<TR, TB> LiftM<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f)
 		{
 			return (Reader<TR, TB>)MonadCombinators<TR>.LiftM(f, ma);
 		}
 
-		public static Reader<TR, TB> LiftM<TR, TA, TB>(Func<TA, TB> f, Reader<TR, TA> ma)
+		public static Reader<TR, TC> LiftM2<TR, TA, TB, TC>(Func<TA, TB, TC> f, Reader<TR, TA> ma, Reader<TR, TB> mb)
 		{
-			return (Reader<TR, TB>)MonadCombinators<TR>.LiftM(f, ma);
+			return ma.LiftM2(mb, f);
 		}
 
 		public static Reader<TR, TC> LiftM2<TR, TA, TB, TC>(this Reader<TR, TA> ma, Reader<TR, TB> mb, Func<TA, TB, TC> f)
@@ -664,9 +669,9 @@ namespace MonadLib
 			return (Reader<TR, TC>)MonadCombinators<TR>.LiftM2(f, ma, mb);
 		}
 
-		public static Reader<TR, TC> LiftM2<TR, TA, TB, TC>(Func<TA, TB, TC> f, Reader<TR, TA> ma, Reader<TR, TB> mb)
+		public static Reader<TR, TD> LiftM3<TR, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc)
 		{
-			return (Reader<TR, TC>)MonadCombinators<TR>.LiftM2(f, ma, mb);
+			return ma.LiftM3(mb, mc, f);
 		}
 
 		public static Reader<TR, TD> LiftM3<TR, TA, TB, TC, TD>(this Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Func<TA, TB, TC, TD> f)
@@ -674,9 +679,9 @@ namespace MonadLib
 			return (Reader<TR, TD>)MonadCombinators<TR>.LiftM3(f, ma, mb, mc);
 		}
 
-		public static Reader<TR, TD> LiftM3<TR, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc)
+		public static Reader<TR, TE> LiftM4<TR, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Reader<TR, TD> md)
 		{
-			return (Reader<TR, TD>)MonadCombinators<TR>.LiftM3(f, ma, mb, mc);
+			return ma.LiftM4(mb, mc, md, f);
 		}
 
 		public static Reader<TR, TE> LiftM4<TR, TA, TB, TC, TD, TE>(this Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Reader<TR, TD> md, Func<TA, TB, TC, TD, TE> f)
@@ -684,17 +689,12 @@ namespace MonadLib
 			return (Reader<TR, TE>)MonadCombinators<TR>.LiftM4(f, ma, mb, mc, md);
 		}
 
-		public static Reader<TR, TE> LiftM4<TR, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Reader<TR, TD> md)
+		public static Reader<TR, TF> LiftM5<TR, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Reader<TR, TD> md, Reader<TR, TE> me)
 		{
-			return (Reader<TR, TE>)MonadCombinators<TR>.LiftM4(f, ma, mb, mc, md);
+			return ma.LiftM5(mb, mc, md, me, f);
 		}
 
 		public static Reader<TR, TF> LiftM5<TR, TA, TB, TC, TD, TE, TF>(this Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Reader<TR, TD> md, Reader<TR, TE> me, Func<TA, TB, TC, TD, TE, TF> f)
-		{
-			return (Reader<TR, TF>)MonadCombinators<TR>.LiftM5(f, ma, mb, mc, md, me);
-		}
-
-		public static Reader<TR, TF> LiftM5<TR, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Reader<TR, TD> md, Reader<TR, TE> me)
 		{
 			return (Reader<TR, TF>)MonadCombinators<TR>.LiftM5(f, ma, mb, mc, md, me);
 		}

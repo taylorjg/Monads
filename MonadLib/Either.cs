@@ -129,7 +129,7 @@ namespace MonadLib
 
         public static TB MapEither<TLeft, TA, TB>(Func<TLeft, TB> f, Func<TA, TB> g, Either<TLeft, TA> either)
         {
-            return either.Match(f, g);
+            return either.MapEither(f, g);
         }
 
         public static TB MapEither<TLeft, TA, TB>(this Either<TLeft, TA> either, Func<TLeft, TB> f, Func<TA, TB> g)
