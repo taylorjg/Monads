@@ -163,16 +163,28 @@ namespace MonadLibTests
         public void MapOrDefaultAppliedToNothing()
         {
             var maybe = Maybe.Nothing<int>();
-            var actual = Maybe.MapOrDefault("my-default-value", Convert.ToString, maybe);
-            Assert.That(actual, Is.EqualTo("my-default-value"));
+
+            const string myDefaultValue = "my-default-value";
+
+            var actual1 = Maybe.MapOrDefault(myDefaultValue, Convert.ToString, maybe);
+            Assert.That(actual1, Is.EqualTo(myDefaultValue));
+
+            var actual2 = maybe.MapOrDefault(myDefaultValue, Convert.ToString);
+            Assert.That(actual2, Is.EqualTo(myDefaultValue));
         }
 
         [Test]
         public void MapOrDefaultAppliedToJust()
         {
             var maybe = Maybe.Just(42);
-            var actual = Maybe.MapOrDefault("my-default-value", Convert.ToString, maybe);
-            Assert.That(actual, Is.EqualTo("42"));
+
+            const string myDefaultValue = "my-default-value";
+
+            var actual1 = Maybe.MapOrDefault(myDefaultValue, Convert.ToString, maybe);
+            Assert.That(actual1, Is.EqualTo("42"));
+
+            var actual2 = maybe.MapOrDefault(myDefaultValue, Convert.ToString);
+            Assert.That(actual2, Is.EqualTo("42"));
         }
 
         [Test, TestCaseSource("TestCaseSourceForEquals")]
