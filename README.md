@@ -11,6 +11,7 @@ I have implemented the following monads:
 * Either
 * State
 * Reader
+* Writer
 
 I created my own simple <code>Unit</code> type to represent Haskell's <code>()</code> type.
 
@@ -49,6 +50,7 @@ MonadLib is available as a NuGet package:
 * [ReaderHaskellDocsExample1](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample1)
 * [ReaderHaskellDocsExample2](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample2)
 * [ReaderAllAboutMonadsExample](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderAllAboutMonadsExample)
+* [WriterBasicTell](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/WriterBasicTell)
 * [WadlerEvaluator](https://github.com/taylorjg/WadlerEvaluator)
 
 ## Design
@@ -248,6 +250,56 @@ var reader2 = ReaderConfig
     .Local(c1 => new Config(c1.Multiplier * 2))
     .Bind(c2 => ReaderConfig.Return(c2.Multiplier * 3));
 Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
+```
+
+### Writer
+
+```C#
+using MyWriter = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string>;
+using MyWriterInt = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string, int>;
+using MyWriterUnit = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string, Unit>;
+
+internal class Program
+{
+    private static void Main()
+    {
+        Print(MultWithLog().RunWriter);
+    }
+
+    private static void Print(Tuple<int, ListMonoid<string>> tuple)
+    {
+        var a = tuple.Item1;
+        var w = tuple.Item2;
+        Console.WriteLine("a: {0}", a);
+        foreach (var msg in w.List) Console.WriteLine("msg: {0}", msg);
+    }
+
+    private static MyWriterUnit TellHelper(string s)
+    {
+        var listMonoid = new ListMonoid<string>(new[] { s });
+        return MyWriter.Tell(listMonoid);
+    }
+
+    private static MyWriterInt LogNumber(int x)
+    {
+        return TellHelper(string.Format("Got number: {0}", x))
+            .BindIgnoringLeft(MyWriter.Return(x));
+    }
+
+    private static MyWriterInt MultWithLog()
+    {
+        return LogNumber(3).Bind(
+            a => LogNumber(5).Bind(
+                b => TellHelper(string.Format("multiplying {0} and {1}", a, b)).BindIgnoringLeft(
+                    MyWriter.Return(a * b))));
+    }
+}
+```
+
+We could record each message 5 times by doing this in <code>TellHelper</code>:
+
+```C#
+        return MyWriter.Tell(listMonoid).ReplicateM_(5);
 ```
 
 ## Documentation
