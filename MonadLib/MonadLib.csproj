@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IMonadT3.cs" />
+    <Compile Include="IMonadT2.cs" />
+    <Compile Include="Writer.cs" />
     <Compile Include="GeneratedCombinatorWrappers.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -53,6 +56,8 @@
     <Compile Include="IMonad.cs" />
     <Compile Include="IMonadPlus.cs" />
     <Compile Include="IMonadT1.cs" />
+    <Compile Include="IMonoid.cs" />
+    <Compile Include="ListMonoid.cs" />
     <Compile Include="Maybe.cs" />
     <Compile Include="MonadHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
