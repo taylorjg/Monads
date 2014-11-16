@@ -13,5 +13,10 @@
 
         public Template TemplateT { get { return _templateT; } }
         public Template TemplateD { get { return _templateD; } }
+
+        public string Show()
+        {
+            return string.Format("{0}={1}", TemplateT.Show(), TemplateD.Show());
+        }
     }
 }

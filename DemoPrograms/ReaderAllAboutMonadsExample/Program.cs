@@ -41,31 +41,31 @@ namespace ReaderAllAboutMonadsExample
             Func<string, Func<Environment, Maybe<string>>> partiallyApplyLookupVar = name => env => LookupVar(name, env);
             Func<string, Func<Environment, Maybe<Template>>> partiallyApplyLookupTemplate = name => env => LookupTemplate(name, env);
 
-            if (template is T)
+            if (template is TextTemplate)
             {
-                return Reader<Environment>.Return((template as T).String);
+                return Reader<Environment>.Return((template as TextTemplate).String);
             }
 
-            if (template is V)
+            if (template is VariableTemplate)
             {
-                var t = (template as V).Template;
+                var t = (template as VariableTemplate).Template;
                 return Resolve(t).Bind(
                     varName => Reader.Asks(partiallyApplyLookupVar(varName)).Bind(
                         varValue => Reader<Environment>.Return(Maybe.MapOrDefault(string.Empty, x => x, varValue))));
             }
 
-            if (template is Q)
+            if (template is QuoteTemplate)
             {
-                var t = (template as Q).Template;
+                var t = (template as QuoteTemplate).Template;
                 return Resolve(t).Bind(
                     tmplName => Reader.Asks(partiallyApplyLookupTemplate(tmplName)).Bind(
                         body => Reader<Environment>.Return(Maybe.MapOrDefault(string.Empty, x => x.ToString(), body))));
             }
 
-            if (template is I)
+            if (template is IncludeTemplate)
             {
-                var t = (template as I).Template;
-                var ds = (template as I).Definitions;
+                var t = (template as IncludeTemplate).Template;
+                var ds = (template as IncludeTemplate).Definitions;
 
                 return Resolve(t).Bind(
                     tmplName => Reader.Asks(partiallyApplyLookupTemplate(tmplName)).Bind(
@@ -74,9 +74,9 @@ namespace ReaderAllAboutMonadsExample
                             () => Reader<Environment>.Return(string.Empty))));
             }
 
-            if (template is C)
+            if (template is CompoundTemplate)
             {
-                var ts = (template as C).Templates;
+                var ts = (template as CompoundTemplate).Templates;
                 return Reader.MapM(Resolve, ts).LiftM(string.Concat);
             }
 
