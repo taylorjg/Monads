@@ -296,7 +296,8 @@ internal class Program
 }
 ```
 
-We could record each message 5 times by doing this in <code>TellHelper</code>:
+All the monad combinators can be used with Writer.
+For example, we could record each message 5 times by using <code>ReplicateM_</code> in <code>TellHelper</code>:
 
 ```C#
         return MyWriter.Tell(listMonoid).ReplicateM_(5);
@@ -351,9 +352,9 @@ It is on my TODO list to add XML documentation comments to the source code and t
 * Implement more monads e.g.:
  * ~~State~~
  * ~~Reader~~
- * Writer
+ * ~~Writer~~
 * ~~Implement MonadPlus~~
-* Implement some monad transformers ?
+* Implement monad transformers ?
  * MaybeT
  * EitherT
  * StateT
