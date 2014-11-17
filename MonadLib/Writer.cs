@@ -20,6 +20,21 @@ namespace MonadLib
             get { return Tuple.Create(_a, _w); }
         }
 
+        public Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TMonoid>> Listen()
+        {
+            return new Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TMonoid>>(Tuple.Create(_a, _w), _w);
+        }
+
+        public Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TB>> Listens<TB>(Func<TMonoid, TB> f)
+        {
+            return Listen().Bind(tuple =>
+                {
+                    var a = tuple.Item1;
+                    var w = tuple.Item2;
+                    return Writer<TMonoid, TMonoidAdapter, TW>.Return(Tuple.Create(a, f(w)));
+                });
+        }
+
         private WriterMonadAdapter<TMonoid, TMonoidAdapter, TW> _monadAdapter;
 
         public MonadAdapter<TMonoid, TMonoidAdapter, TW> GetMonadAdapter()
@@ -39,6 +54,20 @@ namespace MonadLib
         public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Tell(TMonoid s)
         {
             return new Writer<TMonoid, TMonoidAdapter, TW, Unit>(new Unit(), s);
+        }
+
+        public static Writer<TMonoid, TMonoidAdapter, TW, TA> Pass<TA>(Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, Func<TMonoid, TMonoid>>> m)
+        {
+            var tuple = m.RunWriter;
+            var a = tuple.Item1.Item1;
+            var f = tuple.Item1.Item2;
+            var w = tuple.Item2;
+            return new Writer<TMonoid, TMonoidAdapter, TW, TA>(a, f(w));
+        }
+
+        public static Writer<TMonoid, TMonoidAdapter, TW, TA> Censor<TA>(Func<TMonoid, TMonoid> f, Writer<TMonoid, TMonoidAdapter, TW, TA> m)
+        {
+            return Pass(m.Bind(a => Return(Tuple.Create(a, f))));
         }
 
         public static Writer<TMonoid, TMonoidAdapter, TW, TA> Return<TA>(TA a)
