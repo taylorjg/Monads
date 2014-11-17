@@ -1,4 +1,4 @@
-﻿namespace Monads
+﻿namespace Scrapbook
 {
     public class Config
     {

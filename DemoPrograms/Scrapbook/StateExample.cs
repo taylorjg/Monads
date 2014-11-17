@@ -1,7 +1,7 @@
 ﻿using System;
 using MonadLib;
 
-namespace Monads
+namespace Scrapbook
 {
     using TickState = State<int>;
     using Tick = State<int, int>;

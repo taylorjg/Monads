@@ -5,24 +5,18 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using MonadLib;
 
-namespace Monads
+namespace Scrapbook
 {
     // Either has two type parameters - TLeft and TA.
     // This is a little trick to make EitherString an alias for Either<String>.
     // EitherString is then a monad with a single type parameter - TA.
-    using EitherString = Either<String>;
 
     // Reader has two type parameters - TR and TA.
     // This is a little trick to make ReaderConfig an alias for Reader<Config>.
     // ReaderConfig is then a monad with a single type parameter - TA.
-    using ReaderConfig = Reader<Config>;
-
-    // State has two type parameters - TS and TA.
+        // State has two type parameters - TS and TA.
     // This is a little trick to make StateString an alias for State<string>.
     // StateString is then a monad with a single type parameter - TA.
-    using TickState = State<int>;
-
-    using IntState = State<int>;
 
     public static class Scrapbook
     {
@@ -85,8 +79,8 @@ namespace Monads
         public static void EitherScrapbook()
         {
             // Creating a Left and Right
-            var eitherLeft = EitherString.Left<int>("an error message");
-            var eitherRight = EitherString.Right(10);
+            var eitherLeft = Either<string>.Left<int>("an error message");
+            var eitherRight = Either<string>.Right(10);
 
             // Extracting values via Left and Right
             var left = eitherLeft.Left;
@@ -97,8 +91,8 @@ namespace Monads
             Console.WriteLine("eitherRight: {0}", eitherRight.Match(l => Convert.ToString(l), r => Convert.ToString(r)));
 
             // Bind
-            var eitherRightSquared1 = eitherRight.Bind(r => EitherString.Right(r * r));
-            var eitherRightSquared2 = eitherRight.Bind(r => EitherString.Return(r * r));
+            var eitherRightSquared1 = eitherRight.Bind(r => Either<string>.Right(r * r));
+            var eitherRightSquared2 = eitherRight.Bind(r => Either<string>.Return(r * r));
 
             // LiftM
             var eitherRightSquared3 = eitherRight.LiftM(r => r * r);
@@ -106,11 +100,9 @@ namespace Monads
 
         public static void StateScrapbook()
         {
-            var tick = TickState
-                .Get()
-                .Bind(n => TickState
-                               .Put(n + 1)
-                               .BindIgnoringLeft(TickState.Return(n)));
+            var tick = State<int>.Get()
+                .Bind(n => State<int>.Put(n + 1)
+                               .BindIgnoringLeft(State<int>.Return(n)));
 
             Console.WriteLine("tick.EvalState(5): {0}", tick.EvalState(5));
             Console.WriteLine("tick.ExecState(5): {0}", tick.ExecState(5));
@@ -123,7 +115,7 @@ namespace Monads
 
         public static void F1()
         {
-            var stateMonad = IntState.Return("abc");
+            var stateMonad = State<int>.Return("abc");
             var result = stateMonad.RunState(4);
             Console.WriteLine("result: {0}", result);
             // Output: result: (abc, 4)
@@ -131,8 +123,8 @@ namespace Monads
 
         public static void F2()
         {
-            var stateMonad = IntState.Return("abc").Bind(
-                s => IntState.Return(s + s));
+            var stateMonad = State<int>.Return("abc").Bind(
+                s => State<int>.Return(s + s));
             var result = stateMonad.RunState(4);
             Console.WriteLine("result: {0}", result);
             // Output: result: (abcabc, 4)
@@ -140,9 +132,9 @@ namespace Monads
 
         public static void F3()
         {
-            var stateMonad = IntState.Return("abc").Bind(
-                s => IntState.Get().Bind(
-                    _ => IntState.Return(s + s)));
+            var stateMonad = State<int>.Return("abc").Bind(
+                s => State<int>.Get().Bind(
+                    _ => State<int>.Return(s + s)));
             var result = stateMonad.RunState(4);
             Console.WriteLine("result: {0}", result);
             // Output: result: (abcabc, 4)
@@ -150,10 +142,10 @@ namespace Monads
 
         public static void F4()
         {
-            var stateMonad = IntState.Return("abc").Bind(
-                s => IntState.Get().Bind(
-                    n => IntState.Put(n + 1).BindIgnoringLeft(
-                        IntState.Return(s + s))));
+            var stateMonad = State<int>.Return("abc").Bind(
+                s => State<int>.Get().Bind(
+                    n => State<int>.Put(n + 1).BindIgnoringLeft(
+                        State<int>.Return(s + s))));
             var result = stateMonad.RunState(4);
             Console.WriteLine("result: {0}", result);
             // Output: result: (abcabc, 5)
@@ -163,15 +155,13 @@ namespace Monads
         {
             var config = new Config(2);
 
-            var reader1 = ReaderConfig
-                .Ask()
-                .Bind(c1 => ReaderConfig.Return(c1.Multiplier * 3));
+            var reader1 = Reader<Config>.Ask()
+                .Bind(c1 => Reader<Config>.Return(c1.Multiplier * 3));
             Console.WriteLine("reader1.RunReader(config): {0}", reader1.RunReader(config));
 
-            var reader2 = ReaderConfig
-                .Ask()
+            var reader2 = Reader<Config>.Ask()
                 .Local(c1 => new Config(c1.Multiplier * 2))
-                .Bind(c2 => ReaderConfig.Return(c2.Multiplier * 3));
+                .Bind(c2 => Reader<Config>.Return(c2.Multiplier * 3));
             Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
         }
     }
