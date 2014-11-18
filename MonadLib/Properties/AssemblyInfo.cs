@@ -5,13 +5,8 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MonadLib")]
-[assembly: AssemblyDescription("Monads (e.g. Maybe, Either, State) and monad combinators (e.g. Sequence, LiftM, etc.) in C#")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyDescription("Monads (Maybe, Either, State, Reader, Writer) and monad combinators (Sequence, Sequence_, ReplicateM, ReplicateM_, MapM, MapM_, FoldM, FoldM_, ZipWithM, ZipWithM_, ForM, FilterM, LiftM, LiftM2, LiftM3, LiftM4, LiftM5, Join, When, Unless, Forever, Void, Ap, Compose) in C#")]
 [assembly: AssemblyProduct("MonadLib")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
