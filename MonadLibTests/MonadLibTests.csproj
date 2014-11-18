@@ -54,6 +54,7 @@
     <Compile Include="ReaderMonadLaws.cs" />
     <Compile Include="StateMonadLaws.cs" />
     <Compile Include="StateTests.cs" />
+    <Compile Include="WriterMonadLaws.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonadLib\MonadLib.csproj">

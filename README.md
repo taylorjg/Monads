@@ -274,10 +274,12 @@ internal class Program
         foreach (var msg in w.List) Console.WriteLine("msg: {0}", msg);
     }
 
-    private static MyWriterUnit TellHelper(string s)
+    private static MyWriterInt MultWithLog()
     {
-        var listMonoid = new ListMonoid<string>(new[] { s });
-        return MyWriter.Tell(listMonoid);
+        return LogNumber(3).Bind(
+            a => LogNumber(5).Bind(
+                b => TellHelper(string.Format("multiplying {0} and {1}", a, b)).BindIgnoringLeft(
+                    MyWriter.Return(a * b))));
     }
 
     private static MyWriterInt LogNumber(int x)
@@ -286,12 +288,10 @@ internal class Program
             .BindIgnoringLeft(MyWriter.Return(x));
     }
 
-    private static MyWriterInt MultWithLog()
+    private static MyWriterUnit TellHelper(string s)
     {
-        return LogNumber(3).Bind(
-            a => LogNumber(5).Bind(
-                b => TellHelper(string.Format("multiplying {0} and {1}", a, b)).BindIgnoringLeft(
-                    MyWriter.Return(a * b))));
+        var listMonoid = new ListMonoid<string>(new[] { s });
+        return MyWriter.Tell(listMonoid);
     }
 }
 ```
@@ -354,6 +354,9 @@ It is on my TODO list to add XML documentation comments to the source code and t
  * ~~Reader~~
  * ~~Writer~~
 * ~~Implement MonadPlus~~
+* Try to mimic do notation
+    * There is an interesting post here:
+        * [C# await is the Haskell do notation](http://ruudvanasseldonk.com/2013/08/20/csharp-await-is-the-haskell-do-notation)
 * Implement monad transformers ?
  * MaybeT
  * EitherT
