@@ -55,6 +55,9 @@
     <Compile Include="StateMonadLaws.cs" />
     <Compile Include="StateTests.cs" />
     <Compile Include="WriterMonadLaws.cs" />
+    <Compile Include="WriterTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonadLib\MonadLib.csproj">
