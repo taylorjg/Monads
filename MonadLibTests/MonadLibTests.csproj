@@ -52,6 +52,7 @@
     <Compile Include="MaybeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReaderMonadLaws.cs" />
+    <Compile Include="ReaderTests.cs" />
     <Compile Include="StateMonadLaws.cs" />
     <Compile Include="StateTests.cs" />
     <Compile Include="WriterMonadLaws.cs" />
