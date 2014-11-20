@@ -21,6 +21,11 @@ namespace MonadLib
             return RunState(s).Item2;
         }
 
+        public State<TS, TS2> Gets<TS2>(Func<TS, TS2> f)
+        {
+            return State<TS>.Get().Bind(s => State<TS>.Return(f(s)));
+        }
+
         private MonadAdapter<TS> _monadAdapter;
 
         public MonadAdapter<TS> GetMonadAdapter()

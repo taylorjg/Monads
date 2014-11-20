@@ -31,7 +31,7 @@ namespace MonadLib
             return new Reader<TR, TA>(r => ma.RunReader(f(r)));
         }
 
-        public static Reader<TR, TA> Asks<TR, TA>(Func<TR, TA> f)
+        public static Reader<TR, TR2> Asks<TR, TR2>(Func<TR, TR2> f)
         {
             return Reader<TR>.Ask().Bind(r => Reader<TR>.Return(f(r)));
         }

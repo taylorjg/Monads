@@ -25,7 +25,7 @@ namespace MonadLib
             return new Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TMonoid>>(Tuple.Create(_a, _w), _w);
         }
 
-        public Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TB>> Listens<TB>(Func<TMonoid, TB> f)
+        public Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TW2>> Listens<TW2>(Func<TMonoid, TW2> f)
         {
             return Listen().Bind(tuple =>
                 {
