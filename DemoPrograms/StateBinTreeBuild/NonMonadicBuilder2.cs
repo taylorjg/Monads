@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 
 namespace StateBinTreeBuild
 {
     public static class NonMonadicBuilder2
     {
-        public static BinTree Build<TA>(IImmutableList<TA> xs)
+        public static BinTree Build<TA>(IReadOnlyList<TA> xs)
         {
-            return Build2(xs.Count, Tuple.Create(xs as IReadOnlyList<TA>, 0)).Item1;
+            return Build2(xs.Count, Tuple.Create(xs, 0)).Item1;
         }
 
         private static Tuple<BinTree, Tuple<IReadOnlyList<TA>, int>> Build2<TA>(int n, Tuple<IReadOnlyList<TA>, int> state)

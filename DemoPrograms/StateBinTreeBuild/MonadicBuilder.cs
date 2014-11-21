@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MonadLib;
 
@@ -6,23 +6,23 @@ namespace StateBinTreeBuild
 {
     public static class MonadicBuilder
     {
-        public static BinTree Build<TA>(IImmutableList<TA> xs)
+        public static BinTree Build<TA>(IReadOnlyList<TA> xs)
         {
             return Build2<TA>(xs.Count).EvalState(xs);
         }
 
-        private static State<IImmutableList<TA>, BinTree> Build2<TA>(int n)
+        private static State<IReadOnlyList<TA>, BinTree> Build2<TA>(int n)
         {
             if (n == 1)
             {
-                return State<IImmutableList<TA>>.Get().Bind(xs =>
+                return State<IReadOnlyList<TA>>.Get().Bind(xs =>
                     {
                         var head = xs.First();
-                        var tail = (IImmutableList<TA>) ImmutableList.CreateRange(xs.Skip(1));
-                        return State<IImmutableList<TA>>.Put(tail).Bind(_ =>
+                        var tail = (IReadOnlyList<TA>)xs.Skip(1).ToList();
+                        return State<IReadOnlyList<TA>>.Put(tail).Bind(_ =>
                             {
                                 BinTree leaf = new Leaf<TA>(head);
-                                return State<IImmutableList<TA>>.Return(leaf);
+                                return State<IReadOnlyList<TA>>.Return(leaf);
                             });
                     });
             }
@@ -33,7 +33,7 @@ namespace StateBinTreeBuild
                     v =>
                         {
                             BinTree fork = new Fork(u, v);
-                            return State<IImmutableList<TA>>.Return(fork);
+                            return State<IReadOnlyList<TA>>.Return(fork);
                         }));
         }
     }

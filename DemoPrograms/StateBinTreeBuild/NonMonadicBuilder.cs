@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace StateBinTreeBuild
 {
     public static class NonMonadicBuilder
     {
-        public static BinTree Build<TA>(IImmutableList<TA> xs)
+        public static BinTree Build<TA>(IReadOnlyList<TA> xs)
         {
             return Build2(xs.Count, xs).Item1;
         }
 
-        private static Tuple<BinTree, IImmutableList<TA>> Build2<TA>(int n, IImmutableList<TA> xs)
+        private static Tuple<BinTree, IReadOnlyList<TA>> Build2<TA>(int n, IReadOnlyList<TA> xs)
         {
             if (n == 1)
             {
                 var head = xs.First();
-                var tail = (IImmutableList<TA>) ImmutableList.CreateRange(xs.Skip(1));
+                var tail = (IReadOnlyList<TA>)xs.Skip(1).ToList();
                 BinTree leaf = new Leaf<TA>(head);
                 return Tuple.Create(leaf, tail);
             }
