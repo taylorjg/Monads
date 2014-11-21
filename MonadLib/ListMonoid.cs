@@ -15,7 +15,9 @@ namespace MonadLib
             _list = new List<TA>(collection);
         }
 
-        private readonly List<TA> _list = new List<TA> ();
+        public IReadOnlyList<TA> List { get { return _list; } }
+
+        private readonly List<TA> _list;
 
         private static MonoidAdapter<TA> _monoidAdapter;
 
@@ -23,8 +25,6 @@ namespace MonadLib
         {
             return _monoidAdapter ?? (_monoidAdapter = new ListMonoidAdapter<TA>());
         }
-
-        public List<TA> List { get { return _list; } } 
     }
 
     public class ListMonoidAdapter<TA> : MonoidAdapter<TA>
