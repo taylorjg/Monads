@@ -9,7 +9,7 @@ namespace EitherMovieReview
 
     internal class Program
     {
-        private static Either<string, string> Lookup1(AssociationList alist, string key)
+        private static Either<string, string> Lookup1(string key, AssociationList alist)
         {
             var keyWithEmptyValue = EitherError.Left<string>(string.Format("Found key \"{0}\" but its value is empty", key));
             var keyWithNoValue = EitherError.Left<string>(string.Format("Found key \"{0}\" but it has no value", key));
@@ -26,9 +26,9 @@ namespace EitherMovieReview
         {
             return Either.LiftM3(
                 MovieReview.MakeMovieReview,
-                Lookup1(alist, "title"),
-                Lookup1(alist, "user"),
-                Lookup1(alist, "review"));
+                Lookup1("title", alist),
+                Lookup1("user", alist),
+                Lookup1("review", alist));
         }
 
         private static void Main()

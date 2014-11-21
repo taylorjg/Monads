@@ -8,7 +8,7 @@ namespace MaybeMovieReview
 
     internal class Program
     {
-        private static Maybe<string> Lookup1(AssociationList alist, string key)
+        private static Maybe<string> Lookup1(string key, AssociationList alist)
         {
             return alist
                 .GetValue(key)
@@ -19,9 +19,9 @@ namespace MaybeMovieReview
         {
             return Maybe.LiftM3(
                 MovieReview.MakeMovieReview,
-                Lookup1(alist, "title"),
-                Lookup1(alist, "user"),
-                Lookup1(alist, "review"));
+                Lookup1("title", alist),
+                Lookup1("user", alist),
+                Lookup1("review", alist));
         }
 
         private static void Main()
