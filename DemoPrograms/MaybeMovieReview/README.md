@@ -21,12 +21,29 @@ liftedReview alist =
     liftM3 MovieReview (lookup1 "title" alist)
                        (lookup1 "user" alist)
                        (lookup1 "review" alist)
+
 main = do
-	let alist = [
+	-- All keys present and correct
+	putStrLn $ show $ liftedReview [
 					("title", Just "Jaws"),
 					("user", Just "Jon"),
-					("review", Just "A film about a shark")
-				]
-	putStrLn $ show $ liftedReview alist
+					("review", Just "A film about a shark")]
+
+	-- Missing "user" key
+	putStrLn $ show $ liftedReview [
+					("title", Just "Jaws"),
+					("review", Just "A film about a shark")]
+
+	-- Value of "user" key is empty
+	putStrLn $ show $ liftedReview [
+					("title", Just "Jaws"),
+					("user", Just ""),
+					("review", Just "A film about a shark")]
+
+	-- Value of "user" key is Nothing
+	putStrLn $ show $ liftedReview [
+					("title", Just "Jaws"),
+					("user", Nothing),
+					("review", Just "A film about a shark")]
 ```
 

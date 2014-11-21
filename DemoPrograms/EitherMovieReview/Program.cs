@@ -9,38 +9,7 @@ namespace EitherMovieReview
 
     internal class Program
     {
-        private static void Main()
-        {
-            var alist = new AssociationList
-                {
-                    {"title", Maybe.Just("Jaws")},
-                    {"user", Maybe.Just("Jon")},
-                    {"review", Maybe.Just("A film about a shark")}
-                };
-
-            // Using void Either.Match()
-            GetMovieReview(alist).Match(
-                error => Console.WriteLine("GetMovieReview returned an error." + Environment.NewLine + error),
-                movieReview => Console.WriteLine("GetMovieReview returned {0}.", MovieReview.Format(movieReview)));
-
-            // Using T Either.Match<T>()
-            Console.WriteLine(
-                "GetMovieReview returned {0}.",
-                GetMovieReview(alist).Match(
-                    error => string.Format("an error: {0}", error),
-                    MovieReview.Format));
-        }
-
-        private static Either<string, MovieReview> GetMovieReview(AssociationList alist)
-        {
-            return Either.LiftM3(
-                MovieReview.MakeMovieReview,
-                Lookup(alist, "title"),
-                Lookup(alist, "user"),
-                Lookup(alist, "review"));
-        }
-
-        private static Either<string, string> Lookup(AssociationList alist, string key)
+        private static Either<string, string> Lookup1(AssociationList alist, string key)
         {
             var keyWithEmptyValue = EitherError.Left<string>(string.Format("Found key \"{0}\" but its value is empty", key));
             var keyWithNoValue = EitherError.Left<string>(string.Format("Found key \"{0}\" but it has no value", key));
@@ -51,6 +20,56 @@ namespace EitherMovieReview
                     s => string.IsNullOrEmpty(s) ? keyWithEmptyValue : EitherError.Right(s),
                     () => keyWithNoValue),
                 () => keyNotFound);
+        }
+
+        private static Either<string, MovieReview> LiftedReview(AssociationList alist)
+        {
+            return Either.LiftM3(
+                MovieReview.MakeMovieReview,
+                Lookup1(alist, "title"),
+                Lookup1(alist, "user"),
+                Lookup1(alist, "review"));
+        }
+
+        private static void Main()
+        {
+            // All keys present and correct
+            Print(LiftedReview(new AssociationList
+                {
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Just("Jon")},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+
+            // Missing "user" key
+            Print(LiftedReview(new AssociationList
+                {
+                    {"title", Maybe.Just("Jaws")},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+
+            // Value of "user" key is empty
+            Print(LiftedReview(new AssociationList
+                {
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Just(string.Empty)},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+
+            // Value of "user" key is Nothing
+            Print(LiftedReview(new AssociationList
+                {
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Nothing<string>()},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+        }
+
+        private static void Print(Either<string, MovieReview> movieReview)
+        {
+            Console.WriteLine(movieReview.Match(
+                error => string.Format("An error occurred: {0}", error),
+                MovieReview.Format));
         }
     }
 }

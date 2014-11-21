@@ -8,42 +8,55 @@ namespace MaybeMovieReview
 
     internal class Program
     {
-        private static void Main()
-        {
-            var alist = new AssociationList
-                {
-                    {"title", Maybe.Just("Jaws")},
-                    {"user", Maybe.Just("Jon")},
-                    {"review", Maybe.Just("A film about a shark")}
-                };
-
-            // Using void Maybe.Match()
-            GetMovieReview(alist).Match(
-                movieReview => Console.WriteLine("GetMovieReview returned {0}.", MovieReview.Format(movieReview)),
-                () => Console.WriteLine("GetMovieReview returned Nothing."));
-
-            // Using T Maybe.Match<T>()
-            Console.WriteLine(
-                "GetMovieReview returned {0}.",
-                GetMovieReview(alist).Match(
-                    MovieReview.Format,
-                    () => "Nothing"));
-        }
-
-        private static Maybe<MovieReview> GetMovieReview(AssociationList alist)
-        {
-            return Maybe.LiftM3(
-                MovieReview.MakeMovieReview,
-                Lookup(alist, "title"),
-                Lookup(alist, "user"),
-                Lookup(alist, "review"));
-        }
-
-        private static Maybe<string> Lookup(AssociationList alist, string key)
+        private static Maybe<string> Lookup1(AssociationList alist, string key)
         {
             return alist
                 .GetValue(key)
                 .Bind(v => v.MFilter(s => !string.IsNullOrEmpty(s)));
+        }
+
+        private static Maybe<MovieReview> LiftedReview(AssociationList alist)
+        {
+            return Maybe.LiftM3(
+                MovieReview.MakeMovieReview,
+                Lookup1(alist, "title"),
+                Lookup1(alist, "user"),
+                Lookup1(alist, "review"));
+        }
+
+        private static void Main()
+        {
+	        // All keys present and correct
+            Print(LiftedReview(new AssociationList {
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Just("Jon")},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+
+	        // Missing "user" key
+            Print(LiftedReview(new AssociationList {
+                    {"title", Maybe.Just("Jaws")},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+
+	        // Value of "user" key is empty
+            Print(LiftedReview(new AssociationList {
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Just(string.Empty)},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+
+	        // Value of "user" key is Nothing
+            Print(LiftedReview(new AssociationList {
+                    {"title", Maybe.Just("Jaws")},
+                    {"user", Maybe.Nothing<string>()},
+                    {"review", Maybe.Just("A film about a shark")}
+                }));
+        }
+
+        private static void Print(Maybe<MovieReview> movieReview)
+        {
+            Console.WriteLine(movieReview.Match(MovieReview.Format, () => "Nothing"));
         }
     }
 }
