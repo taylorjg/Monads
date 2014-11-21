@@ -9,19 +9,6 @@ namespace ReaderHaskellDocsExample1
 
     internal class Program
     {
-        private static void Main()
-        {
-            var sampleBindings = new Dictionary<string, int>
-                {
-                    {"count", 3},
-                    {"1", 1},
-                    {"b", 2}
-                };
-
-            Console.Write("Count is correct for bindings " + FormatBindings(sampleBindings) + ": ");
-            Console.WriteLine(IsCountCorrect(sampleBindings));
-        }
-
         private static bool IsCountCorrect(Bindings bindings)
         {
             return CalcIsCountCorrect().RunReader(bindings);
@@ -40,6 +27,19 @@ namespace ReaderHaskellDocsExample1
         private static int LookupVar(string name, Bindings bindings)
         {
             return bindings.GetValue(name).FromJust;
+        }
+
+        private static void Main()
+        {
+            var sampleBindings = new Dictionary<string, int>
+                {
+                    {"count", 3},
+                    {"1", 1},
+                    {"b", 2}
+                };
+
+            Console.Write("Count is correct for bindings " + FormatBindings(sampleBindings) + ": ");
+            Console.WriteLine(IsCountCorrect(sampleBindings));
         }
 
         private static string FormatBindings(Bindings bindings)

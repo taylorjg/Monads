@@ -5,15 +5,6 @@ namespace ReaderHaskellDocsExample2
 {
     internal class Program
     {
-        private static void Main()
-        {
-            const string s = "12345";
-            var modifiedLen = CalculateModifiedContentLen.RunReader(s);
-            var len = CalculateContentLen.RunReader(s);
-            Console.WriteLine("Modified 's' length: {0}", modifiedLen);
-            Console.WriteLine("Original 's' length: {0}", len);
-        }
-
         private static Reader<string, int> CalculateContentLen
         {
             get
@@ -30,6 +21,15 @@ namespace ReaderHaskellDocsExample2
                 Func<string, Func<string, string>> partiallyAppliedStringConcatenation = s1 => s2 => s1 + s2;
                 return Reader.Local(partiallyAppliedStringConcatenation("Prefix "), CalculateContentLen);
             }
+        }
+
+        private static void Main()
+        {
+            const string s = "12345";
+            var modifiedLen = CalculateModifiedContentLen.RunReader(s);
+            var len = CalculateContentLen.RunReader(s);
+            Console.WriteLine("Modified 's' length: {0}", modifiedLen);
+            Console.WriteLine("Original 's' length: {0}", len);
         }
     }
 }
