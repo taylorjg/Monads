@@ -1,7 +1,9 @@
 
 ## Description
 
-This demo program is a C# version of an example from "Thinking Functionally in Haskell" by Richard Bird (see page 249).
+This demo program is a C# version of an example from
+[Thinking Functionally with Haskell](http://www.cambridge.org/us/academic/subjects/computer-science/programming-languages-and-applied-logic/thinking-functionally-haskell)
+by Richard Bird (see page 249).
 The idea is to build a binary tree given a list of values. Two implementations are presented - one in which the state
 (the list of remaining values) is explicit and another in which a State monad is used to house the state.
 
