@@ -67,9 +67,7 @@ namespace EitherMovieReview
 
         private static void Print(Either<string, MovieReview> movieReview)
         {
-            Console.WriteLine(movieReview.Match(
-                error => string.Format("An error occurred: {0}", error),
-                MovieReview.Format));
+            Console.WriteLine(movieReview.Match(error => error, MovieReview.Format));
         }
     }
 }
