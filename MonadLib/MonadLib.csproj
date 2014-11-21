@@ -44,13 +44,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeneratedMonadCombinators.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GeneratedMonadCombinators.tt</DependentUpon>
+    </Compile>
     <Compile Include="IMonadT3.cs" />
     <Compile Include="IMonadT2.cs" />
     <Compile Include="Writer.cs" />
-    <Compile Include="GeneratedCombinatorWrappers.cs">
+    <Compile Include="GeneratedMonadCombinatorWrappers.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GeneratedCombinatorWrappers.tt</DependentUpon>
+      <DependentUpon>GeneratedMonadCombinatorWrappers.tt</DependentUpon>
     </Compile>
     <Compile Include="Either.cs" />
     <Compile Include="IMonad.cs" />
@@ -67,9 +72,13 @@
     <Compile Include="Unit.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GeneratedCombinatorWrappers.tt">
+    <None Include="GeneratedMonadCombinatorWrappers.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>GeneratedCombinatorWrappers.cs</LastGenOutput>
+      <LastGenOutput>GeneratedMonadCombinatorWrappers.cs</LastGenOutput>
+    </None>
+    <None Include="GeneratedMonadCombinators.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GeneratedMonadCombinators.cs</LastGenOutput>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
