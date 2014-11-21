@@ -24,7 +24,7 @@ lookup1 key alist =
 				_ -> Left $ "Found key " ++ show key ++ " but it has no value"
 		_ -> Left $ "Failed to find a value for key " ++ show key
 
-liftedReview :: [([Char], Maybe [Char])] -> Either String MovieReview
+liftedReview :: [(String, Maybe String)] -> Either String MovieReview
 liftedReview alist =
     liftM3 MovieReview (lookup1 "title" alist)
                        (lookup1 "user" alist)

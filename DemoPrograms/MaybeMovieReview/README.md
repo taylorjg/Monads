@@ -16,7 +16,7 @@ lookup1 key alist =
 		Just (Just s@(_:_)) -> Just s
 		_ -> Nothing
 
-liftedReview :: [([Char], Maybe [Char])] -> Maybe MovieReview
+liftedReview :: [(String, Maybe String)] -> Maybe MovieReview
 liftedReview alist =
     liftM3 MovieReview (lookup1 "title" alist)
                        (lookup1 "user" alist)
