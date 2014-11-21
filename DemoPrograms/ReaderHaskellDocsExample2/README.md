@@ -19,3 +19,6 @@ main = do
     putStrLn $ "Original 's' length: " ++ (show len)
 ```
 
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/taylorjg/Monads/master/Images/ReaderHaskellDocsExample2.png "Screenshot")

@@ -55,3 +55,6 @@ main = do
 					("review", Just "A film about a shark")]
 ```
 
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/taylorjg/Monads/master/Images/EitherMovieReview.png "Screenshot")

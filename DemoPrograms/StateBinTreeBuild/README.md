@@ -49,3 +49,7 @@ I give four implementations - two non-monadic and two monadic. Two of the implem
 the Haskell implementations in that they split the list of values into head and tail. However, this is
 probably not very efficient in C# because we have to keep building a new list containing the tail. So I have
 another pair of implementations that maintain an index to identify the head item as the algorithm progresses.
+
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/taylorjg/Monads/master/Images/StateBinTreeBuild.png "Screenshot")

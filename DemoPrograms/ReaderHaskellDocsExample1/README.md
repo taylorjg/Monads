@@ -27,3 +27,6 @@ main = do
     putStrLn $ show (isCountCorrect sampleBindings);
 ```
 
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/taylorjg/Monads/master/Images/ReaderHaskellDocsExample1.png "Screenshot")

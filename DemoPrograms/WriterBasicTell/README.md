@@ -20,3 +20,6 @@ main :: IO ()
 main = print $ runWriter multWithLog -- (15,["Got number: 3","Got number: 5","multiplying 3 and 5"])
 ```
 
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/taylorjg/Monads/master/Images/WriterBasicTell.png "Screenshot")

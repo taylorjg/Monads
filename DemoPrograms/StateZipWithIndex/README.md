@@ -25,3 +25,6 @@ object ZipWithIndex {
 }
 ```
 
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/taylorjg/Monads/master/Images/StateZipWithIndex.png "Screenshot")

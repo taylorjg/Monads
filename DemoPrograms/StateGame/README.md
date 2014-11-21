@@ -43,3 +43,7 @@ startState = (False, 0)
  
 main = print $ evalState (playGame "abcaaacbbcabbab") startState
 ```
+
+## Screenshot
+
+![Screenshot](https://raw.githubusercontent.com/taylorjg/Monads/master/Images/StateGame.png "Screenshot")
