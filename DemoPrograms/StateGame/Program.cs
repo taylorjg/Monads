@@ -8,12 +8,6 @@ namespace StateGame
 
     internal class Program
     {
-        private static void Main()
-        {
-            var startState = Tuple.Create(false, 0);
-            Console.WriteLine(PlayGame("abcaaacbbcabbab").EvalState(startState));
-        }
-
         private static State<GameState, GameValue> PlayGame(string s)
         {
             if (s.Length == 0)
@@ -53,6 +47,12 @@ namespace StateGame
                         if (m == null) m = State<GameState>.Put(state);
                         return m.BindIgnoringLeft(PlayGame(xs));
                     });
+        }
+
+        private static void Main()
+        {
+            var startState = Tuple.Create(false, 0);
+            Console.WriteLine(PlayGame("abcaaacbbcabbab").EvalState(startState));
         }
     }
 }

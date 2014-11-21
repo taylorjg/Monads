@@ -5,11 +5,6 @@ namespace ReaderBasicLocal
 {
     internal class Program
     {
-        private static void Main()
-        {
-            Console.WriteLine(LocalExample().RunReader("Fred"));
-        }
-
         private static Reader<string, string> MyName(string step)
         {
             return Reader<string>.Ask().Bind(
@@ -22,6 +17,11 @@ namespace ReaderBasicLocal
                 a => Reader.Local(r => r + "dy", MyName("Second")).Bind(
                     b => MyName("Third").Bind(
                         c => Reader<string>.Return(Tuple.Create(a, b, c)))));
+        }
+
+        private static void Main()
+        {
+            Console.WriteLine(LocalExample().RunReader("Fred"));
         }
     }
 }

@@ -5,23 +5,28 @@ using MonadLib;
 
 namespace StateZipWithIndex
 {
+    using F = State<int>;
+
     internal class Program
     {
         private static void Main()
         {
-            var source = new[] { "a", "b", "c", "d", "e" };
-            var xs = ZipWithIndex(source);
-            foreach (var x in xs) Console.WriteLine(x);
+            Print(ZipWithIndex(new[] {"A", "B", "C"}));
         }
 
-        public static IEnumerable<Tuple<int, T>> ZipWithIndex<T>(IEnumerable<T> source)
+        public static IEnumerable<Tuple<int, T>> ZipWithIndex<T>(IEnumerable<T> @as)
         {
-            var seed = State<int>.Return(Enumerable.Empty<Tuple<int, T>>());
-            var stateMonad = source.Aggregate(seed, (acc, a) => acc.Bind(
-                xs => State<int>.Get().Bind(
-                    n => State<int>.Put(n + 1).LiftM(
+            var z = F.Return(Enumerable.Empty<Tuple<int, T>>());
+            var m = @as.Aggregate(z, (acc, a) => acc.Bind(
+                xs => F.Get().Bind(
+                    n => F.Put(n + 1).LiftM(
                         _ => Cons(Tuple.Create(n, a), xs)))));
-            return stateMonad.EvalState(0).Reverse();
+            return m.EvalState(0).Reverse();
+        }
+
+        private static void Print(IEnumerable<Tuple<int, string>> xs)
+        {
+            foreach (var x in xs) Console.WriteLine(x);
         }
 
         private static IEnumerable<T> Cons<T>(T t, IEnumerable<T> ts)

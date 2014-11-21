@@ -9,17 +9,10 @@ namespace WriterBasicTell
 
     internal class Program
     {
-        private static void Main()
+        private static MyWriterInt LogNumber(int x)
         {
-            Print(MultWithLog().RunWriter);
-        }
-
-        private static void Print(Tuple<int, ListMonoid<string>> tuple)
-        {
-            var a = tuple.Item1;
-            var w = tuple.Item2;
-            Console.WriteLine("a: {0}", a);
-            foreach (var msg in w.List) Console.WriteLine("msg: {0}", msg);
+            return TellHelper(string.Format("Got number: {0}", x))
+                .BindIgnoringLeft(MyWriter.Return(x));
         }
 
         private static MyWriterInt MultWithLog()
@@ -30,16 +23,23 @@ namespace WriterBasicTell
                         MyWriter.Return(a * b))));
         }
 
-        private static MyWriterInt LogNumber(int x)
+        private static void Main()
         {
-            return TellHelper(string.Format("Got number: {0}", x))
-                .BindIgnoringLeft(MyWriter.Return(x));
+            Print(MultWithLog().RunWriter);
         }
 
         private static MyWriterUnit TellHelper(string s)
         {
             var listMonoid = new ListMonoid<string>(new[] { s });
             return MyWriter.Tell(listMonoid);
+        }
+
+        private static void Print(Tuple<int, ListMonoid<string>> tuple)
+        {
+            var a = tuple.Item1;
+            var w = tuple.Item2;
+            Console.WriteLine("a: {0}", a);
+            foreach (var msg in w.List) Console.WriteLine("msg: {0}", msg);
         }
     }
 }
