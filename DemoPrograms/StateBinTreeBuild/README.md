@@ -40,8 +40,9 @@ monadicBuild xs = evalState (build2 (length xs)) xs
                                 m = n `div` 2
 
 main = do
-    putStrLn $ show $ nonMonadicBuild [1,2,3,4,5]
-    putStrLn $ show $ monadicBuild [1,2,3,4,5]
+    let xs = [1,2,3,4,5]
+    putStrLn $ show $ nonMonadicBuild xs
+    putStrLn $ show $ monadicBuild xs
 ```
 
 I give four implementations - two non-monadic and two monadic. Two of the implementations are quite close to
