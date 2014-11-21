@@ -7,7 +7,7 @@
             return System.Environment.NewLine + new string(' ', level * 2);
         }
 
-        public abstract string Dump(int level = 0);
+        public abstract string Dump();
     }
 
     public class Leaf<TA> : BinTree
@@ -19,9 +19,9 @@
             Value = value;
         }
 
-        public override string Dump(int _ = 0)
+        public override string Dump()
         {
-            return string.Format("Leaf: {0}", Value);
+            return string.Format("Leaf {0}", Value);
         }
     }
 
@@ -36,15 +36,9 @@
             Right = right;
         }
 
-        public override string Dump(int level = 0)
+        public override string Dump()
         {
-            var nextLevel = level + 1;
-            return string.Format(
-                "Fork:{0}Left: {1}{2}Right: {3}",
-                Padding(nextLevel),
-                Left.Dump(nextLevel),
-                Padding(nextLevel),
-                Right.Dump(nextLevel));
+            return string.Format("Fork ({0}) ({1})", Left.Dump(), Right.Dump());
         }
     }
 }

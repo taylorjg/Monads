@@ -6,7 +6,7 @@ namespace StateBinTreeBuild
     {
         private static void Main()
         {
-            var xs = ImmutableList.Create(new[] { 1, 2, 3, 4, 5 });
+            var xs = new[] {1, 2, 3, 4, 5}.ToImmutableList();
             NonMonadicBuilder.Build(xs).Dump().ToConsole();
             NonMonadicBuilder2.Build(xs).Dump().ToConsole();
             MonadicBuilder.Build(xs).Dump().ToConsole();
