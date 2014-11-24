@@ -49,9 +49,17 @@ MonadLib is available as a NuGet package:
 * [ReaderBasicLocal](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderBasicLocal)
 * [ReaderHaskellDocsExample1](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample1)
 * [ReaderHaskellDocsExample2](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/ReaderHaskellDocsExample2)
-* [ReaderAllAboutMonadsExample](https://github.com/taylorjg/Parsers/tree/master/DemoPrograms/ReaderAllAboutMonadsExample)
 * [WriterBasicTell](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/WriterBasicTell)
 * [WadlerEvaluator](https://github.com/taylorjg/WadlerEvaluator)
+
+## Extended Demo Programs
+
+* [ReaderAllAboutMonadsExample](https://github.com/taylorjg/Parsers/tree/master/DemoPrograms/ReaderAllAboutMonadsExample)
+    * This example uses my translation to C# of the parser developed in chapter 9 of the book
+[Functional Programming in Scala](http://www.manning.com/bjarnason/).
+* TO COME: WriterAllAboutMonadsExample
+    * https://www.haskell.org/haskellwiki/All_About_Monads#Example_8
+    * https://raw.githubusercontent.com/dag/all-about-monads/master/examples/example17.hs
 
 ## Design
 
