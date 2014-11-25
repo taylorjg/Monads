@@ -24,6 +24,12 @@
             get { return _logIt; }
         }
 
+        public override string ToString()
+        {
+            // Rule {disposition = Reject, pattern = Packet {from = Host 7, to = AnyHost, payload = AnyData}, logIt = True}
+            return string.Format("Rule {{disposition = {0}, pattern = {1}, logIt = {2}}}", Disposition, Pattern, LogIt);
+        }
+
         private readonly Disposition _disposition;
         private readonly Packet _pattern;
         private readonly bool _logIt;

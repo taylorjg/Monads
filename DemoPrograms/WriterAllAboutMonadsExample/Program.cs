@@ -17,7 +17,7 @@ namespace WriterAllAboutMonadsExample
     {
         private static Maybe<Rule> MatchPacket(Packet packet, Rule rule)
         {
-            return rule.Pattern == packet ? Maybe.Just(rule) : Maybe.Nothing<Rule>();
+            return Equals(rule.Pattern, packet) ? Maybe.Just(rule) : Maybe.Nothing<Rule>();
         }
 
         private static Maybe<Rule> Match(IEnumerable<Rule> rules, Packet packet)
@@ -105,18 +105,6 @@ namespace WriterAllAboutMonadsExample
                     @out => LogMsg("STOPPING PACKET FILTER").BindIgnoringLeft(
                         WriterEntries.Return(Maybe.CatMaybes(@out)))));
         }
-
-        // TODO:
-        // override ToString for Packet
-        // override Equals/GetHashCode for Packet
-        //
-        // override ToString for Rule
-        // 
-        // override ToString for AddrBase / AnyHost / Addr
-        // override Equals/GetHashCode for AddrBase / AnyHost / Addr
-        //
-        // override ToString for DataBase / AnyData / Data
-        // override Equals/GetHashCode for DataBase / AnyData / Data
 
         private static void Main()
         {
