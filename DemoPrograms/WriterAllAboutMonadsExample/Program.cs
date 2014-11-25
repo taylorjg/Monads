@@ -32,8 +32,28 @@ namespace WriterAllAboutMonadsExample
             return WriterEntries.Tell(new ListMonoid<Entry>(new[] {new Entry(1, s)}));
         }
 
-        private static WriterEntriesEntries MergeEntries(ListMonoid<Entry> entries1, ListMonoid<Entry> entries2)
+        private static WriterEntriesEntries MergeEntries(ListMonoid<Entry> e1, ListMonoid<Entry> e2)
         {
+            if (e1.List.Count == 0) WriterEntries.Return(e2);
+            if (e2.List.Count == 0) WriterEntries.Return(e1);
+
+            if (e1.List.Count == 1 && e2.List.Count == 1)
+            {
+                var n1 = e1.List[0].Count;
+                var msg1 = e1.List[0].Msg;
+                var n2 = e2.List[0].Count;
+                var msg2 = e2.List[0].Msg;
+
+                if (msg1 == msg2)
+                {
+                    WriterEntries.Return(new ListMonoid<Entry>(new[] {new Entry(n1 + n2, msg1)}));
+                }
+                else
+                {
+                    return WriterEntries.Tell(e1).BindIgnoringLeft(WriterEntries.Return(e2));
+                }
+            }
+
             return null;
         }
 
