@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Flinq;
 using MonadLib;
+using Enumerable = System.Linq.Enumerable;
 
 namespace WriterAllAboutMonadsExample
 {
-    using WriterEntry = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry>;
-    using U1 = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Unit>;
-    using U2 = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, ListMonoid<Entry>>;
-    using U3 = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Maybe<Packet>>;
-    using U4 = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, IEnumerable<Packet>>;
+    using WriterEntries = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry>;
+    using WriterEntriesUnit = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Unit>;
+    using WriterEntriesEntries = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, ListMonoid<Entry>>;
+    using WriterEntriesMaybePacket = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Maybe<Packet>>;
+    using WriterEntriesPackets = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, IEnumerable<Packet>>;
 
     internal class Program
     {
@@ -26,52 +27,63 @@ namespace WriterAllAboutMonadsExample
             return (Maybe<Rule>)matchedRules.FoldLeft(z, z.GetMonadPlusAdapter().MPlus);
         }
 
-        private static U1 LogMsg(string s)
+        private static WriterEntriesUnit LogMsg(string s)
         {
-            return WriterEntry.Tell(new ListMonoid<Entry>(new[] {new Entry(1, s)}));
+            return WriterEntries.Tell(new ListMonoid<Entry>(new[] {new Entry(1, s)}));
         }
 
-        private static U2 MergeEntries(ListMonoid<Entry> entries1, ListMonoid<Entry> entries2)
+        private static WriterEntriesEntries MergeEntries(ListMonoid<Entry> entries1, ListMonoid<Entry> entries2)
         {
             return null;
         }
 
-        private static U3 FilterOne(IEnumerable<Rule> rules, Packet packet)
+        private static WriterEntriesMaybePacket FilterOne(IEnumerable<Rule> rules, Packet packet)
         {
             return Match(rules, packet).Match(
                 rule =>
                     {
                         var msg = string.Format("MATCH: {0} <=> {1}", rule, packet);
                         return Writer.When(rule.LogIt, LogMsg(msg)).BindIgnoringLeft(
-                            WriterEntry.Return(rule.Disposition == Disposition.Accept ? Maybe.Just(packet) : Maybe.Nothing<Packet>()));
+                            WriterEntries.Return(rule.Disposition == Disposition.Accept ? Maybe.Just(packet) : Maybe.Nothing<Packet>()));
                     },
                 () =>
                     {
                         var msg = string.Format("DROPPING UNMATCHED PACKET: {0}", packet);
-                        return LogMsg(msg).BindIgnoringLeft(WriterEntry.Return(Maybe.Nothing<Packet>()));
+                        return LogMsg(msg).BindIgnoringLeft(WriterEntries.Return(Maybe.Nothing<Packet>()));
                     });
         }
 
-        private static Writer<ListMonoid<TA>, ListMonoidAdapter<TA>, TA, IEnumerable<TC>> GroupSame<TA, TB, TC>(
-            ListMonoid<TA> a,
-            Func<ListMonoid<TA>, ListMonoid<TA>, Writer<ListMonoid<TA>, ListMonoidAdapter<TA>, TA, ListMonoid<TA>>> merge,
-            IEnumerable<TB> bs,
-            Func<TB, Writer<ListMonoid<TA>, ListMonoidAdapter<TA>, TA, TC>> fn)
+        private static Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, IList<Maybe<Packet>>> GroupSame(
+            ListMonoid<Entry> initial,
+            Func<ListMonoid<Entry>, ListMonoid<Entry>, Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, ListMonoid<Entry>>> merge,
+            IList<Packet> packets,
+            Func<Packet, Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Maybe<Packet>>> fn)
         {
-            return null;
+            if (!packets.Any())
+            {
+                WriterEntries.Tell(initial).BindIgnoringLeft(WriterEntries.Return(Enumerable.Empty<Maybe<Packet>>()));
+            }
+
+            var x = packets.First();
+            var xs = packets.Skip(1).ToList();
+
+            var tuple = fn(x).RunWriter;
+            var result = tuple.Item1;
+            var output = tuple.Item2;
+
+            return merge(initial, output).Bind(
+                @new => GroupSame(@new, merge, xs, fn)).Bind(
+                    rest => WriterEntries.Return(new[] {result}.Concat(rest) as IList<Maybe<Packet>>));
         }
 
-        private static U4 FilterAll(IEnumerable<Rule> rules, IEnumerable<Packet> packets)
+        private static WriterEntriesPackets FilterAll(IEnumerable<Rule> rules, IList<Packet> packets)
         {
-            Func<IEnumerable<Rule>, Func<Packet, U3>> partiallyAppliedFilterOne = rs => packet => FilterOne(rs, packet);
+            Func<IEnumerable<Rule>, Func<Packet, WriterEntriesMaybePacket>> partiallyAppliedFilterOne = rs => packet => FilterOne(rs, packet);
 
-            var tell1 = new ListMonoid<Entry>(new[] {new Entry(1, "STARTING PACKET FILTER")});
-            var tell2 = new ListMonoid<Entry>(new[] {new Entry(1, "STOPPING PACKET FILTER")});
-
-            return WriterEntry.Tell(tell1).BindIgnoringLeft(
+            return LogMsg("STARTING PACKET FILTER").BindIgnoringLeft(
                 GroupSame(new ListMonoid<Entry>(), MergeEntries, packets, partiallyAppliedFilterOne(rules)).Bind(
-                    @out => WriterEntry.Tell(tell2).BindIgnoringLeft(
-                        WriterEntry.Return(Maybe.CatMaybes(@out)))));
+                    @out => LogMsg("STOPPING PACKET FILTER").BindIgnoringLeft(
+                        WriterEntries.Return(Maybe.CatMaybes(@out)))));
         }
 
         // TODO:
