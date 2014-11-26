@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Flinq;
 
 namespace MonadLib
 {
@@ -20,6 +22,18 @@ namespace MonadLib
             var monadPlusAdapter = ma.GetMonadPlusAdapter();
             return (IMonadPlus<TA>)monadPlusAdapter.Bind(
                 ma, a => p(a) ? monadPlusAdapter.Return(a) : monadPlusAdapter.MZero);
+        }
+
+        public static IMonadPlus<TA> MSumInternal<TA>(IEnumerable<IMonadPlus<TA>> ms, MonadPlusAdapter<TA> monadPlusAdapter)
+        {
+            return ms.FoldRight(monadPlusAdapter.MZero, monadPlusAdapter.MPlus);
+        }
+
+        public static IMonadPlus<Unit> GuardInternal(bool b, MonadPlusAdapter<Unit> monadPlusAdapter)
+        {
+            return (IMonadPlus<Unit>) (b
+                                           ? monadPlusAdapter.Return(new Unit())
+                                           : monadPlusAdapter.MZero);
         }
     }
 }
