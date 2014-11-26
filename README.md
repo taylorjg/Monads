@@ -66,8 +66,10 @@ to match C# conventions e.g. <code>Sequence</code> instead of <code>sequence</co
 Whilst I have an <code>IMonad</code> interface, it does not have the expected <code>Return</code> and <code>Bind</code>
 members. Instead, these methods, along with the other common monad functions, are available
 as extension methods. This allows these methods to take and return the correct types e.g.
-<code>Maybe</code>'s <code>Bind</code> method returns a <code>Maybe</code> rather than an <code>IMonad</code>. Internally, these extension methods are actually wrappers around
-common implementations of the monad functions with appropriate casting. Whilst it is tedious for me to write these wrappers, the hope is that this results in an API that is convenient and easy to use.
+<code>Maybe</code>'s <code>Bind</code> method returns a <code>Maybe</code> rather than an <code>IMonad</code>.
+Internally, these extension methods are actually wrappers around common implementations of the monad functions with appropriate casting.
+~~Whilst it is tedious for me to write these wrappers, the hope is that this results in an API that is convenient and easy to use.~~
+The wrappers are generated using T4.
 
 Most of my implementations of the common monad functions are noticably very similar to the
 Haskell implementations. This was a deliberate goal and trying to achieve it guided my design choices.
@@ -80,12 +82,12 @@ This section is a "work in progress". I hope to add more examples. The unit test
 
 The following Maybe methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
 
-* FromMaybe (fromMaybe)
-* ToEnumerable (maybeToList)
-* ListToMaybe (listToMaybe)
-* MapMaybe (mapMaybe)
-* CatMaybes (catMaybes)
-* MapOrDefault (maybe)
+* FromMaybe ([fromMaybe](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html#v:fromMaybe))
+* ToEnumerable ([maybeToList](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html#v:maybeToList))
+* ListToMaybe ([listToMaybe](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html#v:listToMaybe))
+* MapMaybe ([mapMaybe](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html#v:mapMaybe))
+* CatMaybes ([catMaybes](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Maybe.html#v:catMaybes))
+* MapOrDefault ([maybe](http://hackage.haskell.org/package/base-4.7.0.1/docs/Prelude.html#v:maybe))
 
 ```C#
 // Just and Nothing
@@ -186,10 +188,10 @@ namespace Monads
 
 The following Either methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
 
-* Lefts (lefts)
-* Rights (rights)
-* PartitionEithers (partitionEithers)
-* MapEither (either)
+* Lefts ([lefts](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html#v:lefts))
+* Rights ([rights](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html#v:rights))
+* PartitionEithers ([http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html#v:partitionEithers]())
+* MapEither ([either](http://hackage.haskell.org/package/base-4.7.0.1/docs/Prelude.html#v:either))
 
 ```C#
 // Either has two type parameters - TLeft and TA.
@@ -219,6 +221,11 @@ var eitherRightSquared3 = eitherRight.LiftM(r => r * r);
 
 ### State
 
+The following State methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
+
+* Modify ([modify](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Class.html#v:modify))
+* Gets ([gets](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-State-Class.html#v:gets))
+
 ```C#
 // State has two type parameters - TS and TA.
 // This is a little trick to make StateString an alias for State<string>.
@@ -236,6 +243,10 @@ Console.WriteLine("tick.ExecState(5): {0}", tick.ExecState(5));
 ```
 
 ### Reader
+
+The following Reader methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
+
+* Asks ([asks](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Reader-Class.html#v:asks))
 
 ```C#
 // Reader has two type parameters - TR and TA.
@@ -258,6 +269,13 @@ Console.WriteLine("reader2.RunReader(config): {0}", reader2.RunReader(config));
 ```
 
 ### Writer
+
+The following Writer methods exist but are not yet covered by the examples below. The Haskell function names are shown in parentheses.
+
+* Listen ([listen](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Writer-Class.html#v:listen))
+* Listens ([listens](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Writer-Class.html#v:listens))
+* Pass ([pass](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Writer-Class.html#v:pass))
+* Censor ([censor](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Writer-Class.html#v:censor))
 
 ```C#
 using MyWriter = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string>;
