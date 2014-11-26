@@ -21,7 +21,8 @@ namespace WriterAllAboutMonadsExample
 
         private static Maybe<Rule> Match(IEnumerable<Rule> rules, Packet packet)
         {
-            var matchedRules = rules.Select(rule => MatchPacket(packet, rule));
+            Func<Packet, Func<Rule, Maybe<Rule>>> partiallyAppliedMatchPacket = p => r => MatchPacket(p, r);
+            var matchedRules = rules.Map(partiallyAppliedMatchPacket(packet));
             var z = Maybe.Nothing<Rule>() as IMonadPlus<Rule>;
             return (Maybe<Rule>)matchedRules.FoldLeft(z, z.GetMonadPlusAdapter().MPlus);
         }
@@ -51,7 +52,7 @@ namespace WriterAllAboutMonadsExample
                 return WriterEntries.Tell(e1).BindIgnoringLeft(WriterEntries.Return(e2));
             }
 
-            throw new InvalidOperationException("MergeEentries - unhandled case");
+            throw new InvalidOperationException("MergeEntries: non-exhaustive patterns");
         }
 
         private static WriterEntriesMaybePacket FilterOne(IEnumerable<Rule> rules, Packet packet)
