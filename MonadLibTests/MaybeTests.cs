@@ -511,26 +511,6 @@ namespace MonadLibTests
         }
 
         [Test]
-        public void MFilter()
-        {
-            Func<int, bool> isEven = n => n % 2 == 0;
-
-            var actual1 = Maybe.MFilter(isEven, Maybe.Just(8));
-            Assert.That(actual1.IsJust, Is.True);
-            Assert.That(actual1.FromJust, Is.EqualTo(8));
-
-            var actual2 = Maybe.MFilter(isEven, Maybe.Just(13));
-            Assert.That(actual2.IsNothing, Is.True);
-
-            var actual3 = Maybe.Just(8).MFilter(isEven);
-            Assert.That(actual3.IsJust, Is.True);
-            Assert.That(actual3.FromJust, Is.EqualTo(8));
-
-            var actual4 = Maybe.Just(13).MFilter(isEven);
-            Assert.That(actual4.IsNothing, Is.True);
-        }
-
-        [Test]
         public void FilterMWherePredicateAlwaysReturnsJust()
         {
             var actual = Maybe.FilterM(n => Maybe.Just(n < 10), Enumerable.Range(1, 20));

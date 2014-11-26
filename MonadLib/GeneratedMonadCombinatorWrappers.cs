@@ -165,6 +165,16 @@ namespace MonadLib
 			return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
 		}
 
+        public static Maybe<TA> MSum<TA>(IEnumerable<Maybe<TA>> ms)
+        {
+            return (Maybe<TA>)MonadPlusCombinators.MSumInternal(ms, new MaybeMonadPlusAdapter<TA>());
+        }
+
+        public static Maybe<Unit> Guard(bool b)
+        {
+            return (Maybe<Unit>)MonadPlusCombinators.GuardInternal(b, new MaybeMonadPlusAdapter<Unit>());
+        }
+
 		public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs) 
 		{
 			return (Maybe<TA>)MonadCombinators.FoldMInternal(f, a, bs, new MaybeMonadPlusAdapter<TA>());

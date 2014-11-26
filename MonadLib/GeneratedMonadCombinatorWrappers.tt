@@ -191,6 +191,16 @@ namespace MonadLib
 		{
 			return (<#= M #><<#= T1TypeList #>TA>)MonadPlusCombinators.MFilter(p, ma);
 		}
+
+        public static <#= M #><<#= T1TypeList #>TA> MSum<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms)
+        {
+            return (<#= M #><<#= T1TypeList #>TA>)MonadPlusCombinators.MSumInternal(ms, new <#= M #>MonadPlusAdapter<TA>());
+        }
+
+        public static <#= M #><<#= T1TypeList #>Unit> Guard(bool b)
+        {
+            return (<#= M #><<#= T1TypeList #>Unit>)MonadPlusCombinators.GuardInternal(b, new <#= M #>MonadPlusAdapter<Unit>());
+        }
 <# } #>
 
 		public static <#= M #><<#= T1TypeList #>TA> FoldM<<#= T1TypeList #>TA, TB>(Func<TA, TB, <#= M #><<#= T1TypeList #>TA>> f, TA a, IEnumerable<TB> bs) <#= typeConstraints #>

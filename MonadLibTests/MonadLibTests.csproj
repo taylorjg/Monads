@@ -49,6 +49,7 @@
     <Compile Include="EitherTests.cs" />
     <Compile Include="MaybeMonadLaws.cs" />
     <Compile Include="MaybeMonadLawsKleisli.cs" />
+    <Compile Include="MaybeMonadPlusTests.cs" />
     <Compile Include="MaybeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReaderMonadLaws.cs" />
