@@ -18,34 +18,9 @@
             get { return _msg; }
         }
 
-        public override bool Equals(object rhs)
+        public override string ToString()
         {
-            if (rhs == null)
-                return false;
-
-            if (ReferenceEquals(this, rhs))
-                return true;
-
-            if (GetType() != rhs.GetType())
-                return false;
-
-            return CompareFields(rhs as Entry);
-        }
-
-        private bool CompareFields(Entry rhs)
-        {
-            return Count == rhs.Count && Msg == rhs.Msg;
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hash = 17;
-                hash = hash * 23 + Count.GetHashCode();
-                hash = hash * 23 + Msg.GetHashCode();
-                return hash;
-            }
+            return Count == 1 ? Msg : string.Format("{0} X {1}", Count, Msg);
         }
 
         private readonly int _count;

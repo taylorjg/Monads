@@ -6,6 +6,20 @@
 
     public class AnyHost : AddrBase
     {
+        public override string ToString()
+        {
+            return "AnyHost";
+        }
+
+        public override bool Equals(object rhs)
+        {
+            return rhs != null;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
     }
 
     public class Host : AddrBase
@@ -33,6 +47,9 @@
             if (ReferenceEquals(this, rhs))
                 return true;
 
+            if (rhs is AnyHost)
+                return true;
+
             if (GetType() != rhs.GetType())
                 return false;
 
@@ -41,7 +58,7 @@
 
         private bool CompareFields(Host rhs)
         {
-            return Value == rhs.Value;
+            return Value.Equals(rhs.Value);
         }
 
         public override int GetHashCode()

@@ -6,6 +6,20 @@
 
     public class AnyData : DataBase
     {
+        public override string ToString()
+        {
+            return "AnyData";
+        }
+
+        public override bool Equals(object rhs)
+        {
+            return rhs != null;
+        }
+
+        public override int GetHashCode()
+        {
+            return 0;
+        }
     }
 
     public class Data : DataBase
@@ -22,7 +36,7 @@
 
         public override string ToString()
         {
-            return string.Format("Data {0}", Value);
+            return string.Format("Data \"{0}\"", Value);
         }
 
         public override bool Equals(object rhs)
@@ -33,6 +47,9 @@
             if (ReferenceEquals(this, rhs))
                 return true;
 
+            if (rhs is AnyData)
+                return true;
+
             if (GetType() != rhs.GetType())
                 return false;
 
@@ -41,7 +58,7 @@
 
         private bool CompareFields(Data rhs)
         {
-            return Value == rhs.Value;
+            return Value.Equals(rhs.Value);
         }
 
         public override int GetHashCode()

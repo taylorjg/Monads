@@ -26,7 +26,6 @@
 
         public override string ToString()
         {
-            // Rule {disposition = Reject, pattern = Packet {from = Host 7, to = AnyHost, payload = AnyData}, logIt = True}
             return string.Format("Rule {{disposition = {0}, pattern = {1}, logIt = {2}}}", Disposition, Pattern, LogIt);
         }
 

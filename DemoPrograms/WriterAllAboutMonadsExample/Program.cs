@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Flinq;
 using MonadLib;
-using Enumerable = System.Linq.Enumerable;
 
 namespace WriterAllAboutMonadsExample
 {
@@ -17,7 +16,7 @@ namespace WriterAllAboutMonadsExample
     {
         private static Maybe<Rule> MatchPacket(Packet packet, Rule rule)
         {
-            return Equals(rule.Pattern, packet) ? Maybe.Just(rule) : Maybe.Nothing<Rule>();
+            return packet.Equals(rule.Pattern) ? Maybe.Just(rule) : Maybe.Nothing<Rule>();
         }
 
         private static Maybe<Rule> Match(IEnumerable<Rule> rules, Packet packet)
@@ -34,8 +33,8 @@ namespace WriterAllAboutMonadsExample
 
         private static WriterEntriesEntries MergeEntries(ListMonoid<Entry> e1, ListMonoid<Entry> e2)
         {
-            if (e1.List.Count == 0) WriterEntries.Return(e2);
-            if (e2.List.Count == 0) WriterEntries.Return(e1);
+            if (e1.List.Count == 0) return WriterEntries.Return(e2);
+            if (e2.List.Count == 0) return WriterEntries.Return(e1);
 
             if (e1.List.Count == 1 && e2.List.Count == 1)
             {
@@ -46,15 +45,13 @@ namespace WriterAllAboutMonadsExample
 
                 if (msg1 == msg2)
                 {
-                    WriterEntries.Return(new ListMonoid<Entry>(new[] {new Entry(n1 + n2, msg1)}));
+                    return WriterEntries.Return(new ListMonoid<Entry>(new[] {new Entry(n1 + n2, msg1)}));
                 }
-                else
-                {
-                    return WriterEntries.Tell(e1).BindIgnoringLeft(WriterEntries.Return(e2));
-                }
+
+                return WriterEntries.Tell(e1).BindIgnoringLeft(WriterEntries.Return(e2));
             }
 
-            return null;
+            throw new InvalidOperationException("MergeEentries - unhandled case");
         }
 
         private static WriterEntriesMaybePacket FilterOne(IEnumerable<Rule> rules, Packet packet)
@@ -81,7 +78,8 @@ namespace WriterAllAboutMonadsExample
         {
             if (!packets.Any())
             {
-                WriterEntries.Tell(initial).BindIgnoringLeft(WriterEntries.Return(Enumerable.Empty<Maybe<Packet>>()));
+                return WriterEntries.Tell(initial).BindIgnoringLeft(
+                    WriterEntries.Return(new Maybe<Packet>[] { } as IList<Maybe<Packet>>));
             }
 
             var x = packets.First();
@@ -93,7 +91,7 @@ namespace WriterAllAboutMonadsExample
 
             return merge(initial, output).Bind(
                 @new => GroupSame(@new, merge, xs, fn)).Bind(
-                    rest => WriterEntries.Return(new[] {result}.Concat(rest) as IList<Maybe<Packet>>));
+                    rest => WriterEntries.Return(new[] { result }.Concat(rest).ToList() as IList<Maybe<Packet>>));
         }
 
         private static WriterEntriesPackets FilterAll(IEnumerable<Rule> rules, IList<Packet> packets)
@@ -108,6 +106,15 @@ namespace WriterAllAboutMonadsExample
 
         private static void Main()
         {
+            var rules = TestData.Rules;
+            var packets = TestData.Packets;
+            var tuple = FilterAll(rules, packets).RunWriter;
+            var @out = tuple.Item1;
+            var log = tuple.Item2;
+            Console.WriteLine("ACCEPTED PACKETS");
+            foreach (var packet in @out) Console.WriteLine(packet);
+            Console.WriteLine("{0}{0}FIREWALL LOG", Environment.NewLine);
+            foreach (var entry in log.List) Console.WriteLine(entry);
         }
     }
 }

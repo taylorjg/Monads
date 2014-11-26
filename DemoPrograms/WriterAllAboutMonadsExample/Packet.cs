@@ -45,7 +45,10 @@
 
         private bool CompareFields(Packet rhs)
         {
-            return From == rhs.From && To == rhs.To && Payload == rhs.Payload;
+            return
+                From.Equals(rhs.From) &&
+                To.Equals(rhs.To) &&
+                Payload.Equals(rhs.Payload);
         }
 
         public override int GetHashCode()

@@ -55,11 +55,8 @@ MonadLib is available as a NuGet package:
 ## Extended Demo Programs
 
 * [ReaderAllAboutMonadsExample](https://github.com/taylorjg/Parsers/tree/master/DemoPrograms/ReaderAllAboutMonadsExample)
-    * This example uses my translation to C# of the parser developed in chapter 9 of the book
-[Functional Programming in Scala](http://www.manning.com/bjarnason/).
-* TO COME: WriterAllAboutMonadsExample
-    * https://www.haskell.org/haskellwiki/All_About_Monads#Example_8
-    * https://raw.githubusercontent.com/dag/all-about-monads/master/examples/example17.hs
+    * This example also makes use of my translation to C# of the parser developed in chapter 9 of the book [Functional Programming in Scala](http://www.manning.com/bjarnason/).
+* [WriterAllAboutMonadsExample](https://github.com/taylorjg/Monads/tree/master/DemoPrograms/WriterAllAboutMonadsExample)
 
 ## Design
 
