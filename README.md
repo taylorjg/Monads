@@ -190,7 +190,7 @@ The following Either methods exist but are not yet covered by the examples below
 
 * Lefts ([lefts](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html#v:lefts))
 * Rights ([rights](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html#v:rights))
-* PartitionEithers ([http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html#v:partitionEithers]())
+* PartitionEithers ([partitionEithers](http://hackage.haskell.org/package/base-4.7.0.1/docs/Data-Either.html#v:partitionEithers))
 * MapEither ([either](http://hackage.haskell.org/package/base-4.7.0.1/docs/Prelude.html#v:either))
 
 ```C#
