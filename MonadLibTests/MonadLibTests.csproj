@@ -47,9 +47,11 @@
   <ItemGroup>
     <Compile Include="EitherMonadLaws.cs" />
     <Compile Include="EitherTests.cs" />
+    <Compile Include="ListMonoidLaws.cs" />
     <Compile Include="ListMonoidTests.cs" />
     <Compile Include="MaybeMonadLaws.cs" />
     <Compile Include="MaybeMonadLawsKleisli.cs" />
+    <Compile Include="MaybeMonadPlusLaws.cs" />
     <Compile Include="MaybeMonadPlusTests.cs" />
     <Compile Include="MaybeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
