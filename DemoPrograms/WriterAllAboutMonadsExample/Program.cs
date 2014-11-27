@@ -23,8 +23,7 @@ namespace WriterAllAboutMonadsExample
         {
             Func<Packet, Func<Rule, Maybe<Rule>>> partiallyAppliedMatchPacket = p => r => MatchPacket(p, r);
             var matchedRules = rules.Map(partiallyAppliedMatchPacket(packet));
-            var z = Maybe.Nothing<Rule>() as IMonadPlus<Rule>;
-            return (Maybe<Rule>)matchedRules.FoldLeft(z, z.GetMonadPlusAdapter().MPlus);
+            return matchedRules.FoldLeft(Maybe.MZero<Rule>(), Maybe.MPlus);
         }
 
         private static WriterEntriesUnit LogMsg(string s)

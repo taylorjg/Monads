@@ -3,6 +3,18 @@ using System.Collections.Generic;
 
 namespace MonadLib
 {
+    //public static class MaybeMonadPlus<TA>
+    //{
+    //    public static Maybe<TA> MZero
+    //    {
+    //        get
+    //        {
+	//			var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
+    //            return (Maybe<TA>)monadPlusAdapter.MZero;
+    //        }
+    //    }
+    //}
+
 	public static partial class Maybe
 	{
 		public static Maybe<TB> Bind<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f) 
@@ -155,6 +167,18 @@ namespace MonadLib
 			return (Maybe<TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
 		}
 
+		public static Maybe<TA> MZero<TA>()
+		{
+            var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
+            return (Maybe<TA>)monadPlusAdapter.MZero;
+		}
+
+        public static Maybe<TA> MPlus<TA>(this Maybe<TA> xs, Maybe<TA> ys)
+        {
+            var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
+            return (Maybe<TA>)monadPlusAdapter.MPlus(xs, ys);
+        }
+
 		public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma) 
 		{
 			return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
@@ -249,6 +273,7 @@ namespace MonadLib
 			return a => (Maybe<TC>)MonadCombinators.Compose(f, g)(a);
 		}
 	}
+
 
 	public static partial class Either
 	{
@@ -478,6 +503,7 @@ namespace MonadLib
 		}
 	}
 
+
 	public static partial class State
 	{
 		public static State<TS, TB> Bind<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f) 
@@ -706,6 +732,7 @@ namespace MonadLib
 		}
 	}
 
+
 	public static partial class Reader
 	{
 		public static Reader<TR, TB> Bind<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f) 
@@ -933,6 +960,7 @@ namespace MonadLib
 			return a => (Reader<TR, TC>)MonadCombinators<TR>.Compose(f, g)(a);
 		}
 	}
+
 
 	public static partial class Writer
 	{

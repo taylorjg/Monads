@@ -29,6 +29,20 @@ namespace MonadLib
 <# var isMonadPlus = typeToGenerate.Item4; #>
 <# var MonadAdapter = (isMonadPlus) ? string.Format("{0}MonadPlusAdapter<TA>", M) : string.Format("{0}MonadAdapter{1}", M, T1MonadAdapter); #>
 <# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
+<# if (isMonadPlus) { #>
+    //public static class <#= M #>MonadPlus<TA>
+    //{
+    //    public static <#= M #><TA> MZero
+    //    {
+    //        get
+    //        {
+	//			var monadPlusAdapter = new <#= M #>MonadPlusAdapter<TA>();
+    //            return (<#= M #><TA>)monadPlusAdapter.MZero;
+    //        }
+    //    }
+    //}
+<# } #>
+
 	public static partial class <#= M #>
 	{
 		public static <#= M #><<#= T1TypeList #>TB> Bind<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, <#= M #><<#= T1TypeList #>TB>> f) <#= typeConstraints #>
@@ -182,6 +196,18 @@ namespace MonadLib
 		}
 
 <# if (isMonadPlus) { #>
+		public static <#= M #><TA> MZero<TA>()
+		{
+            var monadPlusAdapter = new <#= M #>MonadPlusAdapter<TA>();
+            return (<#= M #><TA>)monadPlusAdapter.MZero;
+		}
+
+        public static <#= M #><TA> MPlus<TA>(this <#= M #><TA> xs, <#= M #><TA> ys)
+        {
+            var monadPlusAdapter = new <#= M #>MonadPlusAdapter<TA>();
+            return (<#= M #><TA>)monadPlusAdapter.MPlus(xs, ys);
+        }
+
 		public static <#= M #><<#= T1TypeList #>TA> MFilter<<#= T1TypeList #>TA>(Func<TA, bool> p, <#= M #><<#= T1TypeList #>TA> ma) <#= typeConstraints #>
 		{
 			return (<#= M #><<#= T1TypeList #>TA>)MonadPlusCombinators.MFilter(p, ma);

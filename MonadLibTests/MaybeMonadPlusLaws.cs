@@ -8,20 +8,12 @@ namespace MonadLibTests
     [TestFixture]
     internal class MaybeMonadPlusLaws
     {
-        private MonadPlusAdapter<int> _monadPlusAdapter;
-
-        [SetUp]
-        public void SetUp()
-        {
-            _monadPlusAdapter = Maybe.Nothing<int>().GetMonadPlusAdapter();    
-        }
-
         [Test]
         public void MPlusOfMZeroAndMIsM()
         {
             // mzero `mplus` m  =  m
             var m = Maybe.Just(42);
-            var actual = (Maybe<int>)_monadPlusAdapter.MPlus(_monadPlusAdapter.MZero, m);
+            var actual = Maybe.MZero<int>().MPlus(m);
             Assert.That(actual, Is.EqualTo(m));
         }
 
@@ -30,7 +22,7 @@ namespace MonadLibTests
         {
             // m `mplus` mzero  =  m
             var m = Maybe.Just(42);
-            var actual = (Maybe<int>)_monadPlusAdapter.MPlus(m, _monadPlusAdapter.MZero);
+            var actual = m.MPlus(Maybe.MZero<int>());
             Assert.That(actual, Is.EqualTo(m));
         }
 
@@ -41,8 +33,8 @@ namespace MonadLibTests
             var m = Maybe.Just(42);
             var n = Maybe.Just(43);
             var o = Maybe.Just(44);
-            var actual1 = (Maybe<int>) _monadPlusAdapter.MPlus(m, _monadPlusAdapter.MPlus(n, o));
-            var actual2 = (Maybe<int>) _monadPlusAdapter.MPlus(_monadPlusAdapter.MPlus(m, n), o);
+            var actual1 = m.MPlus(n.MPlus(o));
+            var actual2 = m.MPlus(n).MPlus(o);
             Assert.That(actual1, Is.EqualTo(actual2));
         }
     }
