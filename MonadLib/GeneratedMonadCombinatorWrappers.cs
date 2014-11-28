@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonadLib
 {
-    //public static class MaybeMonadPlus<TA>
-    //{
-    //    public static Maybe<TA> MZero
-    //    {
-    //        get
-    //        {
-	//			var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
-    //            return (Maybe<TA>)monadPlusAdapter.MZero;
-    //        }
-    //    }
-    //}
-
 	public static partial class Maybe
 	{
 		public static Maybe<TB> Bind<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f) 
@@ -104,6 +93,11 @@ namespace MonadLib
 			return (Maybe<IEnumerable<TA>>)MonadCombinators.SequenceInternal(ms, new MaybeMonadPlusAdapter<TA>());
 		}
 
+		public static Maybe<IEnumerable<TA>> Sequence<TA>(params Maybe<TA>[] ms) 
+		{
+			return Sequence(ms.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Maybe<Unit> Sequence_<TA>(IEnumerable<Maybe<TA>> ms) 
 		// ReSharper restore InconsistentNaming
@@ -111,9 +105,21 @@ namespace MonadLib
 			return (Maybe<Unit>)MonadCombinators.SequenceInternal_(ms, new MaybeMonadPlusAdapter<TA>());
 		}
 
+		// ReSharper disable InconsistentNaming
+		public static Maybe<Unit> Sequence_<TA>(params Maybe<TA>[] ms) 
+		// ReSharper restore InconsistentNaming
+		{
+			return Sequence_(ms.AsEnumerable());
+		}
+
 		public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as) 
 		{
 			return (Maybe<IEnumerable<TB>>)MonadCombinators.MapMInternal(f, @as, new MaybeMonadPlusAdapter<TA>());
+		}
+
+		public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, params TA[] @as) 
+		{
+			return MapM(f, @as.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
@@ -121,6 +127,13 @@ namespace MonadLib
 		// ReSharper restore InconsistentNaming
 		{
 			return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadPlusAdapter<TA>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Maybe<Unit> MapM_<TA, TB>(Func<TA, Maybe<TB>> f, params TA[] @as) 
+		// ReSharper restore InconsistentNaming
+		{
+			return MapM_(f, @as.AsEnumerable());
 		}
 
 		public static Maybe<IEnumerable<TB>> ForM<TA, TB>(IEnumerable<TA> @as, Func<TA, Maybe<TB>> f) 
@@ -194,6 +207,11 @@ namespace MonadLib
             return (Maybe<TA>)MonadPlusCombinators.MSumInternal(ms, new MaybeMonadPlusAdapter<TA>());
         }
 
+        public static Maybe<TA> MSum<TA>(params Maybe<TA>[] ms)
+        {
+            return MSum(ms.AsEnumerable());
+        }
+
         public static Maybe<Unit> Guard(bool b)
         {
             return (Maybe<Unit>)MonadPlusCombinators.GuardInternal(b, new MaybeMonadPlusAdapter<Unit>());
@@ -204,11 +222,23 @@ namespace MonadLib
 			return (Maybe<TA>)MonadCombinators.FoldMInternal(f, a, bs, new MaybeMonadPlusAdapter<TA>());
 		}
 
+		public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, params TB[] bs) 
+		{
+			return FoldM(f, a, bs.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Maybe<Unit> FoldM_<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs) 
 		// ReSharper restore InconsistentNaming
 		{
 			return (Maybe<Unit>)MonadCombinators.FoldMInternal_(f, a, bs, new MaybeMonadPlusAdapter<TA>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Maybe<Unit> FoldM_<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, params TB[] bs) 
+		// ReSharper restore InconsistentNaming
+		{
+			return FoldM_(f, a, bs.AsEnumerable());
 		}
 
 		public static Maybe<IEnumerable<TC>> ZipWithM<TA, TB, TC>(Func<TA, TB, Maybe<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
@@ -226,6 +256,11 @@ namespace MonadLib
 		public static Maybe<IEnumerable<TA>> FilterM<TA>(Func<TA, Maybe<bool>> p, IEnumerable<TA> @as) 
 		{
 			return (Maybe<IEnumerable<TA>>)MonadCombinators.FilterMInternal(p, @as, new MaybeMonadPlusAdapter<TA>());
+		}
+
+		public static Maybe<IEnumerable<TA>> FilterM<TA>(Func<TA, Maybe<bool>> p, params TA[] @as) 
+		{
+			return FilterM(p, @as.AsEnumerable());
 		}
 
 		public static Maybe<Unit> When(bool b, Maybe<Unit> m) 
@@ -273,7 +308,6 @@ namespace MonadLib
 			return a => (Maybe<TC>)MonadCombinators.Compose(f, g)(a);
 		}
 	}
-
 
 	public static partial class Either
 	{
@@ -364,6 +398,11 @@ namespace MonadLib
 			return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.SequenceInternal(ms, new EitherMonadAdapter<TLeft>());
 		}
 
+		public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(params Either<TLeft, TA>[] ms) 
+		{
+			return Sequence(ms.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Either<TLeft, Unit> Sequence_<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms) 
 		// ReSharper restore InconsistentNaming
@@ -371,9 +410,21 @@ namespace MonadLib
 			return (Either<TLeft, Unit>)MonadCombinators<TLeft>.SequenceInternal_(ms, new EitherMonadAdapter<TLeft>());
 		}
 
+		// ReSharper disable InconsistentNaming
+		public static Either<TLeft, Unit> Sequence_<TLeft, TA>(params Either<TLeft, TA>[] ms) 
+		// ReSharper restore InconsistentNaming
+		{
+			return Sequence_(ms.AsEnumerable());
+		}
+
 		public static Either<TLeft, IEnumerable<TB>> MapM<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, IEnumerable<TA> @as) 
 		{
 			return (Either<TLeft, IEnumerable<TB>>)MonadCombinators<TLeft>.MapMInternal(f, @as, new EitherMonadAdapter<TLeft>());
+		}
+
+		public static Either<TLeft, IEnumerable<TB>> MapM<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, params TA[] @as) 
+		{
+			return MapM(f, @as.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
@@ -381,6 +432,13 @@ namespace MonadLib
 		// ReSharper restore InconsistentNaming
 		{
 			return (Either<TLeft, Unit>)MonadCombinators<TLeft>.MapMInternal_(f, @as, new EitherMonadAdapter<TLeft>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Either<TLeft, Unit> MapM_<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, params TA[] @as) 
+		// ReSharper restore InconsistentNaming
+		{
+			return MapM_(f, @as.AsEnumerable());
 		}
 
 		public static Either<TLeft, IEnumerable<TB>> ForM<TLeft, TA, TB>(IEnumerable<TA> @as, Func<TA, Either<TLeft, TB>> f) 
@@ -433,11 +491,23 @@ namespace MonadLib
 			return (Either<TLeft, TA>)MonadCombinators<TLeft>.FoldMInternal(f, a, bs, new EitherMonadAdapter<TLeft>());
 		}
 
+		public static Either<TLeft, TA> FoldM<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, params TB[] bs) 
+		{
+			return FoldM(f, a, bs.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Either<TLeft, Unit> FoldM_<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, IEnumerable<TB> bs) 
 		// ReSharper restore InconsistentNaming
 		{
 			return (Either<TLeft, Unit>)MonadCombinators<TLeft>.FoldMInternal_(f, a, bs, new EitherMonadAdapter<TLeft>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Either<TLeft, Unit> FoldM_<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, params TB[] bs) 
+		// ReSharper restore InconsistentNaming
+		{
+			return FoldM_(f, a, bs.AsEnumerable());
 		}
 
 		public static Either<TLeft, IEnumerable<TC>> ZipWithM<TLeft, TA, TB, TC>(Func<TA, TB, Either<TLeft, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
@@ -455,6 +525,11 @@ namespace MonadLib
 		public static Either<TLeft, IEnumerable<TA>> FilterM<TLeft, TA>(Func<TA, Either<TLeft, bool>> p, IEnumerable<TA> @as) 
 		{
 			return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.FilterMInternal(p, @as, new EitherMonadAdapter<TLeft>());
+		}
+
+		public static Either<TLeft, IEnumerable<TA>> FilterM<TLeft, TA>(Func<TA, Either<TLeft, bool>> p, params TA[] @as) 
+		{
+			return FilterM(p, @as.AsEnumerable());
 		}
 
 		public static Either<TLeft, Unit> When<TLeft>(bool b, Either<TLeft, Unit> m) 
@@ -502,7 +577,6 @@ namespace MonadLib
 			return a => (Either<TLeft, TC>)MonadCombinators<TLeft>.Compose(f, g)(a);
 		}
 	}
-
 
 	public static partial class State
 	{
@@ -593,6 +667,11 @@ namespace MonadLib
 			return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new StateMonadAdapter<TS>());
 		}
 
+		public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(params State<TS, TA>[] ms) 
+		{
+			return Sequence(ms.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static State<TS, Unit> Sequence_<TS, TA>(IEnumerable<State<TS, TA>> ms) 
 		// ReSharper restore InconsistentNaming
@@ -600,9 +679,21 @@ namespace MonadLib
 			return (State<TS, Unit>)MonadCombinators<TS>.SequenceInternal_(ms, new StateMonadAdapter<TS>());
 		}
 
+		// ReSharper disable InconsistentNaming
+		public static State<TS, Unit> Sequence_<TS, TA>(params State<TS, TA>[] ms) 
+		// ReSharper restore InconsistentNaming
+		{
+			return Sequence_(ms.AsEnumerable());
+		}
+
 		public static State<TS, IEnumerable<TB>> MapM<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as) 
 		{
 			return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new StateMonadAdapter<TS>());
+		}
+
+		public static State<TS, IEnumerable<TB>> MapM<TS, TA, TB>(Func<TA, State<TS, TB>> f, params TA[] @as) 
+		{
+			return MapM(f, @as.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
@@ -610,6 +701,13 @@ namespace MonadLib
 		// ReSharper restore InconsistentNaming
 		{
 			return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new StateMonadAdapter<TS>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static State<TS, Unit> MapM_<TS, TA, TB>(Func<TA, State<TS, TB>> f, params TA[] @as) 
+		// ReSharper restore InconsistentNaming
+		{
+			return MapM_(f, @as.AsEnumerable());
 		}
 
 		public static State<TS, IEnumerable<TB>> ForM<TS, TA, TB>(IEnumerable<TA> @as, Func<TA, State<TS, TB>> f) 
@@ -662,11 +760,23 @@ namespace MonadLib
 			return (State<TS, TA>)MonadCombinators<TS>.FoldMInternal(f, a, bs, new StateMonadAdapter<TS>());
 		}
 
+		public static State<TS, TA> FoldM<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, params TB[] bs) 
+		{
+			return FoldM(f, a, bs.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static State<TS, Unit> FoldM_<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, IEnumerable<TB> bs) 
 		// ReSharper restore InconsistentNaming
 		{
 			return (State<TS, Unit>)MonadCombinators<TS>.FoldMInternal_(f, a, bs, new StateMonadAdapter<TS>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static State<TS, Unit> FoldM_<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, params TB[] bs) 
+		// ReSharper restore InconsistentNaming
+		{
+			return FoldM_(f, a, bs.AsEnumerable());
 		}
 
 		public static State<TS, IEnumerable<TC>> ZipWithM<TS, TA, TB, TC>(Func<TA, TB, State<TS, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
@@ -684,6 +794,11 @@ namespace MonadLib
 		public static State<TS, IEnumerable<TA>> FilterM<TS, TA>(Func<TA, State<TS, bool>> p, IEnumerable<TA> @as) 
 		{
 			return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.FilterMInternal(p, @as, new StateMonadAdapter<TS>());
+		}
+
+		public static State<TS, IEnumerable<TA>> FilterM<TS, TA>(Func<TA, State<TS, bool>> p, params TA[] @as) 
+		{
+			return FilterM(p, @as.AsEnumerable());
 		}
 
 		public static State<TS, Unit> When<TS>(bool b, State<TS, Unit> m) 
@@ -731,7 +846,6 @@ namespace MonadLib
 			return a => (State<TS, TC>)MonadCombinators<TS>.Compose(f, g)(a);
 		}
 	}
-
 
 	public static partial class Reader
 	{
@@ -822,6 +936,11 @@ namespace MonadLib
 			return (Reader<TR, IEnumerable<TA>>)MonadCombinators<TR>.SequenceInternal(ms, new ReaderMonadAdapter<TR>());
 		}
 
+		public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(params Reader<TR, TA>[] ms) 
+		{
+			return Sequence(ms.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Reader<TR, Unit> Sequence_<TR, TA>(IEnumerable<Reader<TR, TA>> ms) 
 		// ReSharper restore InconsistentNaming
@@ -829,9 +948,21 @@ namespace MonadLib
 			return (Reader<TR, Unit>)MonadCombinators<TR>.SequenceInternal_(ms, new ReaderMonadAdapter<TR>());
 		}
 
+		// ReSharper disable InconsistentNaming
+		public static Reader<TR, Unit> Sequence_<TR, TA>(params Reader<TR, TA>[] ms) 
+		// ReSharper restore InconsistentNaming
+		{
+			return Sequence_(ms.AsEnumerable());
+		}
+
 		public static Reader<TR, IEnumerable<TB>> MapM<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, IEnumerable<TA> @as) 
 		{
 			return (Reader<TR, IEnumerable<TB>>)MonadCombinators<TR>.MapMInternal(f, @as, new ReaderMonadAdapter<TR>());
+		}
+
+		public static Reader<TR, IEnumerable<TB>> MapM<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, params TA[] @as) 
+		{
+			return MapM(f, @as.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
@@ -839,6 +970,13 @@ namespace MonadLib
 		// ReSharper restore InconsistentNaming
 		{
 			return (Reader<TR, Unit>)MonadCombinators<TR>.MapMInternal_(f, @as, new ReaderMonadAdapter<TR>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Reader<TR, Unit> MapM_<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, params TA[] @as) 
+		// ReSharper restore InconsistentNaming
+		{
+			return MapM_(f, @as.AsEnumerable());
 		}
 
 		public static Reader<TR, IEnumerable<TB>> ForM<TR, TA, TB>(IEnumerable<TA> @as, Func<TA, Reader<TR, TB>> f) 
@@ -891,11 +1029,23 @@ namespace MonadLib
 			return (Reader<TR, TA>)MonadCombinators<TR>.FoldMInternal(f, a, bs, new ReaderMonadAdapter<TR>());
 		}
 
+		public static Reader<TR, TA> FoldM<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, params TB[] bs) 
+		{
+			return FoldM(f, a, bs.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Reader<TR, Unit> FoldM_<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, IEnumerable<TB> bs) 
 		// ReSharper restore InconsistentNaming
 		{
 			return (Reader<TR, Unit>)MonadCombinators<TR>.FoldMInternal_(f, a, bs, new ReaderMonadAdapter<TR>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Reader<TR, Unit> FoldM_<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, params TB[] bs) 
+		// ReSharper restore InconsistentNaming
+		{
+			return FoldM_(f, a, bs.AsEnumerable());
 		}
 
 		public static Reader<TR, IEnumerable<TC>> ZipWithM<TR, TA, TB, TC>(Func<TA, TB, Reader<TR, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
@@ -913,6 +1063,11 @@ namespace MonadLib
 		public static Reader<TR, IEnumerable<TA>> FilterM<TR, TA>(Func<TA, Reader<TR, bool>> p, IEnumerable<TA> @as) 
 		{
 			return (Reader<TR, IEnumerable<TA>>)MonadCombinators<TR>.FilterMInternal(p, @as, new ReaderMonadAdapter<TR>());
+		}
+
+		public static Reader<TR, IEnumerable<TA>> FilterM<TR, TA>(Func<TA, Reader<TR, bool>> p, params TA[] @as) 
+		{
+			return FilterM(p, @as.AsEnumerable());
 		}
 
 		public static Reader<TR, Unit> When<TR>(bool b, Reader<TR, Unit> m) 
@@ -960,7 +1115,6 @@ namespace MonadLib
 			return a => (Reader<TR, TC>)MonadCombinators<TR>.Compose(f, g)(a);
 		}
 	}
-
 
 	public static partial class Writer
 	{
@@ -1051,6 +1205,11 @@ namespace MonadLib
 			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.SequenceInternal(ms, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
 		}
 
+		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> Sequence<TMonoid, TMonoidAdapter, TW, TA>(params Writer<TMonoid, TMonoidAdapter, TW, TA>[] ms) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		{
+			return Sequence(ms.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Sequence_<TMonoid, TMonoidAdapter, TW, TA>(IEnumerable<Writer<TMonoid, TMonoidAdapter, TW, TA>> ms) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
 		// ReSharper restore InconsistentNaming
@@ -1058,9 +1217,21 @@ namespace MonadLib
 			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.SequenceInternal_(ms, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
 		}
 
+		// ReSharper disable InconsistentNaming
+		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Sequence_<TMonoid, TMonoidAdapter, TW, TA>(params Writer<TMonoid, TMonoidAdapter, TW, TA>[] ms) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		// ReSharper restore InconsistentNaming
+		{
+			return Sequence_(ms.AsEnumerable());
+		}
+
 		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>> MapM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, IEnumerable<TA> @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
 		{
 			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.MapMInternal(f, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+		}
+
+		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>> MapM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, params TA[] @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		{
+			return MapM(f, @as.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
@@ -1068,6 +1239,13 @@ namespace MonadLib
 		// ReSharper restore InconsistentNaming
 		{
 			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.MapMInternal_(f, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> MapM_<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, params TA[] @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		// ReSharper restore InconsistentNaming
+		{
+			return MapM_(f, @as.AsEnumerable());
 		}
 
 		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>> ForM<TMonoid, TMonoidAdapter, TW, TA, TB>(IEnumerable<TA> @as, Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
@@ -1120,11 +1298,23 @@ namespace MonadLib
 			return (Writer<TMonoid, TMonoidAdapter, TW, TA>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.FoldMInternal(f, a, bs, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
 		}
 
+		public static Writer<TMonoid, TMonoidAdapter, TW, TA> FoldM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TA>> f, TA a, params TB[] bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		{
+			return FoldM(f, a, bs.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> FoldM_<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
 		// ReSharper restore InconsistentNaming
 		{
 			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.FoldMInternal_(f, a, bs, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> FoldM_<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TA>> f, TA a, params TB[] bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		// ReSharper restore InconsistentNaming
+		{
+			return FoldM_(f, a, bs.AsEnumerable());
 		}
 
 		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TC>> ZipWithM<TMonoid, TMonoidAdapter, TW, TA, TB, TC>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
@@ -1142,6 +1332,11 @@ namespace MonadLib
 		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> FilterM<TMonoid, TMonoidAdapter, TW, TA>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, bool>> p, IEnumerable<TA> @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
 		{
 			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.FilterMInternal(p, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+		}
+
+		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> FilterM<TMonoid, TMonoidAdapter, TW, TA>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, bool>> p, params TA[] @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		{
+			return FilterM(p, @as.AsEnumerable());
 		}
 
 		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> When<TMonoid, TMonoidAdapter, TW>(bool b, Writer<TMonoid, TMonoidAdapter, TW, Unit> m) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()

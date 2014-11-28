@@ -16,6 +16,7 @@ var typesToGenerate = new[]
 #>
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MonadLib
 {
@@ -29,20 +30,6 @@ namespace MonadLib
 <# var isMonadPlus = typeToGenerate.Item4; #>
 <# var MonadAdapter = (isMonadPlus) ? string.Format("{0}MonadPlusAdapter<TA>", M) : string.Format("{0}MonadAdapter{1}", M, T1MonadAdapter); #>
 <# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
-<# if (isMonadPlus) { #>
-    //public static class <#= M #>MonadPlus<TA>
-    //{
-    //    public static <#= M #><TA> MZero
-    //    {
-    //        get
-    //        {
-	//			var monadPlusAdapter = new <#= M #>MonadPlusAdapter<TA>();
-    //            return (<#= M #><TA>)monadPlusAdapter.MZero;
-    //        }
-    //    }
-    //}
-<# } #>
-
 	public static partial class <#= M #>
 	{
 		public static <#= M #><<#= T1TypeList #>TB> Bind<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, <#= M #><<#= T1TypeList #>TB>> f) <#= typeConstraints #>
@@ -132,6 +119,11 @@ namespace MonadLib
 			return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal(ms, new <#= MonadAdapter #>());
 		}
 
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> Sequence<<#= T1TypeList #>TA>(params <#= M #><<#= T1TypeList #>TA>[] ms) <#= typeConstraints #>
+		{
+			return Sequence(ms.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static <#= M #><<#= T1TypeList #>Unit> Sequence_<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms) <#= typeConstraints #>
 		// ReSharper restore InconsistentNaming
@@ -139,9 +131,21 @@ namespace MonadLib
 			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal_(ms, new <#= MonadAdapter #>());
 		}
 
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> Sequence_<<#= T1TypeList #>TA>(params <#= M #><<#= T1TypeList #>TA>[] ms) <#= typeConstraints #>
+		// ReSharper restore InconsistentNaming
+		{
+			return Sequence_(ms.AsEnumerable());
+		}
+
 		public static <#= M #><<#= T1TypeList #>IEnumerable<TB>> MapM<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, IEnumerable<TA> @as) <#= typeConstraints #>
 		{
 			return (<#= M #><<#= T1TypeList #>IEnumerable<TB>>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal(f, @as, new <#= MonadAdapter #>());
+		}
+
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TB>> MapM<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, params TA[] @as) <#= typeConstraints #>
+		{
+			return MapM(f, @as.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
@@ -149,6 +153,13 @@ namespace MonadLib
 		// ReSharper restore InconsistentNaming
 		{
 			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.MapMInternal_(f, @as, new <#= MonadAdapter #>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> MapM_<<#= T1TypeList #>TA, TB>(Func<TA, <#= M #><<#= T1TypeList #>TB>> f, params TA[] @as) <#= typeConstraints #>
+		// ReSharper restore InconsistentNaming
+		{
+			return MapM_(f, @as.AsEnumerable());
 		}
 
 		public static <#= M #><<#= T1TypeList #>IEnumerable<TB>> ForM<<#= T1TypeList #>TA, TB>(IEnumerable<TA> @as, Func<TA, <#= M #><<#= T1TypeList #>TB>> f) <#= typeConstraints #>
@@ -223,6 +234,11 @@ namespace MonadLib
             return (<#= M #><<#= T1TypeList #>TA>)MonadPlusCombinators.MSumInternal(ms, new <#= M #>MonadPlusAdapter<TA>());
         }
 
+        public static <#= M #><<#= T1TypeList #>TA> MSum<<#= T1TypeList #>TA>(params <#= M #><<#= T1TypeList #>TA>[] ms)
+        {
+            return MSum(ms.AsEnumerable());
+        }
+
         public static <#= M #><<#= T1TypeList #>Unit> Guard(bool b)
         {
             return (<#= M #><<#= T1TypeList #>Unit>)MonadPlusCombinators.GuardInternal(b, new <#= M #>MonadPlusAdapter<Unit>());
@@ -234,11 +250,23 @@ namespace MonadLib
 			return (<#= M #><<#= T1TypeList #>TA>)MonadCombinators<#= T1MonadCombinators #>.FoldMInternal(f, a, bs, new <#= MonadAdapter #>());
 		}
 
+		public static <#= M #><<#= T1TypeList #>TA> FoldM<<#= T1TypeList #>TA, TB>(Func<TA, TB, <#= M #><<#= T1TypeList #>TA>> f, TA a, params TB[] bs) <#= typeConstraints #>
+		{
+			return FoldM(f, a, bs.AsEnumerable());
+		}
+
 		// ReSharper disable InconsistentNaming
 		public static <#= M #><<#= T1TypeList #>Unit> FoldM_<<#= T1TypeList #>TA, TB>(Func<TA, TB, <#= M #><<#= T1TypeList #>TA>> f, TA a, IEnumerable<TB> bs) <#= typeConstraints #>
 		// ReSharper restore InconsistentNaming
 		{
 			return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.FoldMInternal_(f, a, bs, new <#= MonadAdapter #>());
+		}
+
+		// ReSharper disable InconsistentNaming
+		public static <#= M #><<#= T1TypeList #>Unit> FoldM_<<#= T1TypeList #>TA, TB>(Func<TA, TB, <#= M #><<#= T1TypeList #>TA>> f, TA a, params TB[] bs) <#= typeConstraints #>
+		// ReSharper restore InconsistentNaming
+		{
+			return FoldM_(f, a, bs.AsEnumerable());
 		}
 
 		public static <#= M #><<#= T1TypeList #>IEnumerable<TC>> ZipWithM<<#= T1TypeList #>TA, TB, TC>(Func<TA, TB, <#= M #><<#= T1TypeList #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) <#= typeConstraints #>
@@ -256,6 +284,11 @@ namespace MonadLib
 		public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> FilterM<<#= T1TypeList #>TA>(Func<TA, <#= M #><<#= T1TypeList #>bool>> p, IEnumerable<TA> @as) <#= typeConstraints #>
 		{
 			return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.FilterMInternal(p, @as, new <#= MonadAdapter #>());
+		}
+
+		public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> FilterM<<#= T1TypeList #>TA>(Func<TA, <#= M #><<#= T1TypeList #>bool>> p, params TA[] @as) <#= typeConstraints #>
+		{
+			return FilterM(p, @as.AsEnumerable());
 		}
 
 		public static <#= M #><<#= T1TypeList #>Unit> When<#= T1MonadAdapter #>(bool b, <#= M #><<#= T1TypeList #>Unit> m) <#= typeConstraints #>

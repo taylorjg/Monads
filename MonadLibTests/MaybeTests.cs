@@ -483,7 +483,7 @@ namespace MonadLibTests
         [Test]
         public void FoldMWhereFuncAlwaysReturnsJust()
         {
-            var actual = Maybe.FoldM((a, b) => Maybe.Just(a + b), 0, Enumerable.Range(1, 5));
+            var actual = Maybe.FoldM((a, b) => Maybe.Just(a + b), 0, Enumerable.Range(1, 5).ToArray());
             Assert.That(actual.IsJust, Is.True);
             Assert.That(actual.FromJust, Is.EqualTo(15));
         }
@@ -491,7 +491,7 @@ namespace MonadLibTests
         [Test]
         public void FoldMWhereFuncReturnsMixtureOfJustAndNothing()
         {
-            var actual = Maybe.FoldM((a, b) => a > 3 ? Maybe.Nothing<int>() : Maybe.Just(a + b), 0, Enumerable.Range(1, 5));
+            var actual = Maybe.FoldM((a, b) => a > 3 ? Maybe.Nothing<int>() : Maybe.Just(a + b), 0, Enumerable.Range(1, 5).ToArray());
             Assert.That(actual.IsNothing, Is.True);
         }
 
@@ -513,7 +513,7 @@ namespace MonadLibTests
         [Test]
         public void FilterMWherePredicateAlwaysReturnsJust()
         {
-            var actual = Maybe.FilterM(n => Maybe.Just(n < 10), Enumerable.Range(1, 20));
+            var actual = Maybe.FilterM(n => Maybe.Just(n < 10), Enumerable.Range(1, 20).ToArray());
             Assert.That(actual.IsJust, Is.True);
             Assert.That(actual.FromJust, Is.EqualTo(Enumerable.Range(1, 9)));
         }
@@ -521,7 +521,7 @@ namespace MonadLibTests
         [Test]
         public void FilterMWherePredicateReturnsMixtureOfJustAndNothing()
         {
-            var actual = Maybe.FilterM(n => n > 10 ? Maybe.Nothing<bool>() : Maybe.Just(true), Enumerable.Range(1, 20));
+            var actual = Maybe.FilterM(n => n > 10 ? Maybe.Nothing<bool>() : Maybe.Just(true), Enumerable.Range(1, 20).ToArray());
             Assert.That(actual.IsNothing, Is.True);
         }
 

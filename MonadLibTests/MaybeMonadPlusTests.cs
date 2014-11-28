@@ -30,28 +30,28 @@ namespace MonadLibTests
         [Test]
         public void MSum123()
         {
-            var actual = Maybe.MSum(new[] {Maybe.Just(1), Maybe.Just(2), Maybe.Just(3)});
+            var actual = Maybe.MSum(Maybe.Just(1), Maybe.Just(2), Maybe.Just(3));
             Assert.That(actual.FromJust, Is.EqualTo(1));
         }
 
         [Test]
         public void MSum1Nothing()
         {
-            var actual = Maybe.MSum(new[] {Maybe.Just(1), Maybe.Nothing<int>()});
+            var actual = Maybe.MSum(Maybe.Just(1), Maybe.Nothing<int>());
             Assert.That(actual.FromJust, Is.EqualTo(1));
         }
 
         [Test]
         public void MSumNothing1()
         {
-            var actual = Maybe.MSum(new[] {Maybe.Nothing<int>(), Maybe.Just(1)});
+            var actual = Maybe.MSum(Maybe.Nothing<int>(), Maybe.Just(1));
             Assert.That(actual.FromJust, Is.EqualTo(1));
         }
 
         [Test]
         public void MSumNothingNothing()
         {
-            var actual = Maybe.MSum(new[] { Maybe.Nothing<int>(), Maybe.Nothing<int>() });
+            var actual = Maybe.MSum(Maybe.Nothing<int>(), Maybe.Nothing<int>());
             Assert.That(actual.IsNothing, Is.True);
         }
 

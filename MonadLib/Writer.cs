@@ -72,7 +72,8 @@ namespace MonadLib
 
         public static Writer<TMonoid, TMonoidAdapter, TW, TA> Return<TA>(TA a)
         {
-            var w = (TMonoid) new TMonoidAdapter().MEmpty;
+            var monoidAdapter = new TMonoidAdapter();
+            var w = (TMonoid) monoidAdapter.MEmpty;
             return new Writer<TMonoid, TMonoidAdapter, TW, TA>(a, w);
         }
     }
