@@ -6,11 +6,11 @@ using MonadLib;
 
 namespace WriterAllAboutMonadsExample
 {
-    using WriterEntries = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry>;
-    using WriterEntriesUnit = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Unit>;
-    using WriterEntriesEntries = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, ListMonoid<Entry>>;
-    using WriterEntriesMaybePacket = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Maybe<Packet>>;
-    using WriterEntriesPackets = Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, IEnumerable<Packet>>;
+    using WriterEntries = Writer<ListMonoid<Entry>, Entry>;
+    using WriterEntriesUnit = Writer<ListMonoid<Entry>, Entry, Unit>;
+    using WriterEntriesEntries = Writer<ListMonoid<Entry>, Entry, ListMonoid<Entry>>;
+    using WriterEntriesMaybePacket = Writer<ListMonoid<Entry>, Entry, Maybe<Packet>>;
+    using WriterEntriesPackets = Writer<ListMonoid<Entry>, Entry, IEnumerable<Packet>>;
 
     internal class Program
     {
@@ -70,11 +70,11 @@ namespace WriterAllAboutMonadsExample
                     });
         }
 
-        private static Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, IList<Maybe<Packet>>> GroupSame(
+        private static Writer<ListMonoid<Entry>, Entry, IList<Maybe<Packet>>> GroupSame(
             ListMonoid<Entry> initial,
-            Func<ListMonoid<Entry>, ListMonoid<Entry>, Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, ListMonoid<Entry>>> merge,
+            Func<ListMonoid<Entry>, ListMonoid<Entry>, Writer<ListMonoid<Entry>, Entry, ListMonoid<Entry>>> merge,
             IList<Packet> packets,
-            Func<Packet, Writer<ListMonoid<Entry>, ListMonoidAdapter<Entry>, Entry, Maybe<Packet>>> fn)
+            Func<Packet, Writer<ListMonoid<Entry>, Entry, Maybe<Packet>>> fn)
         {
             if (!packets.Any())
             {

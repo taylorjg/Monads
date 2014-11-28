@@ -2,9 +2,7 @@
 
 namespace MonadLib
 {
-    public class Writer<TMonoid, TMonoidAdapter, TW, TA> : IMonad<TMonoid, TMonoidAdapter, TW, TA>
-        where TMonoid : IMonoid<TW>
-        where TMonoidAdapter : MonoidAdapter<TW>, new()
+    public class Writer<TMonoid, TW, TA> : IMonad<TMonoid, TW, TA> where TMonoid : IMonoid<TW>
     {
         private readonly TA _a;
         private readonly TMonoid _w;
@@ -20,26 +18,26 @@ namespace MonadLib
             get { return Tuple.Create(_a, _w); }
         }
 
-        public Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TMonoid>> Listen()
+        public Writer<TMonoid, TW, Tuple<TA, TMonoid>> Listen()
         {
-            return new Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TMonoid>>(Tuple.Create(_a, _w), _w);
+            return new Writer<TMonoid, TW, Tuple<TA, TMonoid>>(Tuple.Create(_a, _w), _w);
         }
 
-        public Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, TW2>> Listens<TW2>(Func<TMonoid, TW2> f)
+        public Writer<TMonoid, TW, Tuple<TA, TW2>> Listens<TW2>(Func<TMonoid, TW2> f)
         {
             return Listen().Bind(tuple =>
                 {
                     var a = tuple.Item1;
                     var w = tuple.Item2;
-                    return Writer<TMonoid, TMonoidAdapter, TW>.Return(Tuple.Create(a, f(w)));
+                    return Writer<TMonoid, TW>.Return(Tuple.Create(a, f(w)));
                 });
         }
 
-        private WriterMonadAdapter<TMonoid, TMonoidAdapter, TW> _monadAdapter;
+        private WriterMonadAdapter<TMonoid, TW> _monadAdapter;
 
-        public MonadAdapter<TMonoid, TMonoidAdapter, TW> GetMonadAdapter()
+        public MonadAdapter<TMonoid, TW> GetMonadAdapter()
         {
-            return _monadAdapter ?? (_monadAdapter = new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+            return _monadAdapter ?? (_monadAdapter = new WriterMonadAdapter<TMonoid, TW>());
         }
     }
 
@@ -47,60 +45,56 @@ namespace MonadLib
     {
     }
 
-    public static class Writer<TMonoid, TMonoidAdapter, TW>
-        where TMonoid : IMonoid<TW>
-        where TMonoidAdapter : MonoidAdapter<TW>, new()
+    public static class Writer<TMonoid, TW> where TMonoid : IMonoid<TW>
     {
-        public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Tell(TMonoid s)
+        public static Writer<TMonoid, TW, Unit> Tell(TMonoid s)
         {
-            return new Writer<TMonoid, TMonoidAdapter, TW, Unit>(new Unit(), s);
+            return new Writer<TMonoid, TW, Unit>(new Unit(), s);
         }
 
-        public static Writer<TMonoid, TMonoidAdapter, TW, TA> Pass<TA>(Writer<TMonoid, TMonoidAdapter, TW, Tuple<TA, Func<TMonoid, TMonoid>>> m)
+        public static Writer<TMonoid, TW, TA> Pass<TA>(Writer<TMonoid, TW, Tuple<TA, Func<TMonoid, TMonoid>>> m)
         {
             var tuple = m.RunWriter;
             var a = tuple.Item1.Item1;
             var f = tuple.Item1.Item2;
             var w = tuple.Item2;
-            return new Writer<TMonoid, TMonoidAdapter, TW, TA>(a, f(w));
+            return new Writer<TMonoid, TW, TA>(a, f(w));
         }
 
-        public static Writer<TMonoid, TMonoidAdapter, TW, TA> Censor<TA>(Func<TMonoid, TMonoid> f, Writer<TMonoid, TMonoidAdapter, TW, TA> m)
+        public static Writer<TMonoid, TW, TA> Censor<TA>(Func<TMonoid, TMonoid> f, Writer<TMonoid, TW, TA> m)
         {
             return Pass(m.Bind(a => Return(Tuple.Create(a, f))));
         }
 
-        public static Writer<TMonoid, TMonoidAdapter, TW, TA> Return<TA>(TA a)
+        public static Writer<TMonoid, TW, TA> Return<TA>(TA a)
         {
-            var monoidAdapter = new TMonoidAdapter();
-            var w = (TMonoid) monoidAdapter.MEmpty;
-            return new Writer<TMonoid, TMonoidAdapter, TW, TA>(a, w);
+            var monoidAdapter = MonoidAdapterRegistry.Get<TW>(typeof(TMonoid));
+            var w = (TMonoid)monoidAdapter.MEmpty;
+            return new Writer<TMonoid, TW, TA>(a, w);
         }
     }
 
-    internal class WriterMonadAdapter<TMonoid, TMonoidAdapter, TW> : MonadAdapter<TMonoid, TMonoidAdapter, TW>
-        where TMonoid : IMonoid<TW>
-        where TMonoidAdapter : MonoidAdapter<TW>, new()
+    internal class WriterMonadAdapter<TMonoid, TW> : MonadAdapter<TMonoid, TW> where TMonoid : IMonoid<TW>
     {
-        public override IMonad<TMonoid, TMonoidAdapter, TW, TA> Return<TA>(TA a)
+        public override IMonad<TMonoid, TW, TA> Return<TA>(TA a)
         {
-            return Writer<TMonoid, TMonoidAdapter, TW>.Return(a);
+            return Writer<TMonoid, TW>.Return(a);
         }
 
-        public override IMonad<TMonoid, TMonoidAdapter, TW, TB> Bind<TA, TB>(IMonad<TMonoid, TMonoidAdapter, TW, TA> ma, Func<TA, IMonad<TMonoid, TMonoidAdapter, TW, TB>> f)
+        public override IMonad<TMonoid, TW, TB> Bind<TA, TB>(IMonad<TMonoid, TW, TA> ma, Func<TA, IMonad<TMonoid, TW, TB>> f)
         {
-            var writerA = (Writer<TMonoid, TMonoidAdapter, TW, TA>)ma;
+            var writerA = (Writer<TMonoid, TW, TA>)ma;
             var t1 = writerA.RunWriter;
             var a = t1.Item1;
             var w1 = t1.Item2;
             var mb = f(a);
-            var writerB = (Writer<TMonoid, TMonoidAdapter, TW, TB>)mb;
+            var writerB = (Writer<TMonoid, TW, TB>)mb;
             var t2 = writerB.RunWriter;
             var b = t2.Item1;
             var w2 = t2.Item2;
             var monoidAdapter = w1.GetMonoidAdapter();
             var w = (TMonoid)monoidAdapter.MAppend(w1, w2);
-            return new Writer<TMonoid, TMonoidAdapter, TW, TB>(b, w);
+            return new Writer<TMonoid, TW, TB>(b, w);
         }
     }
 }

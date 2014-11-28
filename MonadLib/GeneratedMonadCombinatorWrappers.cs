@@ -1118,270 +1118,270 @@ namespace MonadLib
 
 	public static partial class Writer
 	{
-		public static Writer<TMonoid, TMonoidAdapter, TW, TB> Bind<TMonoid, TMonoidAdapter, TW, TA, TB>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TB> Bind<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
 		{
 			var monadAdapter = ma.GetMonadAdapter();
-			return (Writer<TMonoid, TMonoidAdapter, TW, TB>)monadAdapter.Bind(ma, f);
+			return (Writer<TMonoid, TW, TB>)monadAdapter.Bind(ma, f);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TB> BindIgnoringLeft<TMonoid, TMonoidAdapter, TW, TA, TB>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TB> BindIgnoringLeft<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb) where TMonoid : IMonoid<TW>
 		{
 			var monadAdapter = ma.GetMonadAdapter();
-			return (Writer<TMonoid, TMonoidAdapter, TW, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
+			return (Writer<TMonoid, TW, TB>)monadAdapter.BindIgnoringLeft(ma, mb);
 		}
 
-        public static Writer<TMonoid, TMonoidAdapter, TW, TB> Map<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB> f, Writer<TMonoid, TMonoidAdapter, TW, TA> ma) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+        public static Writer<TMonoid, TW, TB> Map<TMonoid, TW, TA, TB>(Func<TA, TB> f, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
         {
             return ma.Map(f);
         }
 		
-        public static Writer<TMonoid, TMonoidAdapter, TW, TB> Map<TMonoid, TMonoidAdapter, TW, TA, TB>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+        public static Writer<TMonoid, TW, TB> Map<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>
         {
             return ma.LiftM(f);
         }
 		
-        public static Writer<TMonoid, TMonoidAdapter, TW, TB> FlatMap<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, Writer<TMonoid, TMonoidAdapter, TW, TA> ma) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+        public static Writer<TMonoid, TW, TB> FlatMap<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
         {
             return ma.Bind(f);
         }
 
-        public static Writer<TMonoid, TMonoidAdapter, TW, TB> FlatMap<TMonoid, TMonoidAdapter, TW, TA, TB>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+        public static Writer<TMonoid, TW, TB> FlatMap<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
         {
             return ma.Bind(f);
         }
 		
-		public static Writer<TMonoid, TMonoidAdapter, TW, TB> LiftM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB> f, Writer<TMonoid, TMonoidAdapter, TW, TA> ma) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TB> LiftM<TMonoid, TW, TA, TB>(Func<TA, TB> f, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
 		{
 			return ma.LiftM(f);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TB> LiftM<TMonoid, TMonoidAdapter, TW, TA, TB>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TB> LiftM<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TB>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.LiftM(f, ma);
+			return (Writer<TMonoid, TW, TB>)MonadCombinators<TMonoid, TW>.LiftM(f, ma);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TC> LiftM2<TMonoid, TMonoidAdapter, TW, TA, TB, TC>(Func<TA, TB, TC> f, Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TC> LiftM2<TMonoid, TW, TA, TB, TC>(Func<TA, TB, TC> f, Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb) where TMonoid : IMonoid<TW>
 		{
 			return ma.LiftM2(mb, f);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TC> LiftM2<TMonoid, TMonoidAdapter, TW, TA, TB, TC>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb, Func<TA, TB, TC> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TC> LiftM2<TMonoid, TW, TA, TB, TC>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Func<TA, TB, TC> f) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TC>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.LiftM2(f, ma, mb);
+			return (Writer<TMonoid, TW, TC>)MonadCombinators<TMonoid, TW>.LiftM2(f, ma, mb);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TD> LiftM3<TMonoid, TMonoidAdapter, TW, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb, Writer<TMonoid, TMonoidAdapter, TW, TC> mc) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TD> LiftM3<TMonoid, TW, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc) where TMonoid : IMonoid<TW>
 		{
 			return ma.LiftM3(mb, mc, f);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TD> LiftM3<TMonoid, TMonoidAdapter, TW, TA, TB, TC, TD>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb, Writer<TMonoid, TMonoidAdapter, TW, TC> mc, Func<TA, TB, TC, TD> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TD> LiftM3<TMonoid, TW, TA, TB, TC, TD>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc, Func<TA, TB, TC, TD> f) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TD>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.LiftM3(f, ma, mb, mc);
+			return (Writer<TMonoid, TW, TD>)MonadCombinators<TMonoid, TW>.LiftM3(f, ma, mb, mc);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TE> LiftM4<TMonoid, TMonoidAdapter, TW, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb, Writer<TMonoid, TMonoidAdapter, TW, TC> mc, Writer<TMonoid, TMonoidAdapter, TW, TD> md) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TE> LiftM4<TMonoid, TW, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc, Writer<TMonoid, TW, TD> md) where TMonoid : IMonoid<TW>
 		{
 			return ma.LiftM4(mb, mc, md, f);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TE> LiftM4<TMonoid, TMonoidAdapter, TW, TA, TB, TC, TD, TE>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb, Writer<TMonoid, TMonoidAdapter, TW, TC> mc, Writer<TMonoid, TMonoidAdapter, TW, TD> md, Func<TA, TB, TC, TD, TE> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TE> LiftM4<TMonoid, TW, TA, TB, TC, TD, TE>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc, Writer<TMonoid, TW, TD> md, Func<TA, TB, TC, TD, TE> f) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TE>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.LiftM4(f, ma, mb, mc, md);
+			return (Writer<TMonoid, TW, TE>)MonadCombinators<TMonoid, TW>.LiftM4(f, ma, mb, mc, md);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TF> LiftM5<TMonoid, TMonoidAdapter, TW, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb, Writer<TMonoid, TMonoidAdapter, TW, TC> mc, Writer<TMonoid, TMonoidAdapter, TW, TD> md, Writer<TMonoid, TMonoidAdapter, TW, TE> me) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TF> LiftM5<TMonoid, TW, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc, Writer<TMonoid, TW, TD> md, Writer<TMonoid, TW, TE> me) where TMonoid : IMonoid<TW>
 		{
 			return ma.LiftM5(mb, mc, md, me, f);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TF> LiftM5<TMonoid, TMonoidAdapter, TW, TA, TB, TC, TD, TE, TF>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, TB> mb, Writer<TMonoid, TMonoidAdapter, TW, TC> mc, Writer<TMonoid, TMonoidAdapter, TW, TD> md, Writer<TMonoid, TMonoidAdapter, TW, TE> me, Func<TA, TB, TC, TD, TE, TF> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TF> LiftM5<TMonoid, TW, TA, TB, TC, TD, TE, TF>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc, Writer<TMonoid, TW, TD> md, Writer<TMonoid, TW, TE> me, Func<TA, TB, TC, TD, TE, TF> f) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TF>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.LiftM5(f, ma, mb, mc, md, me);
+			return (Writer<TMonoid, TW, TF>)MonadCombinators<TMonoid, TW>.LiftM5(f, ma, mb, mc, md, me);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> Sequence<TMonoid, TMonoidAdapter, TW, TA>(IEnumerable<Writer<TMonoid, TMonoidAdapter, TW, TA>> ms) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.SequenceInternal(ms, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.SequenceInternal(ms, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> Sequence<TMonoid, TMonoidAdapter, TW, TA>(params Writer<TMonoid, TMonoidAdapter, TW, TA>[] ms) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(params Writer<TMonoid, TW, TA>[] ms) where TMonoid : IMonoid<TW>
 		{
 			return Sequence(ms.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Sequence_<TMonoid, TMonoidAdapter, TW, TA>(IEnumerable<Writer<TMonoid, TMonoidAdapter, TW, TA>> ms) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> Sequence_<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.SequenceInternal_(ms, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.SequenceInternal_(ms, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Sequence_<TMonoid, TMonoidAdapter, TW, TA>(params Writer<TMonoid, TMonoidAdapter, TW, TA>[] ms) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> Sequence_<TMonoid, TW, TA>(params Writer<TMonoid, TW, TA>[] ms) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
 			return Sequence_(ms.AsEnumerable());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>> MapM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, IEnumerable<TA> @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TB>> MapM<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, IEnumerable<TA> @as) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.MapMInternal(f, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, IEnumerable<TB>>)MonadCombinators<TMonoid, TW>.MapMInternal(f, @as, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>> MapM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, params TA[] @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TB>> MapM<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, params TA[] @as) where TMonoid : IMonoid<TW>
 		{
 			return MapM(f, @as.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> MapM_<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, IEnumerable<TA> @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> MapM_<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, IEnumerable<TA> @as) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.MapMInternal_(f, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.MapMInternal_(f, @as, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> MapM_<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, params TA[] @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> MapM_<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, params TA[] @as) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
 			return MapM_(f, @as.AsEnumerable());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>> ForM<TMonoid, TMonoidAdapter, TW, TA, TB>(IEnumerable<TA> @as, Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TB>> ForM<TMonoid, TW, TA, TB>(IEnumerable<TA> @as, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TB>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.MapMInternal(f, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, IEnumerable<TB>>)MonadCombinators<TMonoid, TW>.MapMInternal(f, @as, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> ForM_<TMonoid, TMonoidAdapter, TW, TA, TB>(IEnumerable<TA> @as, Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> ForM_<TMonoid, TW, TA, TB>(IEnumerable<TA> @as, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.MapMInternal_(f, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.MapMInternal_(f, @as, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> ReplicateM<TMonoid, TMonoidAdapter, TW, TA>(int n, Writer<TMonoid, TMonoidAdapter, TW, TA> ma) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TA>> ReplicateM<TMonoid, TW, TA>(int n, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
 		{
 			return ma.ReplicateM(n);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> ReplicateM<TMonoid, TMonoidAdapter, TW, TA>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, int n) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TA>> ReplicateM<TMonoid, TW, TA>(this Writer<TMonoid, TW, TA> ma, int n) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.ReplicateM(n, ma);
+			return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.ReplicateM(n, ma);
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> ReplicateM_<TMonoid, TMonoidAdapter, TW, TA>(int n, Writer<TMonoid, TMonoidAdapter, TW, TA> ma) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> ReplicateM_<TMonoid, TW, TA>(int n, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
 			return ma.ReplicateM_(n);
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> ReplicateM_<TMonoid, TMonoidAdapter, TW, TA>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, int n) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> ReplicateM_<TMonoid, TW, TA>(this Writer<TMonoid, TW, TA> ma, int n) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.ReplicateM_(n, ma);
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.ReplicateM_(n, ma);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TA> Join<TMonoid, TMonoidAdapter, TW, TA>(Writer<TMonoid, TMonoidAdapter, TW, Writer<TMonoid, TMonoidAdapter, TW, TA>> mma) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TA> Join<TMonoid, TW, TA>(Writer<TMonoid, TW, Writer<TMonoid, TW, TA>> mma) where TMonoid : IMonoid<TW>
 		{
-			// Ideally, we would like to use MonadCombinators<TMonoid, TMonoidAdapter, TW>.Join(mma) but there
+			// Ideally, we would like to use MonadCombinators<TMonoid, TW>.Join(mma) but there
 			// is a casting issue that I have not figured out how to fix.
 			var monadAdapter = mma.GetMonadAdapter();
-			return (Writer<TMonoid, TMonoidAdapter, TW, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+			return (Writer<TMonoid, TW, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
 		}
 
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TA> FoldM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TA> FoldM<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TA>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.FoldMInternal(f, a, bs, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, TA>)MonadCombinators<TMonoid, TW>.FoldMInternal(f, a, bs, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TA> FoldM<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TA>> f, TA a, params TB[] bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TA> FoldM<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, params TB[] bs) where TMonoid : IMonoid<TW>
 		{
 			return FoldM(f, a, bs.AsEnumerable());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> FoldM_<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> FoldM_<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.FoldMInternal_(f, a, bs, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.FoldMInternal_(f, a, bs, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> FoldM_<TMonoid, TMonoidAdapter, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TA>> f, TA a, params TB[] bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> FoldM_<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, params TB[] bs) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
 			return FoldM_(f, a, bs.AsEnumerable());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TC>> ZipWithM<TMonoid, TMonoidAdapter, TW, TA, TB, TC>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TC>> ZipWithM<TMonoid, TW, TA, TB, TC>(Func<TA, TB, Writer<TMonoid, TW, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TC>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.ZipWithMInternal(f, @as, bs, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, IEnumerable<TC>>)MonadCombinators<TMonoid, TW>.ZipWithMInternal(f, @as, bs, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
 		// ReSharper disable InconsistentNaming
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> ZipWithM_<TMonoid, TMonoidAdapter, TW, TA, TB, TC>(Func<TA, TB, Writer<TMonoid, TMonoidAdapter, TW, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> ZipWithM_<TMonoid, TW, TA, TB, TC>(Func<TA, TB, Writer<TMonoid, TW, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
 		// ReSharper restore InconsistentNaming
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.ZipWithMInternal_(f, @as, bs, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.ZipWithMInternal_(f, @as, bs, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> FilterM<TMonoid, TMonoidAdapter, TW, TA>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, bool>> p, IEnumerable<TA> @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TA>> FilterM<TMonoid, TW, TA>(Func<TA, Writer<TMonoid, TW, bool>> p, IEnumerable<TA> @as) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.FilterMInternal(p, @as, new WriterMonadAdapter<TMonoid, TMonoidAdapter, TW>());
+			return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.FilterMInternal(p, @as, new WriterMonadAdapter<TMonoid, TW>());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, IEnumerable<TA>> FilterM<TMonoid, TMonoidAdapter, TW, TA>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, bool>> p, params TA[] @as) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, IEnumerable<TA>> FilterM<TMonoid, TW, TA>(Func<TA, Writer<TMonoid, TW, bool>> p, params TA[] @as) where TMonoid : IMonoid<TW>
 		{
 			return FilterM(p, @as.AsEnumerable());
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> When<TMonoid, TMonoidAdapter, TW>(bool b, Writer<TMonoid, TMonoidAdapter, TW, Unit> m) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> When<TMonoid, TW>(bool b, Writer<TMonoid, TW, Unit> m) where TMonoid : IMonoid<TW>
 		{
 			return m.When(b);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> When<TMonoid, TMonoidAdapter, TW>(this Writer<TMonoid, TMonoidAdapter, TW, Unit> m, bool b) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> When<TMonoid, TW>(this Writer<TMonoid, TW, Unit> m, bool b) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.When(b, m);
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.When(b, m);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Unless<TMonoid, TMonoidAdapter, TW>(bool b, Writer<TMonoid, TMonoidAdapter, TW, Unit> m) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> Unless<TMonoid, TW>(bool b, Writer<TMonoid, TW, Unit> m) where TMonoid : IMonoid<TW>
 		{
 			return m.Unless(b);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Unless<TMonoid, TMonoidAdapter, TW>(this Writer<TMonoid, TMonoidAdapter, TW, Unit> m, bool b) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> Unless<TMonoid, TW>(this Writer<TMonoid, TW, Unit> m, bool b) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.Unless(b, m);
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.Unless(b, m);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TB> Forever<TMonoid, TMonoidAdapter, TW, TA, TB>(this Writer<TMonoid, TMonoidAdapter, TW, TA> m) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TB> Forever<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> m) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TB>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.Forever<TA, TB>(m);
+			return (Writer<TMonoid, TW, TB>)MonadCombinators<TMonoid, TW>.Forever<TA, TB>(m);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, Unit> Void<TMonoid, TMonoidAdapter, TW, TA>(this Writer<TMonoid, TMonoidAdapter, TW, TA> m) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, Unit> Void<TMonoid, TW, TA>(this Writer<TMonoid, TW, TA> m) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, Unit>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.Void(m);
+			return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.Void(m);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TB> Ap<TMonoid, TMonoidAdapter, TW, TA, TB>(Writer<TMonoid, TMonoidAdapter, TW, Func<TA, TB>> mf, Writer<TMonoid, TMonoidAdapter, TW, TA> ma) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TB> Ap<TMonoid, TW, TA, TB>(Writer<TMonoid, TW, Func<TA, TB>> mf, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
 		{
 			return ma.Ap(mf);
 		}
 
-		public static Writer<TMonoid, TMonoidAdapter, TW, TB> Ap<TMonoid, TMonoidAdapter, TW, TA, TB>(this Writer<TMonoid, TMonoidAdapter, TW, TA> ma, Writer<TMonoid, TMonoidAdapter, TW, Func<TA, TB>> mf) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Writer<TMonoid, TW, TB> Ap<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, Func<TA, TB>> mf) where TMonoid : IMonoid<TW>
 		{
-			return (Writer<TMonoid, TMonoidAdapter, TW, TB>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.Ap(mf, ma);
+			return (Writer<TMonoid, TW, TB>)MonadCombinators<TMonoid, TW>.Ap(mf, ma);
 		}
 
-		public static Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TC>> Compose<TMonoid, TMonoidAdapter, TW, TA, TB, TC>(Func<TA, Writer<TMonoid, TMonoidAdapter, TW, TB>> f, Func<TB, Writer<TMonoid, TMonoidAdapter, TW, TC>> g) where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()
+		public static Func<TA, Writer<TMonoid, TW, TC>> Compose<TMonoid, TW, TA, TB, TC>(Func<TA, Writer<TMonoid, TW, TB>> f, Func<TB, Writer<TMonoid, TW, TC>> g) where TMonoid : IMonoid<TW>
 		{
-			return a => (Writer<TMonoid, TMonoidAdapter, TW, TC>)MonadCombinators<TMonoid, TMonoidAdapter, TW>.Compose(f, g)(a);
+			return a => (Writer<TMonoid, TW, TC>)MonadCombinators<TMonoid, TW>.Compose(f, g)(a);
 		}
 	}
 }

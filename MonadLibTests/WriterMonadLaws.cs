@@ -4,10 +4,10 @@ using NUnit.Framework;
 
 namespace MonadLibTests
 {
-    using MyWriter = Writer<ListMonoid<string>, ListMonoidAdapter<String>, string>;
-    using MyWriterInt = Writer<ListMonoid<string>, ListMonoidAdapter<String>, string, int>;
-    using MyWriterDouble = Writer<ListMonoid<string>, ListMonoidAdapter<String>, string, double>;
-    using MyWriterString = Writer<ListMonoid<string>, ListMonoidAdapter<String>, string, string>;
+    using MyWriter = Writer<ListMonoid<string>, string>;
+    using MyWriterInt = Writer<ListMonoid<string>, string, int>;
+    using MyWriterDouble = Writer<ListMonoid<string>, string, double>;
+    using MyWriterString = Writer<ListMonoid<string>, string, string>;
 
     [TestFixture]
     internal class WriterMonadLaws

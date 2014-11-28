@@ -51,6 +51,7 @@
     </Compile>
     <Compile Include="IMonadT3.cs" />
     <Compile Include="IMonadT2.cs" />
+    <Compile Include="MonoidAdapterRegistry.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="GeneratedMonadCombinatorWrappers.cs">
       <AutoGen>True</AutoGen>

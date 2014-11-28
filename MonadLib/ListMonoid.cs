@@ -58,7 +58,7 @@ namespace MonadLib
         }
     }
 
-    public class ListMonoidAdapter<TA> : MonoidAdapter<TA>
+    internal class ListMonoidAdapter<TA> : MonoidAdapter<TA>
     {
         public override IMonoid<TA> MEmpty
         {

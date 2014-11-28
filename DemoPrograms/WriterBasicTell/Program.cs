@@ -3,9 +3,9 @@ using MonadLib;
 
 namespace WriterBasicTell
 {
-    using MyWriter = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string>;
-    using MyWriterInt = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string, int>;
-    using MyWriterUnit = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string, Unit>;
+    using MyWriter = Writer<ListMonoid<string>, string>;
+    using MyWriterInt = Writer<ListMonoid<string>, string, int>;
+    using MyWriterUnit = Writer<ListMonoid<string>, string, Unit>;
 
     internal class Program
     {

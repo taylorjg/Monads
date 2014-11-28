@@ -11,7 +11,7 @@ var typesToGenerate = new[]
 	Tuple.Create("Either", "TLeft", "", false),
 	Tuple.Create("State", "TS", "", false),
 	Tuple.Create("Reader", "TR", "", false),
-	Tuple.Create("Writer", "TMonoid, TMonoidAdapter, TW", "where TMonoid : IMonoid<TW> where TMonoidAdapter : MonoidAdapter<TW>, new()", false)
+	Tuple.Create("Writer", "TMonoid, TW", "where TMonoid : IMonoid<TW>", false)
 };
 #>
 using System;
