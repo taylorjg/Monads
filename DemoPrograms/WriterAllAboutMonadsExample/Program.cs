@@ -28,7 +28,7 @@ namespace WriterAllAboutMonadsExample
 
         private static WriterEntriesUnit LogMsg(string s)
         {
-            return WriterEntries.Tell(new ListMonoid<Entry>(new[] {new Entry(1, s)}));
+            return WriterEntries.Tell(new ListMonoid<Entry>(new Entry(1, s)));
         }
 
         private static WriterEntriesEntries MergeEntries(ListMonoid<Entry> e1, ListMonoid<Entry> e2)
@@ -45,7 +45,7 @@ namespace WriterAllAboutMonadsExample
 
                 if (msg1 == msg2)
                 {
-                    return WriterEntries.Return(new ListMonoid<Entry>(new[] {new Entry(n1 + n2, msg1)}));
+                    return WriterEntries.Return(new ListMonoid<Entry>(new Entry(n1 + n2, msg1)));
                 }
 
                 return WriterEntries.Tell(e1).BindIgnoringLeft(WriterEntries.Return(e2));

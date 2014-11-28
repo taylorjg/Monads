@@ -30,7 +30,7 @@ namespace WriterBasicTell
 
         private static MyWriterUnit TellHelper(string s)
         {
-            var listMonoid = new ListMonoid<string>(new[] { s });
+            var listMonoid = new ListMonoid<string>(s);
             return MyWriter.Tell(listMonoid);
         }
 
