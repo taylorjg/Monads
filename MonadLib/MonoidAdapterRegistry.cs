@@ -5,6 +5,7 @@ namespace MonadLib
 {
     internal class MonoidAdapterRegistry
     {
+        private static readonly object LockObject = new object();
         private static readonly IDictionary<string, Type> Dictionary = new Dictionary<string, Type>();
 
         static MonoidAdapterRegistry()
@@ -20,24 +21,33 @@ namespace MonadLib
             }
 
             var key = GetTypeFullNameWithoutGenericBits(monoidOpenOrClosedType);
-            Dictionary[key] = monoidAdapterOpenType;
+
+            lock (LockObject)
+            {
+                Dictionary[key] = monoidAdapterOpenType;
+            }
         }
 
         public static MonoidAdapter<TW> Get<TW>(Type monoidOpenOrClosedType)
         {
             var key = GetTypeFullNameWithoutGenericBits(monoidOpenOrClosedType);
-            var value = Dictionary.GetValue(key);
 
-            return value.Match(
-                monoidAdapterOpenType =>
-                    {
-                        var monoidAdapterClosedType = monoidAdapterOpenType.MakeGenericType(typeof (TW));
-                        return (MonoidAdapter<TW>) Activator.CreateInstance(monoidAdapterClosedType);
-                    },
-                () =>
-                    {
-                        throw new InvalidOperationException(string.Format("Could not find a registered monoid adapter for {0}", key));
-                    });
+            lock (LockObject)
+            {
+                var value = Dictionary.GetValue(key);
+
+                return value.Match(
+                    monoidAdapterOpenType =>
+                        {
+                            var monoidAdapterClosedType = monoidAdapterOpenType.MakeGenericType(typeof (TW));
+                            return (MonoidAdapter<TW>) Activator.CreateInstance(monoidAdapterClosedType);
+                        },
+                    () =>
+                        {
+                            throw new InvalidOperationException(
+                                string.Format("Could not find a registered monoid adapter for {0}", key));
+                        });
+            }
         }
 
         private static string GetTypeFullNameWithoutGenericBits(Type type)
