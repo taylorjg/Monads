@@ -5,8 +5,33 @@ namespace MonadLib
 {
     internal class MonoidAdapterRegistry
     {
+        private class MonoidAdapterCache
+        {
+            private readonly Type _monoidAdapterOpenType;
+            private readonly IDictionary<Type, object> _dictionary = new Dictionary<Type, object>();
+
+            public MonoidAdapterCache(Type monoidAdapterOpenType)
+            {
+                _monoidAdapterOpenType = monoidAdapterOpenType;
+            }
+
+            public MonoidAdapter<TW> Get<TW>()
+            {
+                var type = typeof(TW);
+                return _dictionary.GetValue(type).Match(
+                    obj => (MonoidAdapter<TW>)obj,
+                    () =>
+                    {
+                        var monoidAdapterClosedType = _monoidAdapterOpenType.MakeGenericType(type);
+                        var monoidAdapter = (MonoidAdapter<TW>)Activator.CreateInstance(monoidAdapterClosedType);
+                        _dictionary[type] = monoidAdapter;
+                        return monoidAdapter;
+                    });
+            }
+        }
+
         private static readonly object LockObject = new object();
-        private static readonly IDictionary<string, Type> Dictionary = new Dictionary<string, Type>();
+        private static readonly IDictionary<string, MonoidAdapterCache> Dictionary = new Dictionary<string, MonoidAdapterCache>();
 
         static MonoidAdapterRegistry()
         {
@@ -24,7 +49,7 @@ namespace MonadLib
 
             lock (LockObject)
             {
-                Dictionary[key] = monoidAdapterOpenType;
+                Dictionary[key] = new MonoidAdapterCache(monoidAdapterOpenType);
             }
         }
 
@@ -37,15 +62,10 @@ namespace MonadLib
                 var value = Dictionary.GetValue(key);
 
                 return value.Match(
-                    monoidAdapterOpenType =>
-                        {
-                            var monoidAdapterClosedType = monoidAdapterOpenType.MakeGenericType(typeof (TW));
-                            return (MonoidAdapter<TW>) Activator.CreateInstance(monoidAdapterClosedType);
-                        },
+                    monoidAdapterCache => monoidAdapterCache.Get<TW>(),
                     () =>
                         {
-                            throw new InvalidOperationException(
-                                string.Format("Could not find a registered monoid adapter for {0}", key));
+                            throw new InvalidOperationException(string.Format("Could not find a registered monoid adapter for {0}", key));
                         });
             }
         }
