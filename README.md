@@ -17,11 +17,11 @@ I created my own simple <code>Unit</code> type to represent Haskell's <code>()</
 
 I have also implemented some of the common monad functions:
 
-* Sequence and Sequence_
-* ReplicateM and ReplicateM_
-* FoldM and FoldM_
-* MapM and MapM_
-* ZipWithM and ZipWithM_
+* Sequence and Sequence&#95;
+* ReplicateM and ReplicateM&#95;
+* FoldM and FoldM&#95;
+* MapM and MapM&#95;
+* ZipWithM and ZipWithM&#95;
 * ForM
 * FilterM
 * LiftM through LiftM5
@@ -30,7 +30,11 @@ I have also implemented some of the common monad functions:
 * Unless
 * Forever
 * Void
+* Ap
 * Compose (Left-to-right Kleisli composition of monads)
+* Guard
+* MFilter
+* MSum
 
 ## NuGet
 
@@ -348,7 +352,7 @@ It is on my TODO list to add XML documentation comments to the source code and t
  * ~~Either<TE, TA>~~
 * ~~Add an example to MonadApp showing the State monad in use~~
 * ~~Add an example to MonadApp showing the Reader monad in use~~
-* Implement more monad combinators e.g.:
+* Implement more Monad combinators e.g.:
  * ~~sequence~~
  * ~~sequence&#95;~~
  * ~~replicateM~~
@@ -365,14 +369,17 @@ It is on my TODO list to add XML documentation comments to the source code and t
  * ~~forM&#95;~~
  * ~~liftM4~~
  * ~~liftM5~~
- * guard
  * ~~when~~
  * ~~unless~~
  * ~~join~~
  * ~~forever~~
  * ~~void~~
  * ~~ap~~
-* Implement more monads e.g.:
+* ~~Implement MonadPlus combinators e.g.:~~
+ * ~~guard~~
+ * ~~mfilter~~
+ * ~~msum~~
+* ~~Implement more monads e.g.:~~
  * ~~State~~
  * ~~Reader~~
  * ~~Writer~~
