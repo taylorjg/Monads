@@ -12,6 +12,6 @@
     <description>$description$</description>
     <releaseNotes>First version</releaseNotes>
     <copyright>Copyright 2014</copyright>
-    <tags>C# monad monads functional Haskell Maybe Either State Reader Writer combinators Sequence Sequence_ ReplicateM ReplicateM_ MapM MapM_ FoldM FoldM_ ZipWithM ZipWithM_ ForM FilterM LiftM LiftM2 LiftM3 LiftM4 LiftM5 Join When Unless Forever Void Ap Compose</tags>
+    <tags>C# monad monads functional Haskell scalaz Maybe Either State Reader Writer combinators Sequence Sequence_ ReplicateM ReplicateM_ MapM MapM_ FoldM FoldM_ ZipWithM ZipWithM_ ForM ForM_ FilterM LiftM LiftM2 LiftM3 LiftM4 LiftM5 Join When Unless Forever Void Ap Compose Guard monadplus MFilter MSum monoid</tags>
   </metadata>
 </package>

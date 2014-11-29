@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MonadLib")]
-[assembly: AssemblyDescription("Monads (Maybe, Either, State, Reader, Writer) and monad combinators (Sequence, Sequence_, ReplicateM, ReplicateM_, MapM, MapM_, FoldM, FoldM_, ZipWithM, ZipWithM_, ForM, FilterM, LiftM, LiftM2, LiftM3, LiftM4, LiftM5, Join, When, Unless, Forever, Void, Ap, Compose) in C#")]
+[assembly: AssemblyDescription("Monads (Maybe, Either, State, Reader, Writer) and monad combinators (Sequence, Sequence_, ReplicateM, ReplicateM_, MapM, MapM_, FoldM, FoldM_, ZipWithM, ZipWithM_, ForM, FilterM, LiftM, LiftM2, LiftM3, LiftM4, LiftM5, Join, When, Unless, Forever, Void, Ap, Compose, Guard, MFilter, MSum) in C#")]
 [assembly: AssemblyProduct("MonadLib")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -26,5 +26,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.1.0")]
-[assembly: AssemblyFileVersion("1.0.1.0")]
+[assembly: AssemblyVersion("1.1.1.0")]
+[assembly: AssemblyFileVersion("1.1.1.0")]
