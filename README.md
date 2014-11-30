@@ -282,9 +282,9 @@ The following Writer methods exist but are not yet covered by the examples below
 * Censor ([censor](http://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Writer-Class.html#v:censor))
 
 ```C#
-using MyWriter = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string>;
-using MyWriterInt = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string, int>;
-using MyWriterUnit = Writer<ListMonoid<string>, ListMonoidAdapter<string>, string, Unit>;
+using MyWriter = Writer<ListMonoid<string>, string>;
+using MyWriterInt = Writer<ListMonoid<string>, string, int>;
+using MyWriterUnit = Writer<ListMonoid<string>, string, Unit>;
 
 internal class Program
 {
@@ -317,7 +317,7 @@ internal class Program
 
     private static MyWriterUnit TellHelper(string s)
     {
-        var listMonoid = new ListMonoid<string>(new[] { s });
+        var listMonoid = new ListMonoid<string>(s);
         return MyWriter.Tell(listMonoid);
     }
 }
