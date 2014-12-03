@@ -1,12 +1,14 @@
-﻿namespace WriterAllAboutMonadsExample
+﻿using System.Collections.Generic;
+
+namespace WriterAllAboutMonadsExample
 {
     public static class TestData
     {
-        public static Packet[] Packets
+        public static List<Packet> Packets
         {
             get
             {
-                return new[]
+                return new List<Packet>
                     {
                         new Packet(new Host(23), new Host(7), new Data("web request")),
                         new Packet(new Host(7), new Host(7), new Data("exploit")),
@@ -27,11 +29,11 @@
             }
         }
 
-        public static Rule[] Rules
+        public static List<Rule> Rules
         {
             get
             {
-                return new[]
+                return new List<Rule>
                     {
                         new Rule(Disposition.Reject, new Packet(new Host(7), new AnyHost(), new AnyData()), true),
                         new Rule(Disposition.Reject, new Packet(new AnyHost(), new AnyHost(), new Data("exploit")), true),
