@@ -6,6 +6,23 @@ namespace MonadLib
 {
 	public static partial class Maybe
 	{
+        public static Maybe<TB> Select<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f) 
+        {
+            return ma.LiftM(f);
+        }
+
+        public static Maybe<TB> SelectMany<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f) 
+        {
+            return ma.FlatMap(f);
+        }
+
+        public static Maybe<TC> SelectMany<TA, TB, TC>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f1, Func<TA, TB, TC> f2) 
+        {
+            return ma.FlatMap(
+                a => f1(a).FlatMap(
+                    b => Maybe.Return(f2(a, b))));
+        }
+
 		public static Maybe<TB> Bind<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f) 
 		{
 			var monadAdapter = ma.GetMonadAdapter();
@@ -311,6 +328,23 @@ namespace MonadLib
 
 	public static partial class Either
 	{
+        public static Either<TLeft, TB> Select<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f) 
+        {
+            return ma.LiftM(f);
+        }
+
+        public static Either<TLeft, TB> SelectMany<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f) 
+        {
+            return ma.FlatMap(f);
+        }
+
+        public static Either<TLeft, TC> SelectMany<TLeft, TA, TB, TC>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f1, Func<TA, TB, TC> f2) 
+        {
+            return ma.FlatMap(
+                a => f1(a).FlatMap(
+                    b => Either<TLeft>.Return(f2(a, b))));
+        }
+
 		public static Either<TLeft, TB> Bind<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f) 
 		{
 			var monadAdapter = ma.GetMonadAdapter();
@@ -580,6 +614,23 @@ namespace MonadLib
 
 	public static partial class State
 	{
+        public static State<TS, TB> Select<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f) 
+        {
+            return ma.LiftM(f);
+        }
+
+        public static State<TS, TB> SelectMany<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f) 
+        {
+            return ma.FlatMap(f);
+        }
+
+        public static State<TS, TC> SelectMany<TS, TA, TB, TC>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f1, Func<TA, TB, TC> f2) 
+        {
+            return ma.FlatMap(
+                a => f1(a).FlatMap(
+                    b => State<TS>.Return(f2(a, b))));
+        }
+
 		public static State<TS, TB> Bind<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f) 
 		{
 			var monadAdapter = ma.GetMonadAdapter();
@@ -849,6 +900,23 @@ namespace MonadLib
 
 	public static partial class Reader
 	{
+        public static Reader<TR, TB> Select<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f) 
+        {
+            return ma.LiftM(f);
+        }
+
+        public static Reader<TR, TB> SelectMany<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f) 
+        {
+            return ma.FlatMap(f);
+        }
+
+        public static Reader<TR, TC> SelectMany<TR, TA, TB, TC>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f1, Func<TA, TB, TC> f2) 
+        {
+            return ma.FlatMap(
+                a => f1(a).FlatMap(
+                    b => Reader<TR>.Return(f2(a, b))));
+        }
+
 		public static Reader<TR, TB> Bind<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f) 
 		{
 			var monadAdapter = ma.GetMonadAdapter();
@@ -1118,6 +1186,23 @@ namespace MonadLib
 
 	public static partial class Writer
 	{
+        public static Writer<TMonoid, TW, TB> Select<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>
+        {
+            return ma.LiftM(f);
+        }
+
+        public static Writer<TMonoid, TW, TB> SelectMany<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
+        {
+            return ma.FlatMap(f);
+        }
+
+        public static Writer<TMonoid, TW, TC> SelectMany<TMonoid, TW, TA, TB, TC>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f1, Func<TA, TB, TC> f2) where TMonoid : IMonoid<TW>
+        {
+            return ma.FlatMap(
+                a => f1(a).FlatMap(
+                    b => Writer<TMonoid, TW>.Return(f2(a, b))));
+        }
+
 		public static Writer<TMonoid, TW, TB> Bind<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
 		{
 			var monadAdapter = ma.GetMonadAdapter();

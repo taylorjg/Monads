@@ -32,6 +32,23 @@ namespace MonadLib
 <# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
 	public static partial class <#= M #>
 	{
+        public static <#= M #><<#= T1TypeList #>TB> Select<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, TB> f) <#= typeConstraints #>
+        {
+            return ma.LiftM(f);
+        }
+
+        public static <#= M #><<#= T1TypeList #>TB> SelectMany<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, <#= M #><<#= T1TypeList #>TB>> f) <#= typeConstraints #>
+        {
+            return ma.FlatMap(f);
+        }
+
+        public static <#= M #><<#= T1TypeList #>TC> SelectMany<<#= T1TypeList #>TA, TB, TC>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, <#= M #><<#= T1TypeList #>TB>> f1, Func<TA, TB, TC> f2) <#= typeConstraints #>
+        {
+            return ma.FlatMap(
+                a => f1(a).FlatMap(
+                    b => <#= M #><#= T1MonadAdapter#>.Return(f2(a, b))));
+        }
+
 		public static <#= M #><<#= T1TypeList #>TB> Bind<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, <#= M #><<#= T1TypeList #>TB>> f) <#= typeConstraints #>
 		{
 			var monadAdapter = ma.GetMonadAdapter();
