@@ -8,7 +8,7 @@ namespace MonadLibTests
     using WriterString = Writer<ListMonoid<string>, string>;
 
     [TestFixture]
-    internal class LinqQuerySyntaxExperiment
+    internal class LinqQuerySyntaxTests
     {
         [Test]
         public void MaybeSelectLinqQuerySyntax()
@@ -73,36 +73,6 @@ namespace MonadLibTests
                 x => m2, (x, y) => new {x, y}).SelectMany(
                     t => m3, (t, z) => t.x * t.y * z);
             Assert.That(mr, Is.EqualTo(Maybe.Just(42 * 2 * 3)));
-        }
-
-        [Test]
-        public void MaybeSelectManyThriceLinqQuerySyntax()
-        {
-            var m1 = new[] { 10 };
-            var m2 = new[] { 11 };
-            var m3 = new[] { 12 };
-            var m4 = new[] { 13 };
-            var mr =
-                from a in m1
-                from b in m2
-                from c in m3
-                from d in m4
-                select a * b * c * d;
-            Assert.That(mr.First(), Is.EqualTo(10 * 11 * 12 * 13));
-        }
-
-        [Test]
-        public void MaybeSelectManyThriceLinqMethodSyntax()
-        {
-            var m1 = new[] { 10 };
-            var m2 = new[] { 11 };
-            var m3 = new[] { 12 };
-            var m4 = new[] { 13 };
-            var mr = m1.SelectMany(
-                a => m2, (a, b) => new {a, b}).SelectMany(
-                    t => m3, (t, c) => new {t, c}).SelectMany(
-                        t => m4, (t, d) => t.t.a * t.t.b * t.c * d);
-            Assert.That(mr.First(), Is.EqualTo(10 * 11 * 12 * 13));
         }
 
         [Test]
