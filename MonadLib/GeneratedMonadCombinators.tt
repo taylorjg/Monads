@@ -25,7 +25,7 @@ namespace MonadLib
 <# var typeList = string.IsNullOrEmpty(typeToGenerate.Item1) ? string.Empty : "<" + typeToGenerate.Item1 + ">"; #>
 <# var typeListPrefix = string.IsNullOrEmpty(typeToGenerate.Item1) ? string.Empty : typeToGenerate.Item1 + ", "; #>
 <# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
-    internal static class MonadCombinators<#= typeList #>
+    public static class MonadCombinators<#= typeList #>
     {
         public static IMonad<<#= typeListPrefix #>TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<<#= typeListPrefix #>TA> ma)
         {

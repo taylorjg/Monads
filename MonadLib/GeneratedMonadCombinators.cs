@@ -5,7 +5,7 @@ using Flinq;
 
 namespace MonadLib
 {
-    internal static class MonadCombinators
+    public static class MonadCombinators
     {
         public static IMonad<TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
         {
@@ -193,7 +193,7 @@ namespace MonadLib
         }
     }
 
-    internal static class MonadCombinators<T1>
+    public static class MonadCombinators<T1>
     {
         public static IMonad<T1, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
         {
@@ -381,7 +381,7 @@ namespace MonadLib
         }
     }
 
-    internal static class MonadCombinators<T1, T2>
+    public static class MonadCombinators<T1, T2>
     {
         public static IMonad<T1, T2, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, TA> ma)
         {
@@ -569,7 +569,7 @@ namespace MonadLib
         }
     }
 
-    internal static class MonadCombinators<T1, T2, T3>
+    public static class MonadCombinators<T1, T2, T3>
     {
         public static IMonad<T1, T2, T3, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, T3, TA> ma)
         {
