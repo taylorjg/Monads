@@ -8,7 +8,7 @@ namespace MonadLib
     {
         public static Maybe<TB> Select<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f) 
         {
-            return ma.LiftM(f);
+            return ma.Map(f);
         }
 
         public static Maybe<TB> SelectMany<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f) 
@@ -330,7 +330,7 @@ namespace MonadLib
     {
         public static Either<TLeft, TB> Select<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f) 
         {
-            return ma.LiftM(f);
+            return ma.Map(f);
         }
 
         public static Either<TLeft, TB> SelectMany<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f) 
@@ -616,7 +616,7 @@ namespace MonadLib
     {
         public static State<TS, TB> Select<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f) 
         {
-            return ma.LiftM(f);
+            return ma.Map(f);
         }
 
         public static State<TS, TB> SelectMany<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f) 
@@ -902,7 +902,7 @@ namespace MonadLib
     {
         public static Reader<TR, TB> Select<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f) 
         {
-            return ma.LiftM(f);
+            return ma.Map(f);
         }
 
         public static Reader<TR, TB> SelectMany<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f) 
@@ -1188,7 +1188,7 @@ namespace MonadLib
     {
         public static Writer<TMonoid, TW, TB> Select<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>
         {
-            return ma.LiftM(f);
+            return ma.Map(f);
         }
 
         public static Writer<TMonoid, TW, TB> SelectMany<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>

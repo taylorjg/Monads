@@ -34,7 +34,7 @@ namespace MonadLib
     {
         public static <#= M #><<#= T1TypeList #>TB> Select<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, TB> f) <#= typeConstraints #>
         {
-            return ma.LiftM(f);
+            return ma.Map(f);
         }
 
         public static <#= M #><<#= T1TypeList #>TB> SelectMany<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, <#= M #><<#= T1TypeList #>TB>> f) <#= typeConstraints #>
