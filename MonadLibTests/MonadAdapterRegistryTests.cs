@@ -1,8 +1,11 @@
-﻿using MonadLib;
+﻿using System;
+using MonadLib;
 using NUnit.Framework;
 
 namespace MonadLibTests
 {
+    using TwTuple = Tuple<string, int>;
+
     [TestFixture]
     internal class MonadAdapterRegistryTests
     {
@@ -15,11 +18,18 @@ namespace MonadLibTests
         }
 
         [Test]
-        [Ignore("Need to figure out how to register the WriterMonadAdapter")]
         public void Test2()
         {
-            var writerMonadAdapter = MonadAdapterRegistry.Get<ListMonoid<string>, string>(typeof(Writer<ListMonoid<string>, string>));
+            var writerMonadAdapter = MonadAdapterRegistry.GetWithSubtypes<ListMonoid<string>, string>(typeof(Writer<ListMonoid<string>, string, int>));
             var writer = (Writer<ListMonoid<string>, string, int>)writerMonadAdapter.Return(42);
+            Assert.That(writer.RunWriter.Item1, Is.EqualTo(42));
+        }
+
+        [Test]
+        public void Test3()
+        {
+            var writerMonadAdapter = MonadAdapterRegistry.GetWithSubtypes<ListMonoid<TwTuple>, TwTuple>(typeof(Writer<ListMonoid<TwTuple>, TwTuple, int>));
+            var writer = (Writer<ListMonoid<TwTuple>, TwTuple, int>)writerMonadAdapter.Return(42);
             Assert.That(writer.RunWriter.Item1, Is.EqualTo(42));
         }
     }
