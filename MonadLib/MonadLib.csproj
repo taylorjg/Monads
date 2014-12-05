@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonadAgnosticFunctions.cs" />
+    <Compile Include="MonadPlusAdapterRegistry.cs" />
     <Compile Include="GeneratedMonadCombinators.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -51,6 +53,7 @@
     </Compile>
     <Compile Include="IMonadT3.cs" />
     <Compile Include="IMonadT2.cs" />
+    <Compile Include="MonadAdapterRegistry.cs" />
     <Compile Include="MonoidAdapterRegistry.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="GeneratedMonadCombinatorWrappers.cs">

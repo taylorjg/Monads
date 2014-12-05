@@ -36,5 +36,10 @@ namespace MonadLib
                 return Maybe.Just(Tuple.Create(head, tail));
             }
         }
+
+        public static Type GetTypeOrGenericTypeDefinition(Type type)
+        {
+            return type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+        }
     }
 }

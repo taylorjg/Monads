@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MonadAgnosticFunctionsTests.cs" />
+    <Compile Include="MonoidAdapterRegistryTests.cs" />
+    <Compile Include="MonadPlusAdapterRegistryTests.cs" />
     <Compile Include="EitherMonadLaws.cs" />
     <Compile Include="EitherTests.cs" />
     <Compile Include="LinqQuerySyntaxTests.cs" />
@@ -55,6 +58,7 @@
     <Compile Include="MaybeMonadPlusLaws.cs" />
     <Compile Include="MaybeMonadPlusTests.cs" />
     <Compile Include="MaybeTests.cs" />
+    <Compile Include="MonadAdapterRegistryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReaderMonadLaws.cs" />
     <Compile Include="ReaderTests.cs" />

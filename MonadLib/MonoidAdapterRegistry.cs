@@ -3,59 +3,54 @@ using System.Collections.Generic;
 
 namespace MonadLib
 {
-    internal class MonoidAdapterRegistry
+    public static class MonoidAdapterRegistry
     {
         private class MonoidAdapterCache
         {
-            private readonly Type _monoidAdapterOpenType;
+            private readonly Type _monoidAdapterType;
             private readonly IDictionary<Type, object> _dictionary = new Dictionary<Type, object>();
 
-            public MonoidAdapterCache(Type monoidAdapterOpenType)
+            public MonoidAdapterCache(Type monoidAdapterType)
             {
-                _monoidAdapterOpenType = monoidAdapterOpenType;
+                _monoidAdapterType = MonadHelpers.GetTypeOrGenericTypeDefinition(monoidAdapterType);
             }
 
             public MonoidAdapter<TW> Get<TW>()
             {
                 var type = typeof(TW);
                 return _dictionary.GetValue(type).Match(
-                    obj => (MonoidAdapter<TW>)obj,
+                    obj => (MonoidAdapter<TW>) obj,
                     () =>
-                    {
-                        var monoidAdapterClosedType = _monoidAdapterOpenType.MakeGenericType(type);
-                        var monoidAdapter = (MonoidAdapter<TW>)Activator.CreateInstance(monoidAdapterClosedType);
-                        _dictionary[type] = monoidAdapter;
-                        return monoidAdapter;
-                    });
+                        {
+                            var monoidAdapterClosedType = _monoidAdapterType.MakeGenericType(type);
+                            var monoidAdapter = (MonoidAdapter<TW>) Activator.CreateInstance(monoidAdapterClosedType);
+                            _dictionary[type] = monoidAdapter;
+                            return monoidAdapter;
+                        });
             }
         }
 
         private static readonly object LockObject = new object();
-        private static readonly IDictionary<string, MonoidAdapterCache> Dictionary = new Dictionary<string, MonoidAdapterCache>();
+        private static readonly IDictionary<Type, MonoidAdapterCache> Dictionary = new Dictionary<Type, MonoidAdapterCache>();
 
         static MonoidAdapterRegistry()
         {
             Register(typeof(ListMonoid<>), typeof(ListMonoidAdapter<>));
         }
 
-        public static void Register(Type monoidOpenOrClosedType, Type monoidAdapterOpenType)
+        public static void Register(Type monoidType, Type monoidAdapterType)
         {
-            if (!monoidAdapterOpenType.IsGenericTypeDefinition)
-            {
-                throw new ArgumentException("Monoid adapter must be a generic open type", "monoidAdapterOpenType");
-            }
-
-            var key = GetTypeFullNameWithoutGenericBits(monoidOpenOrClosedType);
+            var key = MonadHelpers.GetTypeOrGenericTypeDefinition(monoidType);
 
             lock (LockObject)
             {
-                Dictionary[key] = new MonoidAdapterCache(monoidAdapterOpenType);
+                Dictionary[key] = new MonoidAdapterCache(monoidAdapterType);
             }
         }
 
-        public static MonoidAdapter<TW> Get<TW>(Type monoidOpenOrClosedType)
+        public static MonoidAdapter<TW> Get<TW>(Type monoidType)
         {
-            var key = GetTypeFullNameWithoutGenericBits(monoidOpenOrClosedType);
+            var key = MonadHelpers.GetTypeOrGenericTypeDefinition(monoidType);
 
             lock (LockObject)
             {
@@ -68,13 +63,6 @@ namespace MonadLib
                             throw new InvalidOperationException(string.Format("Could not find a registered monoid adapter for {0}", key));
                         });
             }
-        }
-
-        private static string GetTypeFullNameWithoutGenericBits(Type type)
-        {
-            var fullName = type.FullName;
-            var pos = fullName.IndexOf('[');
-            return pos >= 0 ? fullName.Substring(0, pos) : fullName;
         }
     }
 }
