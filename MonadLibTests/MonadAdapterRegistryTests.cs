@@ -20,7 +20,7 @@ namespace MonadLibTests
         [Test]
         public void Test2()
         {
-            var writerMonadAdapter = MonadAdapterRegistry.GetWithSubtypes<ListMonoid<string>, string>(typeof(Writer<ListMonoid<string>, string, int>));
+            var writerMonadAdapter = MonadAdapterRegistry.Get<ListMonoid<string>, string>(typeof(Writer<ListMonoid<string>, string, int>));
             var writer = (Writer<ListMonoid<string>, string, int>)writerMonadAdapter.Return(42);
             Assert.That(writer.RunWriter.Item1, Is.EqualTo(42));
         }
@@ -28,7 +28,7 @@ namespace MonadLibTests
         [Test]
         public void Test3()
         {
-            var writerMonadAdapter = MonadAdapterRegistry.GetWithSubtypes<ListMonoid<TwTuple>, TwTuple>(typeof(Writer<ListMonoid<TwTuple>, TwTuple, int>));
+            var writerMonadAdapter = MonadAdapterRegistry.Get<ListMonoid<TwTuple>, TwTuple>(typeof(Writer<ListMonoid<TwTuple>, TwTuple, int>));
             var writer = (Writer<ListMonoid<TwTuple>, TwTuple, int>)writerMonadAdapter.Return(42);
             Assert.That(writer.RunWriter.Item1, Is.EqualTo(42));
         }
