@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -185,43 +186,6 @@ namespace MonadLib
             return (Maybe<Unit>)MonadCombinators.ReplicateM_(n, ma);
         }
 
-//        public static Maybe<TA> MZero<TA>()
-//        {
-//            var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
-//            return (Maybe<TA>)monadPlusAdapter.MZero;
-//        }
-//
-//        public static Maybe<TA> MPlus<TA>(this Maybe<TA> xs, Maybe<TA> ys)
-//        {
-//            var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
-//            return (Maybe<TA>)monadPlusAdapter.MPlus(xs, ys);
-//        }
-//
-//        public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma) 
-//        {
-//            return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
-//        }
-//
-//        public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p) 
-//        {
-//            return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
-//        }
-//
-//        public static Maybe<TA> MSum<TA>(IEnumerable<Maybe<TA>> ms)
-//        {
-//            return (Maybe<TA>)MonadPlusCombinators.MSumInternal(ms, new MaybeMonadPlusAdapter<TA>());
-//        }
-//
-//        public static Maybe<TA> MSum<TA>(params Maybe<TA>[] ms)
-//        {
-//            return MSum(ms.AsEnumerable());
-//        }
-//
-//        public static Maybe<Unit> Guard(bool b)
-//        {
-//            return (Maybe<Unit>)MonadPlusCombinators.GuardInternal(b, new MaybeMonadPlusAdapter<Unit>());
-//        }
-
         public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs) 
         {
             return (Maybe<TA>)MonadCombinators.FoldMInternal(f, a, bs, new MaybeMonadAdapter());
@@ -311,6 +275,43 @@ namespace MonadLib
         public static Func<TA, Maybe<TC>> Compose<TA, TB, TC>(Func<TA, Maybe<TB>> f, Func<TB, Maybe<TC>> g) 
         {
             return a => (Maybe<TC>)MonadCombinators.Compose(f, g)(a);
+        }
+
+        public static Maybe<TA> MZero<TA>()
+        {
+            var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TA>(typeof(Maybe<TA>));
+            return (Maybe<TA>)monadPlusAdapter.MZero;
+        }
+
+        public static Maybe<TA> MPlus<TA>(this Maybe<TA> xs, Maybe<TA> ys)
+        {
+            var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TA>(typeof(Maybe<TA>));
+            return (Maybe<TA>)monadPlusAdapter.MPlus(xs, ys);
+        }
+
+        public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma)
+        {
+			return ma.MFilter(p);
+        }
+
+        public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p)
+        {
+            return MonadPlusCombinators.MFilter<Maybe<TA>, TA>(p, ma);
+        }
+
+        public static Maybe<TA> MSum<TA>(IEnumerable<Maybe<TA>> ms)
+        {
+            return MonadPlusCombinators.MSum<Maybe<TA>, TA>(ms);
+        }
+
+        public static Maybe<TA> MSum<TA>(params Maybe<TA>[] ms)
+        {
+            return MSum(ms.AsEnumerable());
+        }
+
+        public static Maybe<Unit> Guard(bool b)
+        {
+            return MonadPlusCombinators.Guard<Maybe<Unit>>(b);
         }
     }
 
@@ -507,7 +508,6 @@ namespace MonadLib
             return (Either<TLeft, Unit>)MonadCombinators<TLeft>.ReplicateM_(n, ma);
         }
 
-
         public static Either<TLeft, TA> FoldM<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, IEnumerable<TB> bs) 
         {
             return (Either<TLeft, TA>)MonadCombinators<TLeft>.FoldMInternal(f, a, bs, new EitherMonadAdapter<TLeft>());
@@ -598,6 +598,7 @@ namespace MonadLib
         {
             return a => (Either<TLeft, TC>)MonadCombinators<TLeft>.Compose(f, g)(a);
         }
+
     }
 
     public static partial class State
@@ -793,7 +794,6 @@ namespace MonadLib
             return (State<TS, Unit>)MonadCombinators<TS>.ReplicateM_(n, ma);
         }
 
-
         public static State<TS, TA> FoldM<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, IEnumerable<TB> bs) 
         {
             return (State<TS, TA>)MonadCombinators<TS>.FoldMInternal(f, a, bs, new StateMonadAdapter<TS>());
@@ -884,6 +884,7 @@ namespace MonadLib
         {
             return a => (State<TS, TC>)MonadCombinators<TS>.Compose(f, g)(a);
         }
+
     }
 
     public static partial class Reader
@@ -1079,7 +1080,6 @@ namespace MonadLib
             return (Reader<TR, Unit>)MonadCombinators<TR>.ReplicateM_(n, ma);
         }
 
-
         public static Reader<TR, TA> FoldM<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, IEnumerable<TB> bs) 
         {
             return (Reader<TR, TA>)MonadCombinators<TR>.FoldMInternal(f, a, bs, new ReaderMonadAdapter<TR>());
@@ -1170,6 +1170,7 @@ namespace MonadLib
         {
             return a => (Reader<TR, TC>)MonadCombinators<TR>.Compose(f, g)(a);
         }
+
     }
 
     public static partial class Writer
@@ -1365,7 +1366,6 @@ namespace MonadLib
             return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.ReplicateM_(n, ma);
         }
 
-
         public static Writer<TMonoid, TW, TA> FoldM<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
         {
             return (Writer<TMonoid, TW, TA>)MonadCombinators<TMonoid, TW>.FoldMInternal(f, a, bs, new WriterMonadAdapter<TMonoid, TW>());
@@ -1456,5 +1456,6 @@ namespace MonadLib
         {
             return a => (Writer<TMonoid, TW, TC>)MonadCombinators<TMonoid, TW>.Compose(f, g)(a);
         }
+
     }
 }

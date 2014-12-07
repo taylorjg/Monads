@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Flinq;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -89,16 +90,14 @@ namespace MonadLib
         private readonly TA _a;
         private readonly bool _isNothing;
 
-        private MonadPlusAdapter<TA> _monadPlusAdapter;
-
         public MonadAdapter GetMonadAdapter()
         {
-            return GetMonadPlusAdapter();
+            return MonadAdapterRegistry.Get(typeof(Maybe<>));
         }
 
         public MonadPlusAdapter<TA> GetMonadPlusAdapter()
         {
-            return _monadPlusAdapter ?? (_monadPlusAdapter = new MaybeMonadPlusAdapter<TA>());
+            return MonadPlusAdapterRegistry.Get<TA>(typeof(Maybe<>));
         }
     }
 

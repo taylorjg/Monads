@@ -17,6 +17,7 @@ var typesToGenerate = new[]
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -225,45 +226,6 @@ namespace MonadLib
             return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.ReplicateM_(n, ma);
         }
 
-<# if (isMonadPlus) { #>
-//        public static <#= monadName #><TA> MZero<TA>()
-//        {
-//            var monadPlusAdapter = new <#= monadName #>MonadPlusAdapter<TA>();
-//            return (<#= monadName #><TA>)monadPlusAdapter.MZero;
-//        }
-//
-//        public static <#= monadName #><TA> MPlus<TA>(this <#= monadName #><TA> xs, <#= monadName #><TA> ys)
-//        {
-//            var monadPlusAdapter = new <#= monadName #>MonadPlusAdapter<TA>();
-//            return (<#= monadName #><TA>)monadPlusAdapter.MPlus(xs, ys);
-//        }
-//
-//        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MFilter<<#= addnlTypesPrefix #>TA>(Func<TA, bool> p, <#= monadName #><<#= addnlTypesPrefix #>TA> ma) <#= typeConstraints #>
-//        {
-//            return (<#= monadName #><<#= addnlTypesPrefix #>TA>)MonadPlusCombinators.MFilter(p, ma);
-//        }
-//
-//        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MFilter<<#= addnlTypesPrefix #>TA>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, bool> p) <#= typeConstraints #>
-//        {
-//            return (<#= monadName #><<#= addnlTypesPrefix #>TA>)MonadPlusCombinators.MFilter(p, ma);
-//        }
-//
-//        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MSum<<#= addnlTypesPrefix #>TA>(IEnumerable<<#= monadName #><<#= addnlTypesPrefix #>TA>> ms)
-//        {
-//            return (<#= monadName #><<#= addnlTypesPrefix #>TA>)MonadPlusCombinators.MSumInternal(ms, new <#= monadName #>MonadPlusAdapter<TA>());
-//        }
-//
-//        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MSum<<#= addnlTypesPrefix #>TA>(params <#= monadName #><<#= addnlTypesPrefix #>TA>[] ms)
-//        {
-//            return MSum(ms.AsEnumerable());
-//        }
-//
-//        public static <#= monadName #><<#= addnlTypesPrefix #>Unit> Guard(bool b)
-//        {
-//            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadPlusCombinators.GuardInternal(b, new <#= monadName #>MonadPlusAdapter<Unit>());
-//        }
-<# } #>
-
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> FoldM<<#= addnlTypesPrefix #>TA, TB>(Func<TA, TB, <#= monadName #><<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs) <#= typeConstraints #>
         {
             return (<#= monadName #><<#= addnlTypesPrefix #>TA>)MonadCombinators<#= addnlTypesList #>.FoldMInternal(f, a, bs, new <#= monadAdapterType #>());
@@ -354,6 +316,45 @@ namespace MonadLib
         {
             return a => (<#= monadName #><<#= addnlTypesPrefix #>TC>)MonadCombinators<#= addnlTypesList #>.Compose(f, g)(a);
         }
+
+<# if (isMonadPlus) { #>
+        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MZero<TA>()
+        {
+            var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TA>(typeof(<#= monadName #><<#= addnlTypesPrefix #>TA>));
+            return (<#= monadName #><<#= addnlTypesPrefix #>TA>)monadPlusAdapter.MZero;
+        }
+
+        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MPlus<TA>(this <#= monadName #><<#= addnlTypesPrefix #>TA> xs, <#= monadName #><<#= addnlTypesPrefix #>TA> ys)
+        {
+            var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TA>(typeof(<#= monadName #><<#= addnlTypesPrefix #>TA>));
+            return (<#= monadName #><<#= addnlTypesPrefix #>TA>)monadPlusAdapter.MPlus(xs, ys);
+        }
+
+        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MFilter<TA>(Func<TA, bool> p, <#= monadName #><<#= addnlTypesPrefix #>TA> ma)
+        {
+			return ma.MFilter(p);
+        }
+
+        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MFilter<TA>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, bool> p)
+        {
+            return MonadPlusCombinators.MFilter<<#= monadName #><<#= addnlTypesPrefix #>TA>, TA>(p, ma);
+        }
+
+        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MSum<TA>(IEnumerable<<#= monadName #><<#= addnlTypesPrefix #>TA>> ms)
+        {
+            return MonadPlusCombinators.MSum<<#= monadName #><<#= addnlTypesPrefix #>TA>, TA>(ms);
+        }
+
+        public static <#= monadName #><<#= addnlTypesPrefix #>TA> MSum<TA>(params <#= monadName #><<#= addnlTypesPrefix #>TA>[] ms)
+        {
+            return MSum(ms.AsEnumerable());
+        }
+
+        public static <#= monadName #><<#= addnlTypesPrefix #>Unit> Guard(bool b)
+        {
+            return MonadPlusCombinators.Guard<<#= monadName #><<#= addnlTypesPrefix #>Unit>>(b);
+        }
+<# } #>
     }
 <# if (!isLastTypeToGenerate) WriteLine(string.Empty); #>
 <# } #>
