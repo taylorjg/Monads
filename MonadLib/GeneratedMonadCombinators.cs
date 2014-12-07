@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Flinq;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -51,6 +52,17 @@ namespace MonadLib
                         mc, c => monadAdapter.Bind(
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
+        }
+
+        public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<TA>> ms)
+            where TMonad : IMonad<IEnumerable<TA>>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
+            return (TMonad)ms.FoldRight(
+                z, (m, mtick) => monadAdapter.Bind(
+                    m, x => monadAdapter.Bind(
+                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
         public static IMonad<IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<TA>> ms, MonadAdapter monadAdapter)
@@ -239,6 +251,17 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
+        public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, TA>> ms)
+            where TMonad : IMonad<T1, IEnumerable<TA>>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
+            return (TMonad)ms.FoldRight(
+                z, (m, mtick) => monadAdapter.Bind(
+                    m, x => monadAdapter.Bind(
+                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
+        }
+
         public static IMonad<T1, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, TA>> ms, MonadAdapter<T1> monadAdapter)
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
@@ -425,6 +448,17 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
+        public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, T2, TA>> ms)
+            where TMonad : IMonad<T1, T2, IEnumerable<TA>>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
+            return (TMonad)ms.FoldRight(
+                z, (m, mtick) => monadAdapter.Bind(
+                    m, x => monadAdapter.Bind(
+                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
+        }
+
         public static IMonad<T1, T2, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, T2, TA>> ms, MonadAdapter<T1, T2> monadAdapter)
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
@@ -609,6 +643,17 @@ namespace MonadLib
                         mc, c => monadAdapter.Bind(
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
+        }
+
+        public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms)
+            where TMonad : IMonad<T1, T2, T3, IEnumerable<TA>>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
+            return (TMonad)ms.FoldRight(
+                z, (m, mtick) => monadAdapter.Bind(
+                    m, x => monadAdapter.Bind(
+                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
         public static IMonad<T1, T2, T3, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms, MonadAdapter<T1, T2, T3> monadAdapter)

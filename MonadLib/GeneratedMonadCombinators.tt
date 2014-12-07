@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Flinq;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -79,6 +80,17 @@ namespace MonadLib
                         mc, c => monadAdapter.Bind(
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
+        }
+
+        public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<<#= addnlTypesPrefix #>TA>> ms)
+            where TMonad : IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
+            return (TMonad)ms.FoldRight(
+                z, (m, mtick) => monadAdapter.Bind(
+                    m, x => monadAdapter.Bind(
+                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
         public static IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<<#= addnlTypesPrefix #>TA>> ms, MonadAdapter<#= addnlTypesList #> monadAdapter)

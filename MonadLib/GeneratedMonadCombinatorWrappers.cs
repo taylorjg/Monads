@@ -107,9 +107,9 @@ namespace MonadLib
             return (Maybe<TF>)MonadCombinators.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Maybe<IEnumerable<TA>> Sequence<TA>(params Maybe<TA>[] ms) 
+        public static Maybe<IEnumerable<TA>> Sequence<TA>(IEnumerable<Maybe<TA>> ms) 
         {
-            return Sequence(ms.AsEnumerable());
+            return MonadCombinators.Sequence<Maybe<IEnumerable<TA>>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -317,11 +317,6 @@ namespace MonadLib
 
     public static partial class Either
     {
-        public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms) 
-        {
-            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.SequenceInternal(ms, new EitherMonadAdapter<TLeft>());
-        }
-
         public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma) 
         {
             // Ideally, we would like to use MonadCombinators<TLeft>.Join(mma) but there
@@ -429,9 +424,9 @@ namespace MonadLib
             return (Either<TLeft, TF>)MonadCombinators<TLeft>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(params Either<TLeft, TA>[] ms) 
+        public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms) 
         {
-            return Sequence(ms.AsEnumerable());
+            return MonadCombinators<TLeft>.Sequence<Either<TLeft, IEnumerable<TA>>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -603,11 +598,6 @@ namespace MonadLib
 
     public static partial class State
     {
-        public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms) 
-        {
-            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new StateMonadAdapter<TS>());
-        }
-
         public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma) 
         {
             // Ideally, we would like to use MonadCombinators<TS>.Join(mma) but there
@@ -715,9 +705,9 @@ namespace MonadLib
             return (State<TS, TF>)MonadCombinators<TS>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(params State<TS, TA>[] ms) 
+        public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms) 
         {
-            return Sequence(ms.AsEnumerable());
+            return MonadCombinators<TS>.Sequence<State<TS, IEnumerable<TA>>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -889,11 +879,6 @@ namespace MonadLib
 
     public static partial class Reader
     {
-        public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(IEnumerable<Reader<TR, TA>> ms) 
-        {
-            return (Reader<TR, IEnumerable<TA>>)MonadCombinators<TR>.SequenceInternal(ms, new ReaderMonadAdapter<TR>());
-        }
-
         public static Reader<TR, TA> Join<TR, TA>(Reader<TR, Reader<TR, TA>> mma) 
         {
             // Ideally, we would like to use MonadCombinators<TR>.Join(mma) but there
@@ -1001,9 +986,9 @@ namespace MonadLib
             return (Reader<TR, TF>)MonadCombinators<TR>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(params Reader<TR, TA>[] ms) 
+        public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(IEnumerable<Reader<TR, TA>> ms) 
         {
-            return Sequence(ms.AsEnumerable());
+            return MonadCombinators<TR>.Sequence<Reader<TR, IEnumerable<TA>>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1175,11 +1160,6 @@ namespace MonadLib
 
     public static partial class Writer
     {
-        public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>
-        {
-            return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.SequenceInternal(ms, new WriterMonadAdapter<TMonoid, TW>());
-        }
-
         public static Writer<TMonoid, TW, TA> Join<TMonoid, TW, TA>(Writer<TMonoid, TW, Writer<TMonoid, TW, TA>> mma) where TMonoid : IMonoid<TW>
         {
             // Ideally, we would like to use MonadCombinators<TMonoid, TW>.Join(mma) but there
@@ -1287,9 +1267,9 @@ namespace MonadLib
             return (Writer<TMonoid, TW, TF>)MonadCombinators<TMonoid, TW>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(params Writer<TMonoid, TW, TA>[] ms) where TMonoid : IMonoid<TW>
+        public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>
         {
-            return Sequence(ms.AsEnumerable());
+            return MonadCombinators<TMonoid, TW>.Sequence<Writer<TMonoid, TW, IEnumerable<TA>>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming

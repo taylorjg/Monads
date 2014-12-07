@@ -13,7 +13,7 @@ namespace MonadLibTests
         [Test]
         public void Test1()
         {
-            var eitherMonadAdapter = MonadAdapterRegistry.Get<string>(typeof (Either<>));
+            var eitherMonadAdapter = MonadAdapterRegistry.Get<string>(typeof (Either<,>));
             var either = (Either<string, int>)eitherMonadAdapter.Return(42);
             Assert.That(either.Right, Is.EqualTo(42));
         }

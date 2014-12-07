@@ -34,11 +34,6 @@ namespace MonadLib
     public static partial class <#= monadName #>
     {
 <# if (!new[]{"Maybe"}.Contains(monadName)) { #>
-        public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> Sequence<<#= addnlTypesPrefix #>TA>(IEnumerable<<#= monadName #><<#= addnlTypesPrefix #>TA>> ms) <#= typeConstraints #>
-        {
-            return (<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>>)MonadCombinators<#= addnlTypesList #>.SequenceInternal(ms, new <#= monadAdapterType #>());
-        }
-
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> Join<<#= addnlTypesPrefix #>TA>(<#= monadName #><<#= addnlTypesPrefix #><#= monadName #><<#= addnlTypesPrefix #>TA>> mma) <#= typeConstraints #>
         {
             // Ideally, we would like to use MonadCombinators<#= addnlTypesList #>.Join(mma) but there
@@ -147,9 +142,9 @@ namespace MonadLib
             return (<#= monadName #><<#= addnlTypesPrefix #>TF>)MonadCombinators<#= addnlTypesList #>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> Sequence<<#= addnlTypesPrefix #>TA>(params <#= monadName #><<#= addnlTypesPrefix #>TA>[] ms) <#= typeConstraints #>
+        public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> Sequence<<#= addnlTypesPrefix #>TA>(IEnumerable<<#= monadName #><<#= addnlTypesPrefix #>TA>> ms) <#= typeConstraints #>
         {
-            return Sequence(ms.AsEnumerable());
+            return MonadCombinators<#= addnlTypesList #>.Sequence<<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
