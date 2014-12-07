@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Flinq;
+using MonadLib.Registries;
 
 namespace MonadLib
 {

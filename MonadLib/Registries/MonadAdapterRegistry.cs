@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
-namespace MonadLib
+namespace MonadLib.Registries
 {
     public static class MonadAdapterRegistry
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using MonadLib;
+using MonadLib.Registries;
 using NUnit.Framework;
 
 namespace MonadLibTests
