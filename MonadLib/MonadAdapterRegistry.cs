@@ -62,6 +62,7 @@ namespace MonadLib
 
         static MonadAdapterRegistry()
         {
+            Register(typeof(Maybe<>), typeof(MaybeMonadAdapter));
             Register(typeof(Either<>), typeof(EitherMonadAdapter<>));
             Register(typeof(State<>), typeof(StateMonadAdapter<>));
             Register(typeof(Reader<>), typeof(ReaderMonadAdapter<>));

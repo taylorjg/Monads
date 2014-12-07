@@ -55,6 +55,8 @@
     <Compile Include="IMonadT2.cs" />
     <Compile Include="MonadAdapterRegistry.cs" />
     <Compile Include="MonoidAdapterRegistry.cs" />
+    <Compile Include="TempNewStyleMonadCombinators.cs" />
+    <Compile Include="TempNewStyleMonadCombinatorWrappers.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="GeneratedMonadCombinatorWrappers.cs">
       <AutoGen>True</AutoGen>

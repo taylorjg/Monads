@@ -6,6 +6,7 @@ namespace MonadLib
 {
     public static partial class Maybe
     {
+
         public static Maybe<TB> Select<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -105,11 +106,6 @@ namespace MonadLib
             return (Maybe<TF>)MonadCombinators.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Maybe<IEnumerable<TA>> Sequence<TA>(IEnumerable<Maybe<TA>> ms) 
-        {
-            return (Maybe<IEnumerable<TA>>)MonadCombinators.SequenceInternal(ms, new MaybeMonadPlusAdapter<TA>());
-        }
-
         public static Maybe<IEnumerable<TA>> Sequence<TA>(params Maybe<TA>[] ms) 
         {
             return Sequence(ms.AsEnumerable());
@@ -189,50 +185,42 @@ namespace MonadLib
             return (Maybe<Unit>)MonadCombinators.ReplicateM_(n, ma);
         }
 
-        public static Maybe<TA> Join<TA>(Maybe<Maybe<TA>> mma) 
-        {
-            // Ideally, we would like to use MonadCombinators.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (Maybe<TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
-        }
+        //public static Maybe<TA> MZero<TA>()
+        //{
+        //    var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
+        //    return (Maybe<TA>)monadPlusAdapter.MZero;
+        //}
 
-        public static Maybe<TA> MZero<TA>()
-        {
-            var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
-            return (Maybe<TA>)monadPlusAdapter.MZero;
-        }
+        //public static Maybe<TA> MPlus<TA>(this Maybe<TA> xs, Maybe<TA> ys)
+        //{
+        //    var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
+        //    return (Maybe<TA>)monadPlusAdapter.MPlus(xs, ys);
+        //}
 
-        public static Maybe<TA> MPlus<TA>(this Maybe<TA> xs, Maybe<TA> ys)
-        {
-            var monadPlusAdapter = new MaybeMonadPlusAdapter<TA>();
-            return (Maybe<TA>)monadPlusAdapter.MPlus(xs, ys);
-        }
+        //public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma) 
+        //{
+        //    return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
+        //}
 
-        public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma) 
-        {
-            return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
-        }
+        //public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p) 
+        //{
+        //    return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
+        //}
 
-        public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p) 
-        {
-            return (Maybe<TA>)MonadPlusCombinators.MFilter(p, ma);
-        }
+        //public static Maybe<TA> MSum<TA>(IEnumerable<Maybe<TA>> ms)
+        //{
+        //    return (Maybe<TA>)MonadPlusCombinators.MSumInternal(ms, new MaybeMonadPlusAdapter<TA>());
+        //}
 
-        public static Maybe<TA> MSum<TA>(IEnumerable<Maybe<TA>> ms)
-        {
-            return (Maybe<TA>)MonadPlusCombinators.MSumInternal(ms, new MaybeMonadPlusAdapter<TA>());
-        }
+        //public static Maybe<TA> MSum<TA>(params Maybe<TA>[] ms)
+        //{
+        //    return MSum(ms.AsEnumerable());
+        //}
 
-        public static Maybe<TA> MSum<TA>(params Maybe<TA>[] ms)
-        {
-            return MSum(ms.AsEnumerable());
-        }
-
-        public static Maybe<Unit> Guard(bool b)
-        {
-            return (Maybe<Unit>)MonadPlusCombinators.GuardInternal(b, new MaybeMonadPlusAdapter<Unit>());
-        }
+        //public static Maybe<Unit> Guard(bool b)
+        //{
+        //    return (Maybe<Unit>)MonadPlusCombinators.GuardInternal(b, new MaybeMonadPlusAdapter<Unit>());
+        //}
 
         public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs) 
         {
@@ -328,6 +316,19 @@ namespace MonadLib
 
     public static partial class Either
     {
+        public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms) 
+        {
+            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.SequenceInternal(ms, new EitherMonadAdapter<TLeft>());
+        }
+
+        public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma) 
+        {
+            // Ideally, we would like to use MonadCombinators<TLeft>.Join(mma) but there
+            // is a casting issue that I have not figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (Either<TLeft, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
         public static Either<TLeft, TB> Select<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -427,11 +428,6 @@ namespace MonadLib
             return (Either<TLeft, TF>)MonadCombinators<TLeft>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms) 
-        {
-            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.SequenceInternal(ms, new EitherMonadAdapter<TLeft>());
-        }
-
         public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(params Either<TLeft, TA>[] ms) 
         {
             return Sequence(ms.AsEnumerable());
@@ -509,14 +505,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return (Either<TLeft, Unit>)MonadCombinators<TLeft>.ReplicateM_(n, ma);
-        }
-
-        public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma) 
-        {
-            // Ideally, we would like to use MonadCombinators<TLeft>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (Either<TLeft, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
 
@@ -614,6 +602,19 @@ namespace MonadLib
 
     public static partial class State
     {
+        public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms) 
+        {
+            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new StateMonadAdapter<TS>());
+        }
+
+        public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma) 
+        {
+            // Ideally, we would like to use MonadCombinators<TS>.Join(mma) but there
+            // is a casting issue that I have not figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (State<TS, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
         public static State<TS, TB> Select<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -713,11 +714,6 @@ namespace MonadLib
             return (State<TS, TF>)MonadCombinators<TS>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms) 
-        {
-            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.SequenceInternal(ms, new StateMonadAdapter<TS>());
-        }
-
         public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(params State<TS, TA>[] ms) 
         {
             return Sequence(ms.AsEnumerable());
@@ -795,14 +791,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return (State<TS, Unit>)MonadCombinators<TS>.ReplicateM_(n, ma);
-        }
-
-        public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma) 
-        {
-            // Ideally, we would like to use MonadCombinators<TS>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (State<TS, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
 
@@ -900,6 +888,19 @@ namespace MonadLib
 
     public static partial class Reader
     {
+        public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(IEnumerable<Reader<TR, TA>> ms) 
+        {
+            return (Reader<TR, IEnumerable<TA>>)MonadCombinators<TR>.SequenceInternal(ms, new ReaderMonadAdapter<TR>());
+        }
+
+        public static Reader<TR, TA> Join<TR, TA>(Reader<TR, Reader<TR, TA>> mma) 
+        {
+            // Ideally, we would like to use MonadCombinators<TR>.Join(mma) but there
+            // is a casting issue that I have not figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (Reader<TR, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
         public static Reader<TR, TB> Select<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -999,11 +1000,6 @@ namespace MonadLib
             return (Reader<TR, TF>)MonadCombinators<TR>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(IEnumerable<Reader<TR, TA>> ms) 
-        {
-            return (Reader<TR, IEnumerable<TA>>)MonadCombinators<TR>.SequenceInternal(ms, new ReaderMonadAdapter<TR>());
-        }
-
         public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(params Reader<TR, TA>[] ms) 
         {
             return Sequence(ms.AsEnumerable());
@@ -1081,14 +1077,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return (Reader<TR, Unit>)MonadCombinators<TR>.ReplicateM_(n, ma);
-        }
-
-        public static Reader<TR, TA> Join<TR, TA>(Reader<TR, Reader<TR, TA>> mma) 
-        {
-            // Ideally, we would like to use MonadCombinators<TR>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (Reader<TR, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
 
@@ -1186,6 +1174,19 @@ namespace MonadLib
 
     public static partial class Writer
     {
+        public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>
+        {
+            return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.SequenceInternal(ms, new WriterMonadAdapter<TMonoid, TW>());
+        }
+
+        public static Writer<TMonoid, TW, TA> Join<TMonoid, TW, TA>(Writer<TMonoid, TW, Writer<TMonoid, TW, TA>> mma) where TMonoid : IMonoid<TW>
+        {
+            // Ideally, we would like to use MonadCombinators<TMonoid, TW>.Join(mma) but there
+            // is a casting issue that I have not figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (Writer<TMonoid, TW, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
         public static Writer<TMonoid, TW, TB> Select<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>
         {
             return ma.Map(f);
@@ -1285,11 +1286,6 @@ namespace MonadLib
             return (Writer<TMonoid, TW, TF>)MonadCombinators<TMonoid, TW>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>
-        {
-            return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.SequenceInternal(ms, new WriterMonadAdapter<TMonoid, TW>());
-        }
-
         public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(params Writer<TMonoid, TW, TA>[] ms) where TMonoid : IMonoid<TW>
         {
             return Sequence(ms.AsEnumerable());
@@ -1367,14 +1363,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.ReplicateM_(n, ma);
-        }
-
-        public static Writer<TMonoid, TW, TA> Join<TMonoid, TW, TA>(Writer<TMonoid, TW, Writer<TMonoid, TW, TA>> mma) where TMonoid : IMonoid<TW>
-        {
-            // Ideally, we would like to use MonadCombinators<TMonoid, TW>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (Writer<TMonoid, TW, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
 

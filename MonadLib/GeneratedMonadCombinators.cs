@@ -5,8 +5,9 @@ using Flinq;
 
 namespace MonadLib
 {
-    public static class MonadCombinators
+    public static partial class MonadCombinators
     {
+
         public static IMonad<TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -52,9 +53,7 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
-        // ReSharper disable InconsistentNaming
         public static IMonad<IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<TA>> ms, MonadAdapter monadAdapter)
-        // ReSharper restore InconsistentNaming
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
@@ -93,12 +92,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
-        }
-
-        public static IMonad<TA> Join<TA>(IMonad<IMonad<TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
         public static IMonad<TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter monadAdapter)
@@ -193,8 +186,14 @@ namespace MonadLib
         }
     }
 
-    public static class MonadCombinators<T1>
+    public static partial class MonadCombinators<T1>
     {
+        public static IMonad<T1, TA> Join<TA>(IMonad<T1, IMonad<T1, TA>> mma)
+        {
+            var monadAdapter = mma.GetMonadAdapter();
+            return monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
         public static IMonad<T1, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -240,9 +239,7 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
-        // ReSharper disable InconsistentNaming
         public static IMonad<T1, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, TA>> ms, MonadAdapter<T1> monadAdapter)
-        // ReSharper restore InconsistentNaming
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
@@ -281,12 +278,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
-        }
-
-        public static IMonad<T1, TA> Join<TA>(IMonad<T1, IMonad<T1, TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
         public static IMonad<T1, TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<T1, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
@@ -381,8 +372,14 @@ namespace MonadLib
         }
     }
 
-    public static class MonadCombinators<T1, T2>
+    public static partial class MonadCombinators<T1, T2>
     {
+        public static IMonad<T1, T2, TA> Join<TA>(IMonad<T1, T2, IMonad<T1, T2, TA>> mma)
+        {
+            var monadAdapter = mma.GetMonadAdapter();
+            return monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
         public static IMonad<T1, T2, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -428,9 +425,7 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
-        // ReSharper disable InconsistentNaming
         public static IMonad<T1, T2, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, T2, TA>> ms, MonadAdapter<T1, T2> monadAdapter)
-        // ReSharper restore InconsistentNaming
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
@@ -469,12 +464,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
-        }
-
-        public static IMonad<T1, T2, TA> Join<TA>(IMonad<T1, T2, IMonad<T1, T2, TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
         public static IMonad<T1, T2, TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<T1, T2, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1, T2> monadAdapter)
@@ -569,8 +558,14 @@ namespace MonadLib
         }
     }
 
-    public static class MonadCombinators<T1, T2, T3>
+    public static partial class MonadCombinators<T1, T2, T3>
     {
+        public static IMonad<T1, T2, T3, TA> Join<TA>(IMonad<T1, T2, T3, IMonad<T1, T2, T3, TA>> mma)
+        {
+            var monadAdapter = mma.GetMonadAdapter();
+            return monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+
         public static IMonad<T1, T2, T3, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, T3, TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -616,9 +611,7 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
-        // ReSharper disable InconsistentNaming
         public static IMonad<T1, T2, T3, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms, MonadAdapter<T1, T2, T3> monadAdapter)
-        // ReSharper restore InconsistentNaming
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
@@ -657,12 +650,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
-        }
-
-        public static IMonad<T1, T2, T3, TA> Join<TA>(IMonad<T1, T2, T3, IMonad<T1, T2, T3, TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
         public static IMonad<T1, T2, T3, TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<T1, T2, T3, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1, T2, T3> monadAdapter)

@@ -25,8 +25,16 @@ namespace MonadLib
 <# var typeList = string.IsNullOrEmpty(typeToGenerate.Item1) ? string.Empty : "<" + typeToGenerate.Item1 + ">"; #>
 <# var typeListPrefix = string.IsNullOrEmpty(typeToGenerate.Item1) ? string.Empty : typeToGenerate.Item1 + ", "; #>
 <# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
-    public static class MonadCombinators<#= typeList #>
+    public static partial class MonadCombinators<#= typeList #>
     {
+<# if (!new[]{""}.Contains(typeList)) { #>
+        public static IMonad<<#= typeListPrefix #>TA> Join<TA>(IMonad<<#= typeListPrefix #>IMonad<<#= typeListPrefix #>TA>> mma)
+        {
+            var monadAdapter = mma.GetMonadAdapter();
+            return monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+<# } #>
+
         public static IMonad<<#= typeListPrefix #>TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<<#= typeListPrefix #>TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -72,9 +80,7 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
-        // ReSharper disable InconsistentNaming
         public static IMonad<<#= typeListPrefix #>IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<<#= typeListPrefix #>TA>> ms, MonadAdapter<#= typeList #> monadAdapter)
-        // ReSharper restore InconsistentNaming
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
@@ -113,12 +119,6 @@ namespace MonadLib
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
-        }
-
-        public static IMonad<<#= typeListPrefix #>TA> Join<TA>(IMonad<<#= typeListPrefix #>IMonad<<#= typeListPrefix #>TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 
         public static IMonad<<#= typeListPrefix #>TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<<#= typeListPrefix #>TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<#= typeList #> monadAdapter)

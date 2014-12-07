@@ -17,23 +17,26 @@ namespace MonadLib
 
     internal static class MonadPlusCombinators
     {
-        public static IMonadPlus<TA> MFilter<TA>(Func<TA, bool> p, IMonadPlus<TA> ma)
+        public static TMonadPlus MFilter<TMonadPlus, TA>(Func<TA, bool> p, IMonadPlus<TA> ma)
+            where TMonadPlus : IMonadPlus<TA>
         {
-            var monadPlusAdapter = ma.GetMonadPlusAdapter();
-            return (IMonadPlus<TA>)monadPlusAdapter.Bind(
+            var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TA>(typeof(TMonadPlus));
+            return (TMonadPlus)monadPlusAdapter.Bind(
                 ma, a => p(a) ? monadPlusAdapter.Return(a) : monadPlusAdapter.MZero);
         }
 
-        public static IMonadPlus<TA> MSumInternal<TA>(IEnumerable<IMonadPlus<TA>> ms, MonadPlusAdapter<TA> monadPlusAdapter)
+        public static TMonadPlus MSum<TMonadPlus, TA>(IEnumerable<IMonadPlus<TA>> ms)
+            where TMonadPlus : IMonadPlus<TA>
         {
-            return ms.FoldRight(monadPlusAdapter.MZero, monadPlusAdapter.MPlus);
+            var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TA>(typeof(TMonadPlus));
+            return (TMonadPlus)ms.FoldRight(monadPlusAdapter.MZero, monadPlusAdapter.MPlus);
         }
 
-        public static IMonadPlus<Unit> GuardInternal(bool b, MonadPlusAdapter<Unit> monadPlusAdapter)
+        public static TMonadPlus Guard<TMonadPlus>(bool b)
+            where TMonadPlus : IMonadPlus<Unit>
         {
-            return (IMonadPlus<Unit>) (b
-                                           ? monadPlusAdapter.Return(new Unit())
-                                           : monadPlusAdapter.MZero);
+            var monadPlusAdapter = MonadPlusAdapterRegistry.Get<Unit>(typeof(TMonadPlus));
+            return (TMonadPlus) (b ? monadPlusAdapter.Return(new Unit()) : monadPlusAdapter.MZero);
         }
     }
 }

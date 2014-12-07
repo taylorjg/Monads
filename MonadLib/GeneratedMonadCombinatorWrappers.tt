@@ -32,6 +32,21 @@ namespace MonadLib
 <# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
     public static partial class <#= M #>
     {
+<# if (!new[]{"Maybe"}.Contains(M)) { #>
+        public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> Sequence<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms) <#= typeConstraints #>
+        {
+            return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal(ms, new <#= MonadAdapter #>());
+        }
+
+        public static <#= M #><<#= T1TypeList #>TA> Join<<#= T1TypeList #>TA>(<#= M #><<#= T1TypeList #><#= M #><<#= T1TypeList #>TA>> mma) <#= typeConstraints #>
+        {
+            // Ideally, we would like to use MonadCombinators<#= T1MonadAdapter #>.Join(mma) but there
+            // is a casting issue that I have not figured out how to fix.
+            var monadAdapter = mma.GetMonadAdapter();
+            return (<#= M #><<#= T1TypeList #>TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+        }
+<# } #>
+
         public static <#= M #><<#= T1TypeList #>TB> Select<<#= T1TypeList #>TA, TB>(this <#= M #><<#= T1TypeList #>TA> ma, Func<TA, TB> f) <#= typeConstraints #>
         {
             return ma.Map(f);
@@ -131,11 +146,6 @@ namespace MonadLib
             return (<#= M #><<#= T1TypeList #>TF>)MonadCombinators<#= T1MonadCombinators #>.LiftM5(f, ma, mb, mc, md, me);
         }
 
-        public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> Sequence<<#= T1TypeList #>TA>(IEnumerable<<#= M #><<#= T1TypeList #>TA>> ms) <#= typeConstraints #>
-        {
-            return (<#= M #><<#= T1TypeList #>IEnumerable<TA>>)MonadCombinators<#= T1MonadCombinators #>.SequenceInternal(ms, new <#= MonadAdapter #>());
-        }
-
         public static <#= M #><<#= T1TypeList #>IEnumerable<TA>> Sequence<<#= T1TypeList #>TA>(params <#= M #><<#= T1TypeList #>TA>[] ms) <#= typeConstraints #>
         {
             return Sequence(ms.AsEnumerable());
@@ -215,14 +225,6 @@ namespace MonadLib
             return (<#= M #><<#= T1TypeList #>Unit>)MonadCombinators<#= T1MonadCombinators #>.ReplicateM_(n, ma);
         }
 
-        public static <#= M #><<#= T1TypeList #>TA> Join<<#= T1TypeList #>TA>(<#= M #><<#= T1TypeList #><#= M #><<#= T1TypeList #>TA>> mma) <#= typeConstraints #>
-        {
-            // Ideally, we would like to use MonadCombinators<#= T1MonadAdapter #>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (<#= M #><<#= T1TypeList #>TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
-        }
-
 <# if (isMonadPlus) { #>
         public static <#= M #><TA> MZero<TA>()
         {
@@ -230,11 +232,11 @@ namespace MonadLib
             return (<#= M #><TA>)monadPlusAdapter.MZero;
         }
 
-        public static <#= M #><TA> MPlus<TA>(this <#= M #><TA> xs, <#= M #><TA> ys)
-        {
-            var monadPlusAdapter = new <#= M #>MonadPlusAdapter<TA>();
-            return (<#= M #><TA>)monadPlusAdapter.MPlus(xs, ys);
-        }
+        //public static <#= M #><TA> MPlus<TA>(this <#= M #><TA> xs, <#= M #><TA> ys)
+        //{
+        //    var monadPlusAdapter = new <#= M #>MonadPlusAdapter<TA>();
+        //    return (<#= M #><TA>)monadPlusAdapter.MPlus(xs, ys);
+        //}
 
         public static <#= M #><<#= T1TypeList #>TA> MFilter<<#= T1TypeList #>TA>(Func<TA, bool> p, <#= M #><<#= T1TypeList #>TA> ma) <#= typeConstraints #>
         {

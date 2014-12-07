@@ -170,6 +170,20 @@ namespace MonadLib
         }
     }
 
+    internal class MaybeMonadAdapter : MonadAdapter
+    {
+        public override IMonad<TA> Return<TA>(TA a)
+        {
+            return Maybe.Just(a);
+        }
+
+        public override IMonad<TB> Bind<TA, TB>(IMonad<TA> ma, Func<TA, IMonad<TB>> f)
+        {
+            var maybeA = (Maybe<TA>)ma;
+            return maybeA.IsJust ? f(maybeA.FromJust) : Maybe.Nothing<TB>();
+        }
+    }
+
     internal class MaybeMonadPlusAdapter<TAOuter> : MonadPlusAdapter<TAOuter>
     {
         public override IMonad<TAInner> Return<TAInner>(TAInner a)
