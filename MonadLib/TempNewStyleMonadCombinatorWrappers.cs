@@ -16,6 +16,8 @@ namespace MonadLib
             return MonadCombinators.Join<Maybe<Maybe<TA>>, Maybe<TA>, TA>(mma);
         }
 
+        /* MonadPlus combinators */
+
         public static Maybe<TA> MZero<TA>()
         {
             var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TA>(typeof(Maybe<TA>));

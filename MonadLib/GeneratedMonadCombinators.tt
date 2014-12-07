@@ -22,27 +22,28 @@ namespace MonadLib
 {
 <# for (var index = 0; index < typesToGenerate.Length; index++) { #>
 <# var typeToGenerate = typesToGenerate[index]; #>
-<# var typeList = string.IsNullOrEmpty(typeToGenerate.Item1) ? string.Empty : "<" + typeToGenerate.Item1 + ">"; #>
-<# var typeListPrefix = string.IsNullOrEmpty(typeToGenerate.Item1) ? string.Empty : typeToGenerate.Item1 + ", "; #>
-<# var lastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
-    public static partial class MonadCombinators<#= typeList #>
+<# var addnlTypes = typeToGenerate.Item1; #>
+<# var addnlTypesPrefix = string.IsNullOrEmpty(addnlTypes) ? string.Empty : addnlTypes + ", "; #>
+<# var addnlTypesList = string.IsNullOrEmpty(addnlTypes) ? string.Empty : "<" + addnlTypes + ">"; #>
+<# var isLastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
+    public static partial class MonadCombinators<#= addnlTypesList #>
     {
-<# if (!new[]{""}.Contains(typeList)) { #>
-        public static IMonad<<#= typeListPrefix #>TA> Join<TA>(IMonad<<#= typeListPrefix #>IMonad<<#= typeListPrefix #>TA>> mma)
+<# if (!new[]{""}.Contains(addnlTypes)) { #>
+        public static IMonad<<#= addnlTypesPrefix #>TA> Join<TA>(IMonad<<#= addnlTypesPrefix #>IMonad<<#= addnlTypesPrefix #>TA>> mma)
         {
             var monadAdapter = mma.GetMonadAdapter();
             return monadAdapter.Bind(mma, MonadHelpers.Identity);
         }
 <# } #>
 
-        public static IMonad<<#= typeListPrefix #>TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<<#= typeListPrefix #>TA> ma)
+        public static IMonad<<#= addnlTypesPrefix #>TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<<#= addnlTypesPrefix #>TA> ma)
         {
             var monadAdapter = ma.GetMonadAdapter();
             return monadAdapter.Bind(
                 ma, a => monadAdapter.Return(f(a)));
         }
 
-        public static IMonad<<#= typeListPrefix #>TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, IMonad<<#= typeListPrefix #>TA> ma, IMonad<<#= typeListPrefix #>TB> mb)
+        public static IMonad<<#= addnlTypesPrefix #>TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb)
         {
             var monadAdapter = ma.GetMonadAdapter();
             return monadAdapter.Bind(
@@ -50,7 +51,7 @@ namespace MonadLib
                     mb, b => monadAdapter.Return(f(a, b))));
         }
 
-        public static IMonad<<#= typeListPrefix #>TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<<#= typeListPrefix #>TA> ma, IMonad<<#= typeListPrefix #>TB> mb, IMonad<<#= typeListPrefix #>TC> mc)
+        public static IMonad<<#= addnlTypesPrefix #>TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb, IMonad<<#= addnlTypesPrefix #>TC> mc)
         {
             var monadAdapter = ma.GetMonadAdapter();
             return monadAdapter.Bind(
@@ -59,7 +60,7 @@ namespace MonadLib
                         mc, c => monadAdapter.Return(f(a, b, c)))));
         }
 
-        public static IMonad<<#= typeListPrefix #>TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<<#= typeListPrefix #>TA> ma, IMonad<<#= typeListPrefix #>TB> mb, IMonad<<#= typeListPrefix #>TC> mc, IMonad<<#= typeListPrefix #>TD> md)
+        public static IMonad<<#= addnlTypesPrefix #>TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb, IMonad<<#= addnlTypesPrefix #>TC> mc, IMonad<<#= addnlTypesPrefix #>TD> md)
         {
             var monadAdapter = ma.GetMonadAdapter();
             return monadAdapter.Bind(
@@ -69,7 +70,7 @@ namespace MonadLib
                             md, d => monadAdapter.Return(f(a, b, c, d))))));
         }
 
-        public static IMonad<<#= typeListPrefix #>TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<<#= typeListPrefix #>TA> ma, IMonad<<#= typeListPrefix #>TB> mb, IMonad<<#= typeListPrefix #>TC> mc, IMonad<<#= typeListPrefix #>TD> md, IMonad<<#= typeListPrefix #>TE> me)
+        public static IMonad<<#= addnlTypesPrefix #>TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb, IMonad<<#= addnlTypesPrefix #>TC> mc, IMonad<<#= addnlTypesPrefix #>TD> md, IMonad<<#= addnlTypesPrefix #>TE> me)
         {
             var monadAdapter = ma.GetMonadAdapter();
             return monadAdapter.Bind(
@@ -80,7 +81,7 @@ namespace MonadLib
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
 
-        public static IMonad<<#= typeListPrefix #>IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<<#= typeListPrefix #>TA>> ms, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<<#= addnlTypesPrefix #>TA>> ms, MonadAdapter<#= addnlTypesList #> monadAdapter)
         {
             var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
             return ms.FoldRight(
@@ -90,38 +91,38 @@ namespace MonadLib
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<<#= typeListPrefix #>Unit> SequenceInternal_<TA>(IEnumerable<IMonad<<#= typeListPrefix #>TA>> ms, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> SequenceInternal_<TA>(IEnumerable<IMonad<<#= addnlTypesPrefix #>TA>> ms, MonadAdapter<#= addnlTypesList #> monadAdapter)
         // ReSharper restore InconsistentNaming
         {
             var z = monadAdapter.Return(new Unit());
             return ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
         }
 
-        public static IMonad<<#= typeListPrefix #>IEnumerable<TB>> MapMInternal<TA, TB>(Func<TA, IMonad<<#= typeListPrefix #>TB>> f, IEnumerable<TA> @as, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>IEnumerable<TB>> MapMInternal<TA, TB>(Func<TA, IMonad<<#= addnlTypesPrefix #>TB>> f, IEnumerable<TA> @as, MonadAdapter<#= addnlTypesList #> monadAdapter)
         {
             return SequenceInternal(@as.Map(f), monadAdapter);
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<<#= typeListPrefix #>Unit> MapMInternal_<TA, TB>(Func<TA, IMonad<<#= typeListPrefix #>TB>> f, IEnumerable<TA> @as, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> MapMInternal_<TA, TB>(Func<TA, IMonad<<#= addnlTypesPrefix #>TB>> f, IEnumerable<TA> @as, MonadAdapter<#= addnlTypesList #> monadAdapter)
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(@as.Map(f), monadAdapter);
         }
 
-        public static IMonad<<#= typeListPrefix #>IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<<#= typeListPrefix #>TA> ma)
+        public static IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<<#= addnlTypesPrefix #>TA> ma)
         {
             return SequenceInternal(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<<#= typeListPrefix #>Unit> ReplicateM_<TA>(int n, IMonad<<#= typeListPrefix #>TA> ma)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> ReplicateM_<TA>(int n, IMonad<<#= addnlTypesPrefix #>TA> ma)
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
         }
 
-        public static IMonad<<#= typeListPrefix #>TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<<#= typeListPrefix #>TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<#= addnlTypesList #> monadAdapter)
         {
             // TODO: fix ReSharper grumble: Implicitly captured closure: f
             return bs.HeadAndTail().Match(
@@ -136,7 +137,7 @@ namespace MonadLib
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<<#= typeListPrefix #>Unit> FoldMInternal_<TA, TB>(Func<TA, TB, IMonad<<#= typeListPrefix #>TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> FoldMInternal_<TA, TB>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<#= addnlTypesList #> monadAdapter)
         // ReSharper restore InconsistentNaming
         {
             var m = FoldMInternal(f, a, bs, monadAdapter);
@@ -144,19 +145,19 @@ namespace MonadLib
             return monadAdapter.BindIgnoringLeft(m, unit);
         }
 
-        public static IMonad<<#= typeListPrefix #>IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<<#= typeListPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<#= addnlTypesList #> monadAdapter)
         {
             return SequenceInternal(@as.Zip(bs, f), monadAdapter);
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<<#= typeListPrefix #>Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<<#= typeListPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<#= addnlTypesList #> monadAdapter)
         // ReSharper restore InconsistentNaming
         {
             return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
         }
 
-        public static IMonad<<#= typeListPrefix #>IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<<#= typeListPrefix #>bool>> p, IEnumerable<TA> @as, MonadAdapter<#= typeList #> monadAdapter)
+        public static IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<<#= addnlTypesPrefix #>bool>> p, IEnumerable<TA> @as, MonadAdapter<#= addnlTypesList #> monadAdapter)
         {
             // TODO: fix ReSharper grumble: Implicitly captured closure: p
             return @as.HeadAndTail().Match(
@@ -172,37 +173,37 @@ namespace MonadLib
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
         }
 
-        public static IMonad<<#= typeListPrefix #>Unit> When(bool b, IMonad<<#= typeListPrefix #>Unit> m)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> When(bool b, IMonad<<#= addnlTypesPrefix #>Unit> m)
         {
             var monadAdapter = m.GetMonadAdapter();
             return b ? m : monadAdapter.Return(new Unit());
         }
 
-        public static IMonad<<#= typeListPrefix #>Unit> Unless(bool b, IMonad<<#= typeListPrefix #>Unit> m)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> Unless(bool b, IMonad<<#= addnlTypesPrefix #>Unit> m)
         {
             return When(!b, m);
         }
 
         // ReSharper disable FunctionRecursiveOnAllPaths
-        public static IMonad<<#= typeListPrefix #>TB> Forever<TA, TB>(IMonad<<#= typeListPrefix #>TA> m)
+        public static IMonad<<#= addnlTypesPrefix #>TB> Forever<TA, TB>(IMonad<<#= addnlTypesPrefix #>TA> m)
         {
             var monadAdapter = m.GetMonadAdapter();
             return monadAdapter.BindIgnoringLeft(m, Forever<TA, TB>(m));
         }
         // ReSharper restore FunctionRecursiveOnAllPaths
 
-        public static IMonad<<#= typeListPrefix #>Unit> Void<TA>(IMonad<<#= typeListPrefix #>TA> m)
+        public static IMonad<<#= addnlTypesPrefix #>Unit> Void<TA>(IMonad<<#= addnlTypesPrefix #>TA> m)
         {
             var monadAdapter = m.GetMonadAdapter();
             return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
 
-        public static IMonad<<#= typeListPrefix #>TB> Ap<TA, TB>(IMonad<<#= typeListPrefix #>Func<TA, TB>> mf, IMonad<<#= typeListPrefix #>TA> ma)
+        public static IMonad<<#= addnlTypesPrefix #>TB> Ap<TA, TB>(IMonad<<#= addnlTypesPrefix #>Func<TA, TB>> mf, IMonad<<#= addnlTypesPrefix #>TA> ma)
         {
             return LiftM2((f, a) => f(a), mf, ma);
         }
 
-        public static Func<TA, IMonad<<#= typeListPrefix #>TC>> Compose<TA, TB, TC>(Func<TA, IMonad<<#= typeListPrefix #>TB>> f, Func<TB, IMonad<<#= typeListPrefix #>TC>> g)
+        public static Func<TA, IMonad<<#= addnlTypesPrefix #>TC>> Compose<TA, TB, TC>(Func<TA, IMonad<<#= addnlTypesPrefix #>TB>> f, Func<TB, IMonad<<#= addnlTypesPrefix #>TC>> g)
         {
             return a =>
             {
@@ -212,6 +213,6 @@ namespace MonadLib
             };
         }
     }
-<# if (!lastTypeToGenerate) WriteLine(string.Empty); #>
+<# if (!isLastTypeToGenerate) WriteLine(string.Empty); #>
 <# } #>
 }
