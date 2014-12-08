@@ -39,10 +39,11 @@ namespace MonadLib
                 ma, a => monadAdapter.Return(f(a)));
         }
 
-        public static IMonad<<#= addnlTypesPrefix #>TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb)
+        public static TMonad LiftM2<TMonad, TA, TB, TC>(Func<TA, TB, TC> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb)
+            where TMonad : IMonad<<#= addnlTypesPrefix #>TC>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Return(f(a, b))));
         }
@@ -213,9 +214,10 @@ namespace MonadLib
             return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
 
-        public static IMonad<<#= addnlTypesPrefix #>TB> Ap<TA, TB>(IMonad<<#= addnlTypesPrefix #>Func<TA, TB>> mf, IMonad<<#= addnlTypesPrefix #>TA> ma)
+        public static TMonad Ap<TMonad, TA, TB>(IMonad<<#= addnlTypesPrefix #>Func<TA, TB>> mf, IMonad<<#= addnlTypesPrefix #>TA> ma)
+            where TMonad : IMonad<<#= addnlTypesPrefix #>TB>
         {
-            return LiftM2((f, a) => f(a), mf, ma);
+            return LiftM2<TMonad, Func<TA, TB>, TA, TB>((f, a) => f(a), mf, ma);
         }
 
         public static Func<TA, IMonad<<#= addnlTypesPrefix #>TC>> Compose<TA, TB, TC>(Func<TA, IMonad<<#= addnlTypesPrefix #>TB>> f, Func<TB, IMonad<<#= addnlTypesPrefix #>TC>> g)

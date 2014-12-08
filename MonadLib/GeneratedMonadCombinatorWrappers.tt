@@ -107,7 +107,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TC> LiftM2<<#= addnlTypesPrefix #>TA, TB, TC>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>TB> mb, Func<TA, TB, TC> f) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>TC>)MonadCombinators<#= addnlTypesList #>.LiftM2(f, ma, mb);
+            return MonadCombinators<#= addnlTypesList #>.LiftM2<<#= monadName #><<#= addnlTypesPrefix #>TC>, TA, TB, TC>(f, ma, mb);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TD> LiftM3<<#= addnlTypesPrefix #>TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>TB> mb, <#= monadName #><<#= addnlTypesPrefix #>TC> mc) <#= typeConstraints #>
@@ -307,7 +307,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> Ap<<#= addnlTypesPrefix #>TA, TB>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>Func<TA, TB>> mf) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>TB>)MonadCombinators<#= addnlTypesList #>.Ap(mf, ma);
+            return MonadCombinators<#= addnlTypesList #>.Ap<<#= monadName #><<#= addnlTypesPrefix #>TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TC>> Compose<<#= addnlTypesPrefix #>TA, TB, TC>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f, Func<TB, <#= monadName #><<#= addnlTypesPrefix #>TC>> g) <#= typeConstraints #>

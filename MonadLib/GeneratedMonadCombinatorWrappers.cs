@@ -73,7 +73,7 @@ namespace MonadLib
 
         public static Maybe<TC> LiftM2<TA, TB, TC>(this Maybe<TA> ma, Maybe<TB> mb, Func<TA, TB, TC> f) 
         {
-            return (Maybe<TC>)MonadCombinators.LiftM2(f, ma, mb);
+            return MonadCombinators.LiftM2<Maybe<TC>, TA, TB, TC>(f, ma, mb);
         }
 
         public static Maybe<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc) 
@@ -273,7 +273,7 @@ namespace MonadLib
 
         public static Maybe<TB> Ap<TA, TB>(this Maybe<TA> ma, Maybe<Func<TA, TB>> mf) 
         {
-            return (Maybe<TB>)MonadCombinators.Ap(mf, ma);
+            return MonadCombinators.Ap<Maybe<TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Maybe<TC>> Compose<TA, TB, TC>(Func<TA, Maybe<TB>> f, Func<TB, Maybe<TC>> g) 
@@ -387,7 +387,7 @@ namespace MonadLib
 
         public static Either<TLeft, TC> LiftM2<TLeft, TA, TB, TC>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Func<TA, TB, TC> f) 
         {
-            return (Either<TLeft, TC>)MonadCombinators<TLeft>.LiftM2(f, ma, mb);
+            return MonadCombinators<TLeft>.LiftM2<Either<TLeft, TC>, TA, TB, TC>(f, ma, mb);
         }
 
         public static Either<TLeft, TD> LiftM3<TLeft, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc) 
@@ -587,7 +587,7 @@ namespace MonadLib
 
         public static Either<TLeft, TB> Ap<TLeft, TA, TB>(this Either<TLeft, TA> ma, Either<TLeft, Func<TA, TB>> mf) 
         {
-            return (Either<TLeft, TB>)MonadCombinators<TLeft>.Ap(mf, ma);
+            return MonadCombinators<TLeft>.Ap<Either<TLeft, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Either<TLeft, TC>> Compose<TLeft, TA, TB, TC>(Func<TA, Either<TLeft, TB>> f, Func<TB, Either<TLeft, TC>> g) 
@@ -665,7 +665,7 @@ namespace MonadLib
 
         public static State<TS, TC> LiftM2<TS, TA, TB, TC>(this State<TS, TA> ma, State<TS, TB> mb, Func<TA, TB, TC> f) 
         {
-            return (State<TS, TC>)MonadCombinators<TS>.LiftM2(f, ma, mb);
+            return MonadCombinators<TS>.LiftM2<State<TS, TC>, TA, TB, TC>(f, ma, mb);
         }
 
         public static State<TS, TD> LiftM3<TS, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc) 
@@ -865,7 +865,7 @@ namespace MonadLib
 
         public static State<TS, TB> Ap<TS, TA, TB>(this State<TS, TA> ma, State<TS, Func<TA, TB>> mf) 
         {
-            return (State<TS, TB>)MonadCombinators<TS>.Ap(mf, ma);
+            return MonadCombinators<TS>.Ap<State<TS, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, State<TS, TC>> Compose<TS, TA, TB, TC>(Func<TA, State<TS, TB>> f, Func<TB, State<TS, TC>> g) 
@@ -943,7 +943,7 @@ namespace MonadLib
 
         public static Reader<TR, TC> LiftM2<TR, TA, TB, TC>(this Reader<TR, TA> ma, Reader<TR, TB> mb, Func<TA, TB, TC> f) 
         {
-            return (Reader<TR, TC>)MonadCombinators<TR>.LiftM2(f, ma, mb);
+            return MonadCombinators<TR>.LiftM2<Reader<TR, TC>, TA, TB, TC>(f, ma, mb);
         }
 
         public static Reader<TR, TD> LiftM3<TR, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc) 
@@ -1143,7 +1143,7 @@ namespace MonadLib
 
         public static Reader<TR, TB> Ap<TR, TA, TB>(this Reader<TR, TA> ma, Reader<TR, Func<TA, TB>> mf) 
         {
-            return (Reader<TR, TB>)MonadCombinators<TR>.Ap(mf, ma);
+            return MonadCombinators<TR>.Ap<Reader<TR, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Reader<TR, TC>> Compose<TR, TA, TB, TC>(Func<TA, Reader<TR, TB>> f, Func<TB, Reader<TR, TC>> g) 
@@ -1221,7 +1221,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, TC> LiftM2<TMonoid, TW, TA, TB, TC>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Func<TA, TB, TC> f) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, TC>)MonadCombinators<TMonoid, TW>.LiftM2(f, ma, mb);
+            return MonadCombinators<TMonoid, TW>.LiftM2<Writer<TMonoid, TW, TC>, TA, TB, TC>(f, ma, mb);
         }
 
         public static Writer<TMonoid, TW, TD> LiftM3<TMonoid, TW, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc) where TMonoid : IMonoid<TW>
@@ -1421,7 +1421,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, TB> Ap<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, Func<TA, TB>> mf) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, TB>)MonadCombinators<TMonoid, TW>.Ap(mf, ma);
+            return MonadCombinators<TMonoid, TW>.Ap<Writer<TMonoid, TW, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Writer<TMonoid, TW, TC>> Compose<TMonoid, TW, TA, TB, TC>(Func<TA, Writer<TMonoid, TW, TB>> f, Func<TB, Writer<TMonoid, TW, TC>> g) where TMonoid : IMonoid<TW>
