@@ -8,18 +8,11 @@ namespace MonadLib
 {
     public static partial class MonadCombinators
     {
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<TMonad>
-			where TMonad : IMonad<TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
-
-        public static IMonad<TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
+        public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
+            where TMonad : IMonad<TB>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Return(f(a)));
         }
 
@@ -60,6 +53,14 @@ namespace MonadLib
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
+
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<TMonad>
+			where TMonad : IMonad<TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<TA>> ms)
             where TMonad : IMonad<IEnumerable<TA>>
@@ -207,18 +208,11 @@ namespace MonadLib
 
     public static partial class MonadCombinators<T1>
     {
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<T1, TMonad>
-			where TMonad : IMonad<T1, TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
-
-        public static IMonad<T1, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
+        public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
+            where TMonad : IMonad<T1, TB>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Return(f(a)));
         }
 
@@ -259,6 +253,14 @@ namespace MonadLib
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
+
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<T1, TMonad>
+			where TMonad : IMonad<T1, TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, TA>> ms)
             where TMonad : IMonad<T1, IEnumerable<TA>>
@@ -406,18 +408,11 @@ namespace MonadLib
 
     public static partial class MonadCombinators<T1, T2>
     {
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<T1, T2, TMonad>
-			where TMonad : IMonad<T1, T2, TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
-
-        public static IMonad<T1, T2, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, TA> ma)
+        public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<T1, T2, TA> ma)
+            where TMonad : IMonad<T1, T2, TB>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Return(f(a)));
         }
 
@@ -458,6 +453,14 @@ namespace MonadLib
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
+
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<T1, T2, TMonad>
+			where TMonad : IMonad<T1, T2, TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, T2, TA>> ms)
             where TMonad : IMonad<T1, T2, IEnumerable<TA>>
@@ -605,18 +608,11 @@ namespace MonadLib
 
     public static partial class MonadCombinators<T1, T2, T3>
     {
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<T1, T2, T3, TMonad>
-			where TMonad : IMonad<T1, T2, T3, TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
-
-        public static IMonad<T1, T2, T3, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, T3, TA> ma)
+        public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<T1, T2, T3, TA> ma)
+            where TMonad : IMonad<T1, T2, T3, TB>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Return(f(a)));
         }
 
@@ -657,6 +653,14 @@ namespace MonadLib
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
+
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<T1, T2, T3, TMonad>
+			where TMonad : IMonad<T1, T2, T3, TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms)
             where TMonad : IMonad<T1, T2, T3, IEnumerable<TA>>

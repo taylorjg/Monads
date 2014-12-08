@@ -7,11 +7,6 @@ namespace MonadLib
 {
     public static partial class Maybe
     {
-        public static Maybe<TA> Join<TA>(Maybe<Maybe<TA>> mma) 
-        {
-            return MonadCombinators.Join<Maybe<Maybe<TA>>, Maybe<TA>, TA>(mma);
-        }
-
         public static Maybe<TB> Select<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -68,7 +63,7 @@ namespace MonadLib
 
         public static Maybe<TB> LiftM<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f) 
         {
-            return (Maybe<TB>)MonadCombinators.LiftM(f, ma);
+            return MonadCombinators.LiftM<Maybe<TB>, TA, TB>(f, ma);
         }
 
         public static Maybe<TC> LiftM2<TA, TB, TC>(Func<TA, TB, TC> f, Maybe<TA> ma, Maybe<TB> mb) 
@@ -109,6 +104,11 @@ namespace MonadLib
         public static Maybe<TF> LiftM5<TA, TB, TC, TD, TE, TF>(this Maybe<TA> ma, Maybe<TB> mb, Maybe<TC> mc, Maybe<TD> md, Maybe<TE> me, Func<TA, TB, TC, TD, TE, TF> f) 
         {
             return (Maybe<TF>)MonadCombinators.LiftM5(f, ma, mb, mc, md, me);
+        }
+
+        public static Maybe<TA> Join<TA>(Maybe<Maybe<TA>> mma) 
+        {
+            return MonadCombinators.Join<Maybe<Maybe<TA>>, Maybe<TA>, TA>(mma);
         }
 
         public static Maybe<IEnumerable<TA>> Sequence<TA>(IEnumerable<Maybe<TA>> ms) 
@@ -321,11 +321,6 @@ namespace MonadLib
 
     public static partial class Either
     {
-        public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma) 
-        {
-            return MonadCombinators<TLeft>.Join<Either<TLeft, Either<TLeft, TA>>, Either<TLeft, TA>, TA>(mma);
-        }
-
         public static Either<TLeft, TB> Select<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -382,7 +377,7 @@ namespace MonadLib
 
         public static Either<TLeft, TB> LiftM<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f) 
         {
-            return (Either<TLeft, TB>)MonadCombinators<TLeft>.LiftM(f, ma);
+            return MonadCombinators<TLeft>.LiftM<Either<TLeft, TB>, TA, TB>(f, ma);
         }
 
         public static Either<TLeft, TC> LiftM2<TLeft, TA, TB, TC>(Func<TA, TB, TC> f, Either<TLeft, TA> ma, Either<TLeft, TB> mb) 
@@ -423,6 +418,11 @@ namespace MonadLib
         public static Either<TLeft, TF> LiftM5<TLeft, TA, TB, TC, TD, TE, TF>(this Either<TLeft, TA> ma, Either<TLeft, TB> mb, Either<TLeft, TC> mc, Either<TLeft, TD> md, Either<TLeft, TE> me, Func<TA, TB, TC, TD, TE, TF> f) 
         {
             return (Either<TLeft, TF>)MonadCombinators<TLeft>.LiftM5(f, ma, mb, mc, md, me);
+        }
+
+        public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma) 
+        {
+            return MonadCombinators<TLeft>.Join<Either<TLeft, Either<TLeft, TA>>, Either<TLeft, TA>, TA>(mma);
         }
 
         public static Either<TLeft, IEnumerable<TA>> Sequence<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms) 
@@ -599,11 +599,6 @@ namespace MonadLib
 
     public static partial class State
     {
-        public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma) 
-        {
-            return MonadCombinators<TS>.Join<State<TS, State<TS, TA>>, State<TS, TA>, TA>(mma);
-        }
-
         public static State<TS, TB> Select<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -660,7 +655,7 @@ namespace MonadLib
 
         public static State<TS, TB> LiftM<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f) 
         {
-            return (State<TS, TB>)MonadCombinators<TS>.LiftM(f, ma);
+            return MonadCombinators<TS>.LiftM<State<TS, TB>, TA, TB>(f, ma);
         }
 
         public static State<TS, TC> LiftM2<TS, TA, TB, TC>(Func<TA, TB, TC> f, State<TS, TA> ma, State<TS, TB> mb) 
@@ -701,6 +696,11 @@ namespace MonadLib
         public static State<TS, TF> LiftM5<TS, TA, TB, TC, TD, TE, TF>(this State<TS, TA> ma, State<TS, TB> mb, State<TS, TC> mc, State<TS, TD> md, State<TS, TE> me, Func<TA, TB, TC, TD, TE, TF> f) 
         {
             return (State<TS, TF>)MonadCombinators<TS>.LiftM5(f, ma, mb, mc, md, me);
+        }
+
+        public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma) 
+        {
+            return MonadCombinators<TS>.Join<State<TS, State<TS, TA>>, State<TS, TA>, TA>(mma);
         }
 
         public static State<TS, IEnumerable<TA>> Sequence<TS, TA>(IEnumerable<State<TS, TA>> ms) 
@@ -877,11 +877,6 @@ namespace MonadLib
 
     public static partial class Reader
     {
-        public static Reader<TR, TA> Join<TR, TA>(Reader<TR, Reader<TR, TA>> mma) 
-        {
-            return MonadCombinators<TR>.Join<Reader<TR, Reader<TR, TA>>, Reader<TR, TA>, TA>(mma);
-        }
-
         public static Reader<TR, TB> Select<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f) 
         {
             return ma.Map(f);
@@ -938,7 +933,7 @@ namespace MonadLib
 
         public static Reader<TR, TB> LiftM<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f) 
         {
-            return (Reader<TR, TB>)MonadCombinators<TR>.LiftM(f, ma);
+            return MonadCombinators<TR>.LiftM<Reader<TR, TB>, TA, TB>(f, ma);
         }
 
         public static Reader<TR, TC> LiftM2<TR, TA, TB, TC>(Func<TA, TB, TC> f, Reader<TR, TA> ma, Reader<TR, TB> mb) 
@@ -979,6 +974,11 @@ namespace MonadLib
         public static Reader<TR, TF> LiftM5<TR, TA, TB, TC, TD, TE, TF>(this Reader<TR, TA> ma, Reader<TR, TB> mb, Reader<TR, TC> mc, Reader<TR, TD> md, Reader<TR, TE> me, Func<TA, TB, TC, TD, TE, TF> f) 
         {
             return (Reader<TR, TF>)MonadCombinators<TR>.LiftM5(f, ma, mb, mc, md, me);
+        }
+
+        public static Reader<TR, TA> Join<TR, TA>(Reader<TR, Reader<TR, TA>> mma) 
+        {
+            return MonadCombinators<TR>.Join<Reader<TR, Reader<TR, TA>>, Reader<TR, TA>, TA>(mma);
         }
 
         public static Reader<TR, IEnumerable<TA>> Sequence<TR, TA>(IEnumerable<Reader<TR, TA>> ms) 
@@ -1155,11 +1155,6 @@ namespace MonadLib
 
     public static partial class Writer
     {
-        public static Writer<TMonoid, TW, TA> Join<TMonoid, TW, TA>(Writer<TMonoid, TW, Writer<TMonoid, TW, TA>> mma) where TMonoid : IMonoid<TW>
-        {
-            return MonadCombinators<TMonoid, TW>.Join<Writer<TMonoid, TW, Writer<TMonoid, TW, TA>>, Writer<TMonoid, TW, TA>, TA>(mma);
-        }
-
         public static Writer<TMonoid, TW, TB> Select<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>
         {
             return ma.Map(f);
@@ -1216,7 +1211,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, TB> LiftM<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, TB>)MonadCombinators<TMonoid, TW>.LiftM(f, ma);
+            return MonadCombinators<TMonoid, TW>.LiftM<Writer<TMonoid, TW, TB>, TA, TB>(f, ma);
         }
 
         public static Writer<TMonoid, TW, TC> LiftM2<TMonoid, TW, TA, TB, TC>(Func<TA, TB, TC> f, Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb) where TMonoid : IMonoid<TW>
@@ -1257,6 +1252,11 @@ namespace MonadLib
         public static Writer<TMonoid, TW, TF> LiftM5<TMonoid, TW, TA, TB, TC, TD, TE, TF>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, TB> mb, Writer<TMonoid, TW, TC> mc, Writer<TMonoid, TW, TD> md, Writer<TMonoid, TW, TE> me, Func<TA, TB, TC, TD, TE, TF> f) where TMonoid : IMonoid<TW>
         {
             return (Writer<TMonoid, TW, TF>)MonadCombinators<TMonoid, TW>.LiftM5(f, ma, mb, mc, md, me);
+        }
+
+        public static Writer<TMonoid, TW, TA> Join<TMonoid, TW, TA>(Writer<TMonoid, TW, Writer<TMonoid, TW, TA>> mma) where TMonoid : IMonoid<TW>
+        {
+            return MonadCombinators<TMonoid, TW>.Join<Writer<TMonoid, TW, Writer<TMonoid, TW, TA>>, Writer<TMonoid, TW, TA>, TA>(mma);
         }
 
         public static Writer<TMonoid, TW, IEnumerable<TA>> Sequence<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>

@@ -31,18 +31,11 @@ namespace MonadLib
     {
 <# if (!new[]{""}.Contains(addnlTypes)) { #>
 <# } #>
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<<#= addnlTypesPrefix #>TMonad>
-			where TMonad : IMonad<<#= addnlTypesPrefix #>TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
-
-        public static IMonad<<#= addnlTypesPrefix #>TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<<#= addnlTypesPrefix #>TA> ma)
+        public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<<#= addnlTypesPrefix #>TA> ma)
+            where TMonad : IMonad<<#= addnlTypesPrefix #>TB>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Return(f(a)));
         }
 
@@ -83,6 +76,14 @@ namespace MonadLib
                             md, d => monadAdapter.Bind(
                                 me, e => monadAdapter.Return(f(a, b, c, d, e)))))));
         }
+
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<<#= addnlTypesPrefix #>TMonad>
+			where TMonad : IMonad<<#= addnlTypesPrefix #>TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<<#= addnlTypesPrefix #>TA>> ms)
             where TMonad : IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>>
