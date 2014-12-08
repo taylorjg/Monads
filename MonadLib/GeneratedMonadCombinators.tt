@@ -30,12 +30,14 @@ namespace MonadLib
     public static partial class MonadCombinators<#= addnlTypesList #>
     {
 <# if (!new[]{""}.Contains(addnlTypes)) { #>
-        public static IMonad<<#= addnlTypesPrefix #>TA> Join<TA>(IMonad<<#= addnlTypesPrefix #>IMonad<<#= addnlTypesPrefix #>TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
-        }
 <# } #>
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<<#= addnlTypesPrefix #>TMonad>
+			where TMonad : IMonad<<#= addnlTypesPrefix #>TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static IMonad<<#= addnlTypesPrefix #>TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<<#= addnlTypesPrefix #>TA> ma)
         {

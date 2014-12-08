@@ -7,6 +7,10 @@ namespace MonadLib
 {
     public static partial class Maybe
     {
+        public static Maybe<TA> Join<TA>(Maybe<Maybe<TA>> mma) 
+        {
+            return MonadCombinators.Join<Maybe<Maybe<TA>>, Maybe<TA>, TA>(mma);
+        }
 
         public static Maybe<TB> Select<TA, TB>(this Maybe<TA> ma, Func<TA, TB> f) 
         {
@@ -22,7 +26,7 @@ namespace MonadLib
         {
             return ma.FlatMap(
                 a => f1(a).FlatMap(
-                    b => Maybe.Return(f2(a, b))));
+                    b => Return(f2(a, b))));
         }
 
         public static Maybe<TB> Bind<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f) 
@@ -319,10 +323,7 @@ namespace MonadLib
     {
         public static Either<TLeft, TA> Join<TLeft, TA>(Either<TLeft, Either<TLeft, TA>> mma) 
         {
-            // Ideally, we would like to use MonadCombinators<TLeft>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (Either<TLeft, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+            return MonadCombinators<TLeft>.Join<Either<TLeft, Either<TLeft, TA>>, Either<TLeft, TA>, TA>(mma);
         }
 
         public static Either<TLeft, TB> Select<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, TB> f) 
@@ -600,10 +601,7 @@ namespace MonadLib
     {
         public static State<TS, TA> Join<TS, TA>(State<TS, State<TS, TA>> mma) 
         {
-            // Ideally, we would like to use MonadCombinators<TS>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (State<TS, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+            return MonadCombinators<TS>.Join<State<TS, State<TS, TA>>, State<TS, TA>, TA>(mma);
         }
 
         public static State<TS, TB> Select<TS, TA, TB>(this State<TS, TA> ma, Func<TA, TB> f) 
@@ -881,10 +879,7 @@ namespace MonadLib
     {
         public static Reader<TR, TA> Join<TR, TA>(Reader<TR, Reader<TR, TA>> mma) 
         {
-            // Ideally, we would like to use MonadCombinators<TR>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (Reader<TR, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+            return MonadCombinators<TR>.Join<Reader<TR, Reader<TR, TA>>, Reader<TR, TA>, TA>(mma);
         }
 
         public static Reader<TR, TB> Select<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, TB> f) 
@@ -1162,10 +1157,7 @@ namespace MonadLib
     {
         public static Writer<TMonoid, TW, TA> Join<TMonoid, TW, TA>(Writer<TMonoid, TW, Writer<TMonoid, TW, TA>> mma) where TMonoid : IMonoid<TW>
         {
-            // Ideally, we would like to use MonadCombinators<TMonoid, TW>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (Writer<TMonoid, TW, TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+            return MonadCombinators<TMonoid, TW>.Join<Writer<TMonoid, TW, Writer<TMonoid, TW, TA>>, Writer<TMonoid, TW, TA>, TA>(mma);
         }
 
         public static Writer<TMonoid, TW, TB> Select<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, TB> f) where TMonoid : IMonoid<TW>

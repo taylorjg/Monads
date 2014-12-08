@@ -34,14 +34,11 @@ namespace MonadLib
     public static partial class <#= monadName #>
     {
 <# if (!new[]{"Maybe"}.Contains(monadName)) { #>
+<# } #>
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> Join<<#= addnlTypesPrefix #>TA>(<#= monadName #><<#= addnlTypesPrefix #><#= monadName #><<#= addnlTypesPrefix #>TA>> mma) <#= typeConstraints #>
         {
-            // Ideally, we would like to use MonadCombinators<#= addnlTypesList #>.Join(mma) but there
-            // is a casting issue that I have not figured out how to fix.
-            var monadAdapter = mma.GetMonadAdapter();
-            return (<#= monadName #><<#= addnlTypesPrefix #>TA>)monadAdapter.Bind(mma, MonadHelpers.Identity);
+            return MonadCombinators<#= addnlTypesList #>.Join<<#= monadName #><<#= addnlTypesPrefix #><#= monadName #><<#= addnlTypesPrefix #>TA>>, <#= monadName #><<#= addnlTypesPrefix #>TA>, TA>(mma);
         }
-<# } #>
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> Select<<#= addnlTypesPrefix #>TA, TB>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, TB> f) <#= typeConstraints #>
         {
@@ -55,9 +52,15 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TC> SelectMany<<#= addnlTypesPrefix #>TA, TB, TC>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f1, Func<TA, TB, TC> f2) <#= typeConstraints #>
         {
+<# if (string.IsNullOrEmpty(addnlTypesList)) { #>
             return ma.FlatMap(
                 a => f1(a).FlatMap(
-                    b => <#= monadName #><#= addnlTypesList#>.Return(f2(a, b))));
+                    b => Return(f2(a, b))));
+<# } else { #>
+            return ma.FlatMap(
+                a => f1(a).FlatMap(
+                    b => <#= monadName #><#= addnlTypesList #>.Return(f2(a, b))));
+<# } #>
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> Bind<<#= addnlTypesPrefix #>TA, TB>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f) <#= typeConstraints #>

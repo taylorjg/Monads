@@ -8,6 +8,13 @@ namespace MonadLib
 {
     public static partial class MonadCombinators
     {
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<TMonad>
+			where TMonad : IMonad<TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static IMonad<TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
         {
@@ -200,11 +207,13 @@ namespace MonadLib
 
     public static partial class MonadCombinators<T1>
     {
-        public static IMonad<T1, TA> Join<TA>(IMonad<T1, IMonad<T1, TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
-        }
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<T1, TMonad>
+			where TMonad : IMonad<T1, TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static IMonad<T1, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
         {
@@ -397,11 +406,13 @@ namespace MonadLib
 
     public static partial class MonadCombinators<T1, T2>
     {
-        public static IMonad<T1, T2, TA> Join<TA>(IMonad<T1, T2, IMonad<T1, T2, TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
-        }
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<T1, T2, TMonad>
+			where TMonad : IMonad<T1, T2, TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static IMonad<T1, T2, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, TA> ma)
         {
@@ -594,11 +605,13 @@ namespace MonadLib
 
     public static partial class MonadCombinators<T1, T2, T3>
     {
-        public static IMonad<T1, T2, T3, TA> Join<TA>(IMonad<T1, T2, T3, IMonad<T1, T2, T3, TA>> mma)
-        {
-            var monadAdapter = mma.GetMonadAdapter();
-            return monadAdapter.Bind(mma, MonadHelpers.Identity);
-        }
+		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+			where TMonadMonad : IMonad<T1, T2, T3, TMonad>
+			where TMonad : IMonad<T1, T2, T3, TA>
+		{
+			var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+			return (TMonad)monadAdapter.Bind(mma, ma => ma);
+		}
 
         public static IMonad<T1, T2, T3, TB> LiftM<TA, TB>(Func<TA, TB> f, IMonad<T1, T2, T3, TA> ma)
         {
