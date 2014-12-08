@@ -154,7 +154,7 @@ namespace MonadLib
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> Sequence_<<#= addnlTypesPrefix #>TA>(IEnumerable<<#= monadName #><<#= addnlTypesPrefix #>TA>> ms) <#= typeConstraints #>
         // ReSharper restore InconsistentNaming
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.SequenceInternal_(ms, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.Sequence_<<#= monadName #><<#= addnlTypesPrefix #>Unit>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -164,9 +164,9 @@ namespace MonadLib
             return Sequence_(ms.AsEnumerable());
         }
 
-        public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>> MapM<<#= addnlTypesPrefix #>TA, TB>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f, IEnumerable<TA> @as) <#= typeConstraints #>
+        public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>> MapM<<#= addnlTypesPrefix #>TA, TB>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f, IEnumerable<TA> @as)  <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>>)MonadCombinators<#= addnlTypesList #>.MapMInternal(f, @as, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.MapM<<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>> MapM<<#= addnlTypesPrefix #>TA, TB>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f, params TA[] @as) <#= typeConstraints #>
@@ -178,7 +178,7 @@ namespace MonadLib
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> MapM_<<#= addnlTypesPrefix #>TA, TB>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f, IEnumerable<TA> @as) <#= typeConstraints #>
         // ReSharper restore InconsistentNaming
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.MapMInternal_(f, @as, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.MapM_<<#= monadName #><<#= addnlTypesPrefix #>Unit>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
@@ -190,14 +190,14 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>> ForM<<#= addnlTypesPrefix #>TA, TB>(IEnumerable<TA> @as, Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>>)MonadCombinators<#= addnlTypesList #>.MapMInternal(f, @as, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.MapM<<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> ForM_<<#= addnlTypesPrefix #>TA, TB>(IEnumerable<TA> @as, Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f) <#= typeConstraints #>
         // ReSharper restore InconsistentNaming
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.MapMInternal_(f, @as, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.MapM_<<#= monadName #><<#= addnlTypesPrefix #>Unit>, TA, TB>(f, @as);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> ReplicateM<<#= addnlTypesPrefix #>TA>(int n, <#= monadName #><<#= addnlTypesPrefix #>TA> ma) <#= typeConstraints #>
@@ -207,7 +207,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> ReplicateM<<#= addnlTypesPrefix #>TA>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, int n) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>>)MonadCombinators<#= addnlTypesList #>.ReplicateM(n, ma);
+            return MonadCombinators<#= addnlTypesList #>.ReplicateM<<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>>, TA>(n, ma);
         }
 
         // ReSharper disable InconsistentNaming
@@ -221,7 +221,7 @@ namespace MonadLib
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> ReplicateM_<<#= addnlTypesPrefix #>TA>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, int n) <#= typeConstraints #>
         // ReSharper restore InconsistentNaming
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.ReplicateM_(n, ma);
+            return MonadCombinators<#= addnlTypesList #>.ReplicateM_<<#= monadName #><<#= addnlTypesPrefix #>Unit>, TA>(n, ma);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> FoldM<<#= addnlTypesPrefix #>TA, TB>(Func<TA, TB, <#= monadName #><<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs) <#= typeConstraints #>
@@ -250,14 +250,14 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TC>> ZipWithM<<#= addnlTypesPrefix #>TA, TB, TC>(Func<TA, TB, <#= monadName #><<#= addnlTypesPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TC>>)MonadCombinators<#= addnlTypesList #>.ZipWithMInternal(f, @as, bs, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.ZipWithM<<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TC>>, TA, TB, TC>(f, @as, bs);
         }
 
         // ReSharper disable InconsistentNaming
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> ZipWithM_<<#= addnlTypesPrefix #>TA, TB, TC>(Func<TA, TB, <#= monadName #><<#= addnlTypesPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) <#= typeConstraints #>
         // ReSharper restore InconsistentNaming
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.ZipWithMInternal_(f, @as, bs, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.ZipWithM_<<#= monadName #><<#= addnlTypesPrefix #>Unit>, TA, TB, TC>(f, @as, bs);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> FilterM<<#= addnlTypesPrefix #>TA>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>bool>> p, IEnumerable<TA> @as) <#= typeConstraints #>

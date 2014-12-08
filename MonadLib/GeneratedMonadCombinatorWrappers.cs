@@ -120,7 +120,7 @@ namespace MonadLib
         public static Maybe<Unit> Sequence_<TA>(IEnumerable<Maybe<TA>> ms) 
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.SequenceInternal_(ms, new MaybeMonadAdapter());
+            return MonadCombinators.Sequence_<Maybe<Unit>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -130,9 +130,9 @@ namespace MonadLib
             return Sequence_(ms.AsEnumerable());
         }
 
-        public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as) 
+        public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as)  
         {
-            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapMInternal(f, @as, new MaybeMonadAdapter());
+            return MonadCombinators.MapM<Maybe<IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         public static Maybe<IEnumerable<TB>> MapM<TA, TB>(Func<TA, Maybe<TB>> f, params TA[] @as) 
@@ -144,7 +144,7 @@ namespace MonadLib
         public static Maybe<Unit> MapM_<TA, TB>(Func<TA, Maybe<TB>> f, IEnumerable<TA> @as) 
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadAdapter());
+            return MonadCombinators.MapM_<Maybe<Unit>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
@@ -156,14 +156,14 @@ namespace MonadLib
 
         public static Maybe<IEnumerable<TB>> ForM<TA, TB>(IEnumerable<TA> @as, Func<TA, Maybe<TB>> f) 
         {
-            return (Maybe<IEnumerable<TB>>)MonadCombinators.MapMInternal(f, @as, new MaybeMonadAdapter());
+            return MonadCombinators.MapM<Maybe<IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
         public static Maybe<Unit> ForM_<TA, TB>(IEnumerable<TA> @as, Func<TA, Maybe<TB>> f) 
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.MapMInternal_(f, @as, new MaybeMonadAdapter());
+            return MonadCombinators.MapM_<Maybe<Unit>, TA, TB>(f, @as);
         }
 
         public static Maybe<IEnumerable<TA>> ReplicateM<TA>(int n, Maybe<TA> ma) 
@@ -173,7 +173,7 @@ namespace MonadLib
 
         public static Maybe<IEnumerable<TA>> ReplicateM<TA>(this Maybe<TA> ma, int n) 
         {
-            return (Maybe<IEnumerable<TA>>)MonadCombinators.ReplicateM(n, ma);
+            return MonadCombinators.ReplicateM<Maybe<IEnumerable<TA>>, TA>(n, ma);
         }
 
         // ReSharper disable InconsistentNaming
@@ -187,7 +187,7 @@ namespace MonadLib
         public static Maybe<Unit> ReplicateM_<TA>(this Maybe<TA> ma, int n) 
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.ReplicateM_(n, ma);
+            return MonadCombinators.ReplicateM_<Maybe<Unit>, TA>(n, ma);
         }
 
         public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs) 
@@ -216,14 +216,14 @@ namespace MonadLib
 
         public static Maybe<IEnumerable<TC>> ZipWithM<TA, TB, TC>(Func<TA, TB, Maybe<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         {
-            return (Maybe<IEnumerable<TC>>)MonadCombinators.ZipWithMInternal(f, @as, bs, new MaybeMonadAdapter());
+            return MonadCombinators.ZipWithM<Maybe<IEnumerable<TC>>, TA, TB, TC>(f, @as, bs);
         }
 
         // ReSharper disable InconsistentNaming
         public static Maybe<Unit> ZipWithM_<TA, TB, TC>(Func<TA, TB, Maybe<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.ZipWithMInternal_(f, @as, bs, new MaybeMonadAdapter());
+            return MonadCombinators.ZipWithM_<Maybe<Unit>, TA, TB, TC>(f, @as, bs);
         }
 
         public static Maybe<IEnumerable<TA>> FilterM<TA>(Func<TA, Maybe<bool>> p, IEnumerable<TA> @as) 
@@ -434,7 +434,7 @@ namespace MonadLib
         public static Either<TLeft, Unit> Sequence_<TLeft, TA>(IEnumerable<Either<TLeft, TA>> ms) 
         // ReSharper restore InconsistentNaming
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.SequenceInternal_(ms, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.Sequence_<Either<TLeft, Unit>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -444,9 +444,9 @@ namespace MonadLib
             return Sequence_(ms.AsEnumerable());
         }
 
-        public static Either<TLeft, IEnumerable<TB>> MapM<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, IEnumerable<TA> @as) 
+        public static Either<TLeft, IEnumerable<TB>> MapM<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, IEnumerable<TA> @as)  
         {
-            return (Either<TLeft, IEnumerable<TB>>)MonadCombinators<TLeft>.MapMInternal(f, @as, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.MapM<Either<TLeft, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         public static Either<TLeft, IEnumerable<TB>> MapM<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, params TA[] @as) 
@@ -458,7 +458,7 @@ namespace MonadLib
         public static Either<TLeft, Unit> MapM_<TLeft, TA, TB>(Func<TA, Either<TLeft, TB>> f, IEnumerable<TA> @as) 
         // ReSharper restore InconsistentNaming
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.MapMInternal_(f, @as, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.MapM_<Either<TLeft, Unit>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
@@ -470,14 +470,14 @@ namespace MonadLib
 
         public static Either<TLeft, IEnumerable<TB>> ForM<TLeft, TA, TB>(IEnumerable<TA> @as, Func<TA, Either<TLeft, TB>> f) 
         {
-            return (Either<TLeft, IEnumerable<TB>>)MonadCombinators<TLeft>.MapMInternal(f, @as, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.MapM<Either<TLeft, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
         public static Either<TLeft, Unit> ForM_<TLeft, TA, TB>(IEnumerable<TA> @as, Func<TA, Either<TLeft, TB>> f) 
         // ReSharper restore InconsistentNaming
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.MapMInternal_(f, @as, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.MapM_<Either<TLeft, Unit>, TA, TB>(f, @as);
         }
 
         public static Either<TLeft, IEnumerable<TA>> ReplicateM<TLeft, TA>(int n, Either<TLeft, TA> ma) 
@@ -487,7 +487,7 @@ namespace MonadLib
 
         public static Either<TLeft, IEnumerable<TA>> ReplicateM<TLeft, TA>(this Either<TLeft, TA> ma, int n) 
         {
-            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.ReplicateM(n, ma);
+            return MonadCombinators<TLeft>.ReplicateM<Either<TLeft, IEnumerable<TA>>, TA>(n, ma);
         }
 
         // ReSharper disable InconsistentNaming
@@ -501,7 +501,7 @@ namespace MonadLib
         public static Either<TLeft, Unit> ReplicateM_<TLeft, TA>(this Either<TLeft, TA> ma, int n) 
         // ReSharper restore InconsistentNaming
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.ReplicateM_(n, ma);
+            return MonadCombinators<TLeft>.ReplicateM_<Either<TLeft, Unit>, TA>(n, ma);
         }
 
         public static Either<TLeft, TA> FoldM<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, IEnumerable<TB> bs) 
@@ -530,14 +530,14 @@ namespace MonadLib
 
         public static Either<TLeft, IEnumerable<TC>> ZipWithM<TLeft, TA, TB, TC>(Func<TA, TB, Either<TLeft, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         {
-            return (Either<TLeft, IEnumerable<TC>>)MonadCombinators<TLeft>.ZipWithMInternal(f, @as, bs, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.ZipWithM<Either<TLeft, IEnumerable<TC>>, TA, TB, TC>(f, @as, bs);
         }
 
         // ReSharper disable InconsistentNaming
         public static Either<TLeft, Unit> ZipWithM_<TLeft, TA, TB, TC>(Func<TA, TB, Either<TLeft, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.ZipWithMInternal_(f, @as, bs, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.ZipWithM_<Either<TLeft, Unit>, TA, TB, TC>(f, @as, bs);
         }
 
         public static Either<TLeft, IEnumerable<TA>> FilterM<TLeft, TA>(Func<TA, Either<TLeft, bool>> p, IEnumerable<TA> @as) 
@@ -712,7 +712,7 @@ namespace MonadLib
         public static State<TS, Unit> Sequence_<TS, TA>(IEnumerable<State<TS, TA>> ms) 
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.SequenceInternal_(ms, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.Sequence_<State<TS, Unit>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -722,9 +722,9 @@ namespace MonadLib
             return Sequence_(ms.AsEnumerable());
         }
 
-        public static State<TS, IEnumerable<TB>> MapM<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as) 
+        public static State<TS, IEnumerable<TB>> MapM<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as)  
         {
-            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.MapM<State<TS, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         public static State<TS, IEnumerable<TB>> MapM<TS, TA, TB>(Func<TA, State<TS, TB>> f, params TA[] @as) 
@@ -736,7 +736,7 @@ namespace MonadLib
         public static State<TS, Unit> MapM_<TS, TA, TB>(Func<TA, State<TS, TB>> f, IEnumerable<TA> @as) 
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.MapM_<State<TS, Unit>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
@@ -748,14 +748,14 @@ namespace MonadLib
 
         public static State<TS, IEnumerable<TB>> ForM<TS, TA, TB>(IEnumerable<TA> @as, Func<TA, State<TS, TB>> f) 
         {
-            return (State<TS, IEnumerable<TB>>)MonadCombinators<TS>.MapMInternal(f, @as, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.MapM<State<TS, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
         public static State<TS, Unit> ForM_<TS, TA, TB>(IEnumerable<TA> @as, Func<TA, State<TS, TB>> f) 
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.MapMInternal_(f, @as, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.MapM_<State<TS, Unit>, TA, TB>(f, @as);
         }
 
         public static State<TS, IEnumerable<TA>> ReplicateM<TS, TA>(int n, State<TS, TA> ma) 
@@ -765,7 +765,7 @@ namespace MonadLib
 
         public static State<TS, IEnumerable<TA>> ReplicateM<TS, TA>(this State<TS, TA> ma, int n) 
         {
-            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.ReplicateM(n, ma);
+            return MonadCombinators<TS>.ReplicateM<State<TS, IEnumerable<TA>>, TA>(n, ma);
         }
 
         // ReSharper disable InconsistentNaming
@@ -779,7 +779,7 @@ namespace MonadLib
         public static State<TS, Unit> ReplicateM_<TS, TA>(this State<TS, TA> ma, int n) 
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.ReplicateM_(n, ma);
+            return MonadCombinators<TS>.ReplicateM_<State<TS, Unit>, TA>(n, ma);
         }
 
         public static State<TS, TA> FoldM<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, IEnumerable<TB> bs) 
@@ -808,14 +808,14 @@ namespace MonadLib
 
         public static State<TS, IEnumerable<TC>> ZipWithM<TS, TA, TB, TC>(Func<TA, TB, State<TS, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         {
-            return (State<TS, IEnumerable<TC>>)MonadCombinators<TS>.ZipWithMInternal(f, @as, bs, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.ZipWithM<State<TS, IEnumerable<TC>>, TA, TB, TC>(f, @as, bs);
         }
 
         // ReSharper disable InconsistentNaming
         public static State<TS, Unit> ZipWithM_<TS, TA, TB, TC>(Func<TA, TB, State<TS, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.ZipWithMInternal_(f, @as, bs, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.ZipWithM_<State<TS, Unit>, TA, TB, TC>(f, @as, bs);
         }
 
         public static State<TS, IEnumerable<TA>> FilterM<TS, TA>(Func<TA, State<TS, bool>> p, IEnumerable<TA> @as) 
@@ -990,7 +990,7 @@ namespace MonadLib
         public static Reader<TR, Unit> Sequence_<TR, TA>(IEnumerable<Reader<TR, TA>> ms) 
         // ReSharper restore InconsistentNaming
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.SequenceInternal_(ms, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.Sequence_<Reader<TR, Unit>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1000,9 +1000,9 @@ namespace MonadLib
             return Sequence_(ms.AsEnumerable());
         }
 
-        public static Reader<TR, IEnumerable<TB>> MapM<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, IEnumerable<TA> @as) 
+        public static Reader<TR, IEnumerable<TB>> MapM<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, IEnumerable<TA> @as)  
         {
-            return (Reader<TR, IEnumerable<TB>>)MonadCombinators<TR>.MapMInternal(f, @as, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.MapM<Reader<TR, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         public static Reader<TR, IEnumerable<TB>> MapM<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, params TA[] @as) 
@@ -1014,7 +1014,7 @@ namespace MonadLib
         public static Reader<TR, Unit> MapM_<TR, TA, TB>(Func<TA, Reader<TR, TB>> f, IEnumerable<TA> @as) 
         // ReSharper restore InconsistentNaming
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.MapMInternal_(f, @as, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.MapM_<Reader<TR, Unit>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1026,14 +1026,14 @@ namespace MonadLib
 
         public static Reader<TR, IEnumerable<TB>> ForM<TR, TA, TB>(IEnumerable<TA> @as, Func<TA, Reader<TR, TB>> f) 
         {
-            return (Reader<TR, IEnumerable<TB>>)MonadCombinators<TR>.MapMInternal(f, @as, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.MapM<Reader<TR, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
         public static Reader<TR, Unit> ForM_<TR, TA, TB>(IEnumerable<TA> @as, Func<TA, Reader<TR, TB>> f) 
         // ReSharper restore InconsistentNaming
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.MapMInternal_(f, @as, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.MapM_<Reader<TR, Unit>, TA, TB>(f, @as);
         }
 
         public static Reader<TR, IEnumerable<TA>> ReplicateM<TR, TA>(int n, Reader<TR, TA> ma) 
@@ -1043,7 +1043,7 @@ namespace MonadLib
 
         public static Reader<TR, IEnumerable<TA>> ReplicateM<TR, TA>(this Reader<TR, TA> ma, int n) 
         {
-            return (Reader<TR, IEnumerable<TA>>)MonadCombinators<TR>.ReplicateM(n, ma);
+            return MonadCombinators<TR>.ReplicateM<Reader<TR, IEnumerable<TA>>, TA>(n, ma);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1057,7 +1057,7 @@ namespace MonadLib
         public static Reader<TR, Unit> ReplicateM_<TR, TA>(this Reader<TR, TA> ma, int n) 
         // ReSharper restore InconsistentNaming
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.ReplicateM_(n, ma);
+            return MonadCombinators<TR>.ReplicateM_<Reader<TR, Unit>, TA>(n, ma);
         }
 
         public static Reader<TR, TA> FoldM<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, IEnumerable<TB> bs) 
@@ -1086,14 +1086,14 @@ namespace MonadLib
 
         public static Reader<TR, IEnumerable<TC>> ZipWithM<TR, TA, TB, TC>(Func<TA, TB, Reader<TR, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         {
-            return (Reader<TR, IEnumerable<TC>>)MonadCombinators<TR>.ZipWithMInternal(f, @as, bs, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.ZipWithM<Reader<TR, IEnumerable<TC>>, TA, TB, TC>(f, @as, bs);
         }
 
         // ReSharper disable InconsistentNaming
         public static Reader<TR, Unit> ZipWithM_<TR, TA, TB, TC>(Func<TA, TB, Reader<TR, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.ZipWithMInternal_(f, @as, bs, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.ZipWithM_<Reader<TR, Unit>, TA, TB, TC>(f, @as, bs);
         }
 
         public static Reader<TR, IEnumerable<TA>> FilterM<TR, TA>(Func<TA, Reader<TR, bool>> p, IEnumerable<TA> @as) 
@@ -1268,7 +1268,7 @@ namespace MonadLib
         public static Writer<TMonoid, TW, Unit> Sequence_<TMonoid, TW, TA>(IEnumerable<Writer<TMonoid, TW, TA>> ms) where TMonoid : IMonoid<TW>
         // ReSharper restore InconsistentNaming
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.SequenceInternal_(ms, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.Sequence_<Writer<TMonoid, TW, Unit>, TA>(ms);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1278,9 +1278,9 @@ namespace MonadLib
             return Sequence_(ms.AsEnumerable());
         }
 
-        public static Writer<TMonoid, TW, IEnumerable<TB>> MapM<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, IEnumerable<TA> @as) where TMonoid : IMonoid<TW>
+        public static Writer<TMonoid, TW, IEnumerable<TB>> MapM<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, IEnumerable<TA> @as)  where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, IEnumerable<TB>>)MonadCombinators<TMonoid, TW>.MapMInternal(f, @as, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.MapM<Writer<TMonoid, TW, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         public static Writer<TMonoid, TW, IEnumerable<TB>> MapM<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, params TA[] @as) where TMonoid : IMonoid<TW>
@@ -1292,7 +1292,7 @@ namespace MonadLib
         public static Writer<TMonoid, TW, Unit> MapM_<TMonoid, TW, TA, TB>(Func<TA, Writer<TMonoid, TW, TB>> f, IEnumerable<TA> @as) where TMonoid : IMonoid<TW>
         // ReSharper restore InconsistentNaming
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.MapMInternal_(f, @as, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.MapM_<Writer<TMonoid, TW, Unit>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1304,14 +1304,14 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, IEnumerable<TB>> ForM<TMonoid, TW, TA, TB>(IEnumerable<TA> @as, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, IEnumerable<TB>>)MonadCombinators<TMonoid, TW>.MapMInternal(f, @as, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.MapM<Writer<TMonoid, TW, IEnumerable<TB>>, TA, TB>(f, @as);
         }
 
         // ReSharper disable InconsistentNaming
         public static Writer<TMonoid, TW, Unit> ForM_<TMonoid, TW, TA, TB>(IEnumerable<TA> @as, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
         // ReSharper restore InconsistentNaming
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.MapMInternal_(f, @as, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.MapM_<Writer<TMonoid, TW, Unit>, TA, TB>(f, @as);
         }
 
         public static Writer<TMonoid, TW, IEnumerable<TA>> ReplicateM<TMonoid, TW, TA>(int n, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
@@ -1321,7 +1321,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, IEnumerable<TA>> ReplicateM<TMonoid, TW, TA>(this Writer<TMonoid, TW, TA> ma, int n) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.ReplicateM(n, ma);
+            return MonadCombinators<TMonoid, TW>.ReplicateM<Writer<TMonoid, TW, IEnumerable<TA>>, TA>(n, ma);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1335,7 +1335,7 @@ namespace MonadLib
         public static Writer<TMonoid, TW, Unit> ReplicateM_<TMonoid, TW, TA>(this Writer<TMonoid, TW, TA> ma, int n) where TMonoid : IMonoid<TW>
         // ReSharper restore InconsistentNaming
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.ReplicateM_(n, ma);
+            return MonadCombinators<TMonoid, TW>.ReplicateM_<Writer<TMonoid, TW, Unit>, TA>(n, ma);
         }
 
         public static Writer<TMonoid, TW, TA> FoldM<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
@@ -1364,14 +1364,14 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, IEnumerable<TC>> ZipWithM<TMonoid, TW, TA, TB, TC>(Func<TA, TB, Writer<TMonoid, TW, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, IEnumerable<TC>>)MonadCombinators<TMonoid, TW>.ZipWithMInternal(f, @as, bs, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.ZipWithM<Writer<TMonoid, TW, IEnumerable<TC>>, TA, TB, TC>(f, @as, bs);
         }
 
         // ReSharper disable InconsistentNaming
         public static Writer<TMonoid, TW, Unit> ZipWithM_<TMonoid, TW, TA, TB, TC>(Func<TA, TB, Writer<TMonoid, TW, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
         // ReSharper restore InconsistentNaming
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.ZipWithMInternal_(f, @as, bs, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.ZipWithM_<Writer<TMonoid, TW, Unit>, TA, TB, TC>(f, @as, bs);
         }
 
         public static Writer<TMonoid, TW, IEnumerable<TA>> FilterM<TMonoid, TW, TA>(Func<TA, Writer<TMonoid, TW, bool>> p, IEnumerable<TA> @as) where TMonoid : IMonoid<TW>

@@ -77,45 +77,42 @@ namespace MonadLib
                         mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
-        public static IMonad<IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<TA>> ms, MonadAdapter monadAdapter)
-        {
-            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
-            return ms.FoldRight(
-                z, (m, mtick) => monadAdapter.Bind(
-                    m, x => monadAdapter.Bind(
-                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
-        }
-
         // ReSharper disable InconsistentNaming
-        public static IMonad<Unit> SequenceInternal_<TA>(IEnumerable<IMonad<TA>> ms, MonadAdapter monadAdapter)
+        public static TMonad Sequence_<TMonad, TA>(IEnumerable<IMonad<TA>> ms)
+            where TMonad : IMonad<Unit>
         // ReSharper restore InconsistentNaming
         {
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
             var z = monadAdapter.Return(new Unit());
-            return ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
+            return (TMonad)ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
         }
 
-        public static IMonad<IEnumerable<TB>> MapMInternal<TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as, MonadAdapter monadAdapter)
+        public static TMonad MapM<TMonad, TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<IEnumerable<TB>>
         {
-            return SequenceInternal(@as.Map(f), monadAdapter);
-        }
-
-        // ReSharper disable InconsistentNaming
-        public static IMonad<Unit> MapMInternal_<TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as, MonadAdapter monadAdapter)
-        // ReSharper restore InconsistentNaming
-        {
-            return SequenceInternal_(@as.Map(f), monadAdapter);
-        }
-
-        public static IMonad<IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<TA> ma)
-        {
-            return SequenceInternal(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence<TMonad, TB>(@as.Map(f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<Unit> ReplicateM_<TA>(int n, IMonad<TA> ma)
+        public static TMonad MapM_<TMonad, TA, TB>(Func<TA, IMonad<TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence_<TMonad, TB>(@as.Map(f));
+        }
+
+        public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<TA> ma)
+			where TMonad : IMonad<IEnumerable<TA>>
+        {
+            return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static TMonad ReplicateM_<TMonad, TA>(int n, IMonad<TA> ma)
+            where TMonad : IMonad<Unit>
+        // ReSharper restore InconsistentNaming
+        {
+            return Sequence_<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
 
         public static IMonad<TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter monadAdapter)
@@ -141,16 +138,18 @@ namespace MonadLib
             return monadAdapter.BindIgnoringLeft(m, unit);
         }
 
-        public static IMonad<IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter monadAdapter)
+        public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<IEnumerable<TC>>
         {
-            return SequenceInternal(@as.Zip(bs, f), monadAdapter);
+            return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter monadAdapter)
+        public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
+            return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
         public static IMonad<IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<bool>> p, IEnumerable<TA> @as, MonadAdapter monadAdapter)
@@ -282,45 +281,42 @@ namespace MonadLib
                         mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
-        public static IMonad<T1, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, TA>> ms, MonadAdapter<T1> monadAdapter)
-        {
-            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
-            return ms.FoldRight(
-                z, (m, mtick) => monadAdapter.Bind(
-                    m, x => monadAdapter.Bind(
-                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
-        }
-
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, Unit> SequenceInternal_<TA>(IEnumerable<IMonad<T1, TA>> ms, MonadAdapter<T1> monadAdapter)
+        public static TMonad Sequence_<TMonad, TA>(IEnumerable<IMonad<T1, TA>> ms)
+            where TMonad : IMonad<T1, Unit>
         // ReSharper restore InconsistentNaming
         {
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
             var z = monadAdapter.Return(new Unit());
-            return ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
+            return (TMonad)ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
         }
 
-        public static IMonad<T1, IEnumerable<TB>> MapMInternal<TA, TB>(Func<TA, IMonad<T1, TB>> f, IEnumerable<TA> @as, MonadAdapter<T1> monadAdapter)
+        public static TMonad MapM<TMonad, TA, TB>(Func<TA, IMonad<T1, TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, IEnumerable<TB>>
         {
-            return SequenceInternal(@as.Map(f), monadAdapter);
-        }
-
-        // ReSharper disable InconsistentNaming
-        public static IMonad<T1, Unit> MapMInternal_<TA, TB>(Func<TA, IMonad<T1, TB>> f, IEnumerable<TA> @as, MonadAdapter<T1> monadAdapter)
-        // ReSharper restore InconsistentNaming
-        {
-            return SequenceInternal_(@as.Map(f), monadAdapter);
-        }
-
-        public static IMonad<T1, IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<T1, TA> ma)
-        {
-            return SequenceInternal(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence<TMonad, TB>(@as.Map(f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, Unit> ReplicateM_<TA>(int n, IMonad<T1, TA> ma)
+        public static TMonad MapM_<TMonad, TA, TB>(Func<TA, IMonad<T1, TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence_<TMonad, TB>(@as.Map(f));
+        }
+
+        public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<T1, TA> ma)
+			where TMonad : IMonad<T1, IEnumerable<TA>>
+        {
+            return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static TMonad ReplicateM_<TMonad, TA>(int n, IMonad<T1, TA> ma)
+            where TMonad : IMonad<T1, Unit>
+        // ReSharper restore InconsistentNaming
+        {
+            return Sequence_<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
 
         public static IMonad<T1, TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<T1, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
@@ -346,16 +342,18 @@ namespace MonadLib
             return monadAdapter.BindIgnoringLeft(m, unit);
         }
 
-        public static IMonad<T1, IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
+        public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<T1, IEnumerable<TC>>
         {
-            return SequenceInternal(@as.Zip(bs, f), monadAdapter);
+            return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1> monadAdapter)
+        public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<T1, Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
+            return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
         public static IMonad<T1, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1> monadAdapter)
@@ -487,45 +485,42 @@ namespace MonadLib
                         mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
-        public static IMonad<T1, T2, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, T2, TA>> ms, MonadAdapter<T1, T2> monadAdapter)
-        {
-            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
-            return ms.FoldRight(
-                z, (m, mtick) => monadAdapter.Bind(
-                    m, x => monadAdapter.Bind(
-                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
-        }
-
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, Unit> SequenceInternal_<TA>(IEnumerable<IMonad<T1, T2, TA>> ms, MonadAdapter<T1, T2> monadAdapter)
+        public static TMonad Sequence_<TMonad, TA>(IEnumerable<IMonad<T1, T2, TA>> ms)
+            where TMonad : IMonad<T1, T2, Unit>
         // ReSharper restore InconsistentNaming
         {
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
             var z = monadAdapter.Return(new Unit());
-            return ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
+            return (TMonad)ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
         }
 
-        public static IMonad<T1, T2, IEnumerable<TB>> MapMInternal<TA, TB>(Func<TA, IMonad<T1, T2, TB>> f, IEnumerable<TA> @as, MonadAdapter<T1, T2> monadAdapter)
+        public static TMonad MapM<TMonad, TA, TB>(Func<TA, IMonad<T1, T2, TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, T2, IEnumerable<TB>>
         {
-            return SequenceInternal(@as.Map(f), monadAdapter);
-        }
-
-        // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, Unit> MapMInternal_<TA, TB>(Func<TA, IMonad<T1, T2, TB>> f, IEnumerable<TA> @as, MonadAdapter<T1, T2> monadAdapter)
-        // ReSharper restore InconsistentNaming
-        {
-            return SequenceInternal_(@as.Map(f), monadAdapter);
-        }
-
-        public static IMonad<T1, T2, IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<T1, T2, TA> ma)
-        {
-            return SequenceInternal(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence<TMonad, TB>(@as.Map(f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, Unit> ReplicateM_<TA>(int n, IMonad<T1, T2, TA> ma)
+        public static TMonad MapM_<TMonad, TA, TB>(Func<TA, IMonad<T1, T2, TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, T2, Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence_<TMonad, TB>(@as.Map(f));
+        }
+
+        public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<T1, T2, TA> ma)
+			where TMonad : IMonad<T1, T2, IEnumerable<TA>>
+        {
+            return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static TMonad ReplicateM_<TMonad, TA>(int n, IMonad<T1, T2, TA> ma)
+            where TMonad : IMonad<T1, T2, Unit>
+        // ReSharper restore InconsistentNaming
+        {
+            return Sequence_<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
 
         public static IMonad<T1, T2, TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<T1, T2, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1, T2> monadAdapter)
@@ -551,16 +546,18 @@ namespace MonadLib
             return monadAdapter.BindIgnoringLeft(m, unit);
         }
 
-        public static IMonad<T1, T2, IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1, T2> monadAdapter)
+        public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<T1, T2, IEnumerable<TC>>
         {
-            return SequenceInternal(@as.Zip(bs, f), monadAdapter);
+            return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1, T2> monadAdapter)
+        public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<T1, T2, Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
+            return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
         public static IMonad<T1, T2, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, T2, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1, T2> monadAdapter)
@@ -692,45 +689,42 @@ namespace MonadLib
                         mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
         }
 
-        public static IMonad<T1, T2, T3, IEnumerable<TA>> SequenceInternal<TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms, MonadAdapter<T1, T2, T3> monadAdapter)
-        {
-            var z = monadAdapter.Return(MonadHelpers.Nil<TA>());
-            return ms.FoldRight(
-                z, (m, mtick) => monadAdapter.Bind(
-                    m, x => monadAdapter.Bind(
-                        mtick, xs => monadAdapter.Return(MonadHelpers.Cons(x, xs)))));
-        }
-
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, T3, Unit> SequenceInternal_<TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms, MonadAdapter<T1, T2, T3> monadAdapter)
+        public static TMonad Sequence_<TMonad, TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms)
+            where TMonad : IMonad<T1, T2, T3, Unit>
         // ReSharper restore InconsistentNaming
         {
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
             var z = monadAdapter.Return(new Unit());
-            return ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
+            return (TMonad)ms.FoldRight(z, monadAdapter.BindIgnoringLeft);
         }
 
-        public static IMonad<T1, T2, T3, IEnumerable<TB>> MapMInternal<TA, TB>(Func<TA, IMonad<T1, T2, T3, TB>> f, IEnumerable<TA> @as, MonadAdapter<T1, T2, T3> monadAdapter)
+        public static TMonad MapM<TMonad, TA, TB>(Func<TA, IMonad<T1, T2, T3, TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, T2, T3, IEnumerable<TB>>
         {
-            return SequenceInternal(@as.Map(f), monadAdapter);
-        }
-
-        // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, T3, Unit> MapMInternal_<TA, TB>(Func<TA, IMonad<T1, T2, T3, TB>> f, IEnumerable<TA> @as, MonadAdapter<T1, T2, T3> monadAdapter)
-        // ReSharper restore InconsistentNaming
-        {
-            return SequenceInternal_(@as.Map(f), monadAdapter);
-        }
-
-        public static IMonad<T1, T2, T3, IEnumerable<TA>> ReplicateM<TA>(int n, IMonad<T1, T2, T3, TA> ma)
-        {
-            return SequenceInternal(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence<TMonad, TB>(@as.Map(f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, T3, Unit> ReplicateM_<TA>(int n, IMonad<T1, T2, T3, TA> ma)
+        public static TMonad MapM_<TMonad, TA, TB>(Func<TA, IMonad<T1, T2, T3, TB>> f, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, T2, T3, Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(System.Linq.Enumerable.Repeat(ma, n), ma.GetMonadAdapter());
+            return Sequence_<TMonad, TB>(@as.Map(f));
+        }
+
+        public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<T1, T2, T3, TA> ma)
+			where TMonad : IMonad<T1, T2, T3, IEnumerable<TA>>
+        {
+            return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
+        }
+
+        // ReSharper disable InconsistentNaming
+        public static TMonad ReplicateM_<TMonad, TA>(int n, IMonad<T1, T2, T3, TA> ma)
+            where TMonad : IMonad<T1, T2, T3, Unit>
+        // ReSharper restore InconsistentNaming
+        {
+            return Sequence_<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
 
         public static IMonad<T1, T2, T3, TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<T1, T2, T3, TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<T1, T2, T3> monadAdapter)
@@ -756,16 +750,18 @@ namespace MonadLib
             return monadAdapter.BindIgnoringLeft(m, unit);
         }
 
-        public static IMonad<T1, T2, T3, IEnumerable<TC>> ZipWithMInternal<TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, T3, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1, T2, T3> monadAdapter)
+        public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, T3, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<T1, T2, T3, IEnumerable<TC>>
         {
-            return SequenceInternal(@as.Zip(bs, f), monadAdapter);
+            return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<T1, T2, T3, Unit> ZipWithMInternal_<TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, T3, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs, MonadAdapter<T1, T2, T3> monadAdapter)
+        public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, T3, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
+			where TMonad : IMonad<T1, T2, T3, Unit>
         // ReSharper restore InconsistentNaming
         {
-            return SequenceInternal_(@as.Zip(bs, f), monadAdapter);
+            return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
         public static IMonad<T1, T2, T3, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, T2, T3, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1, T2, T3> monadAdapter)
