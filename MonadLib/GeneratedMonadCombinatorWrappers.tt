@@ -117,7 +117,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TD> LiftM3<<#= addnlTypesPrefix #>TA, TB, TC, TD>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>TB> mb, <#= monadName #><<#= addnlTypesPrefix #>TC> mc, Func<TA, TB, TC, TD> f) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>TD>)MonadCombinators<#= addnlTypesList #>.LiftM3(f, ma, mb, mc);
+            return MonadCombinators<#= addnlTypesList #>.LiftM3<<#= monadName #><<#= addnlTypesPrefix #>TD>, TA, TB, TC, TD>(f, ma, mb, mc);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TE> LiftM4<<#= addnlTypesPrefix #>TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>TB> mb, <#= monadName #><<#= addnlTypesPrefix #>TC> mc, <#= monadName #><<#= addnlTypesPrefix #>TD> md) <#= typeConstraints #>
@@ -127,7 +127,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TE> LiftM4<<#= addnlTypesPrefix #>TA, TB, TC, TD, TE>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>TB> mb, <#= monadName #><<#= addnlTypesPrefix #>TC> mc, <#= monadName #><<#= addnlTypesPrefix #>TD> md, Func<TA, TB, TC, TD, TE> f) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>TE>)MonadCombinators<#= addnlTypesList #>.LiftM4(f, ma, mb, mc, md);
+            return MonadCombinators<#= addnlTypesList #>.LiftM4<<#= monadName #><<#= addnlTypesPrefix #>TE>, TA, TB, TC, TD, TE>(f, ma, mb, mc, md);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TF> LiftM5<<#= addnlTypesPrefix #>TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>TB> mb, <#= monadName #><<#= addnlTypesPrefix #>TC> mc, <#= monadName #><<#= addnlTypesPrefix #>TD> md, <#= monadName #><<#= addnlTypesPrefix #>TE> me) <#= typeConstraints #>
@@ -137,7 +137,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TF> LiftM5<<#= addnlTypesPrefix #>TA, TB, TC, TD, TE, TF>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, <#= monadName #><<#= addnlTypesPrefix #>TB> mb, <#= monadName #><<#= addnlTypesPrefix #>TC> mc, <#= monadName #><<#= addnlTypesPrefix #>TD> md, <#= monadName #><<#= addnlTypesPrefix #>TE> me, Func<TA, TB, TC, TD, TE, TF> f) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>TF>)MonadCombinators<#= addnlTypesList #>.LiftM5(f, ma, mb, mc, md, me);
+            return MonadCombinators<#= addnlTypesList #>.LiftM5<<#= monadName #><<#= addnlTypesPrefix #>TF>, TA, TB, TC, TD, TE, TF>(f, ma, mb, mc, md, me);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> Join<<#= addnlTypesPrefix #>TA>(<#= monadName #><<#= addnlTypesPrefix #><#= monadName #><<#= addnlTypesPrefix #>TA>> mma) <#= typeConstraints #>

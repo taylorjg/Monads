@@ -25,29 +25,32 @@ namespace MonadLib
                     mb, b => monadAdapter.Return(f(a, b))));
         }
 
-        public static IMonad<TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc)
+        public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc)
+            where TMonad : IMonad<TD>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Return(f(a, b, c)))));
         }
 
-        public static IMonad<TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md)
+        public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md)
+            where TMonad : IMonad<TE>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
                             md, d => monadAdapter.Return(f(a, b, c, d))))));
         }
 
-        public static IMonad<TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md, IMonad<TE> me)
+        public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md, IMonad<TE> me)
+            where TMonad : IMonad<TF>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
@@ -227,29 +230,32 @@ namespace MonadLib
                     mb, b => monadAdapter.Return(f(a, b))));
         }
 
-        public static IMonad<T1, TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc)
+        public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc)
+            where TMonad : IMonad<T1, TD>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Return(f(a, b, c)))));
         }
 
-        public static IMonad<T1, TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md)
+        public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md)
+            where TMonad : IMonad<T1, TE>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
                             md, d => monadAdapter.Return(f(a, b, c, d))))));
         }
 
-        public static IMonad<T1, TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md, IMonad<T1, TE> me)
+        public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md, IMonad<T1, TE> me)
+            where TMonad : IMonad<T1, TF>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
@@ -429,29 +435,32 @@ namespace MonadLib
                     mb, b => monadAdapter.Return(f(a, b))));
         }
 
-        public static IMonad<T1, T2, TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc)
+        public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc)
+            where TMonad : IMonad<T1, T2, TD>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Return(f(a, b, c)))));
         }
 
-        public static IMonad<T1, T2, TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc, IMonad<T1, T2, TD> md)
+        public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc, IMonad<T1, T2, TD> md)
+            where TMonad : IMonad<T1, T2, TE>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
                             md, d => monadAdapter.Return(f(a, b, c, d))))));
         }
 
-        public static IMonad<T1, T2, TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc, IMonad<T1, T2, TD> md, IMonad<T1, T2, TE> me)
+        public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc, IMonad<T1, T2, TD> md, IMonad<T1, T2, TE> me)
+            where TMonad : IMonad<T1, T2, TF>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
@@ -631,29 +640,32 @@ namespace MonadLib
                     mb, b => monadAdapter.Return(f(a, b))));
         }
 
-        public static IMonad<T1, T2, T3, TD> LiftM3<TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc)
+        public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc)
+            where TMonad : IMonad<T1, T2, T3, TD>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Return(f(a, b, c)))));
         }
 
-        public static IMonad<T1, T2, T3, TE> LiftM4<TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc, IMonad<T1, T2, T3, TD> md)
+        public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc, IMonad<T1, T2, T3, TD> md)
+            where TMonad : IMonad<T1, T2, T3, TE>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
                             md, d => monadAdapter.Return(f(a, b, c, d))))));
         }
 
-        public static IMonad<T1, T2, T3, TF> LiftM5<TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc, IMonad<T1, T2, T3, TD> md, IMonad<T1, T2, T3, TE> me)
+        public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc, IMonad<T1, T2, T3, TD> md, IMonad<T1, T2, T3, TE> me)
+            where TMonad : IMonad<T1, T2, T3, TF>
         {
-            var monadAdapter = ma.GetMonadAdapter();
-            return monadAdapter.Bind(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(
                 ma, a => monadAdapter.Bind(
                     mb, b => monadAdapter.Bind(
                         mc, c => monadAdapter.Bind(
