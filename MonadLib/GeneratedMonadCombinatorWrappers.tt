@@ -262,7 +262,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> FilterM<<#= addnlTypesPrefix #>TA>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>bool>> p, IEnumerable<TA> @as) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>>)MonadCombinators<#= addnlTypesList #>.FilterMInternal(p, @as, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.FilterM<<#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>>, TA>(p, @as);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>IEnumerable<TA>> FilterM<<#= addnlTypesPrefix #>TA>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>bool>> p, params TA[] @as) <#= typeConstraints #>

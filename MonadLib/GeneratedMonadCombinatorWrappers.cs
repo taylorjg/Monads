@@ -228,7 +228,7 @@ namespace MonadLib
 
         public static Maybe<IEnumerable<TA>> FilterM<TA>(Func<TA, Maybe<bool>> p, IEnumerable<TA> @as) 
         {
-            return (Maybe<IEnumerable<TA>>)MonadCombinators.FilterMInternal(p, @as, new MaybeMonadAdapter());
+            return MonadCombinators.FilterM<Maybe<IEnumerable<TA>>, TA>(p, @as);
         }
 
         public static Maybe<IEnumerable<TA>> FilterM<TA>(Func<TA, Maybe<bool>> p, params TA[] @as) 
@@ -542,7 +542,7 @@ namespace MonadLib
 
         public static Either<TLeft, IEnumerable<TA>> FilterM<TLeft, TA>(Func<TA, Either<TLeft, bool>> p, IEnumerable<TA> @as) 
         {
-            return (Either<TLeft, IEnumerable<TA>>)MonadCombinators<TLeft>.FilterMInternal(p, @as, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.FilterM<Either<TLeft, IEnumerable<TA>>, TA>(p, @as);
         }
 
         public static Either<TLeft, IEnumerable<TA>> FilterM<TLeft, TA>(Func<TA, Either<TLeft, bool>> p, params TA[] @as) 
@@ -820,7 +820,7 @@ namespace MonadLib
 
         public static State<TS, IEnumerable<TA>> FilterM<TS, TA>(Func<TA, State<TS, bool>> p, IEnumerable<TA> @as) 
         {
-            return (State<TS, IEnumerable<TA>>)MonadCombinators<TS>.FilterMInternal(p, @as, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.FilterM<State<TS, IEnumerable<TA>>, TA>(p, @as);
         }
 
         public static State<TS, IEnumerable<TA>> FilterM<TS, TA>(Func<TA, State<TS, bool>> p, params TA[] @as) 
@@ -1098,7 +1098,7 @@ namespace MonadLib
 
         public static Reader<TR, IEnumerable<TA>> FilterM<TR, TA>(Func<TA, Reader<TR, bool>> p, IEnumerable<TA> @as) 
         {
-            return (Reader<TR, IEnumerable<TA>>)MonadCombinators<TR>.FilterMInternal(p, @as, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.FilterM<Reader<TR, IEnumerable<TA>>, TA>(p, @as);
         }
 
         public static Reader<TR, IEnumerable<TA>> FilterM<TR, TA>(Func<TA, Reader<TR, bool>> p, params TA[] @as) 
@@ -1376,7 +1376,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, IEnumerable<TA>> FilterM<TMonoid, TW, TA>(Func<TA, Writer<TMonoid, TW, bool>> p, IEnumerable<TA> @as) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, IEnumerable<TA>>)MonadCombinators<TMonoid, TW>.FilterMInternal(p, @as, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.FilterM<Writer<TMonoid, TW, IEnumerable<TA>>, TA>(p, @as);
         }
 
         public static Writer<TMonoid, TW, IEnumerable<TA>> FilterM<TMonoid, TW, TA>(Func<TA, Writer<TMonoid, TW, bool>> p, params TA[] @as) where TMonoid : IMonoid<TW>

@@ -177,17 +177,18 @@ namespace MonadLib
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
-        public static IMonad<IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<bool>> p, IEnumerable<TA> @as, MonadAdapter monadAdapter)
+        public static TMonad FilterM<TMonad, TA>(Func<TA, IMonad<bool>> p, IEnumerable<TA> @as)
+            where TMonad : IMonad<IEnumerable<TA>>
         {
-            // TODO: fix ReSharper grumble: Implicitly captured closure: p
-            return @as.HeadAndTail().Match(
+            var monadAdapter = MonadAdapterRegistry.Get(typeof (TMonad));
+            return (TMonad)@as.HeadAndTail().Match(
                 tuple =>
                 {
                     var x = tuple.Item1;
                     var xs = tuple.Item2;
                     return monadAdapter.Bind(
                         p(x), flg => monadAdapter.Bind(
-                            FilterMInternal(p, xs, monadAdapter),
+                            FilterM<TMonad, TA>(p, xs),
                             ys => monadAdapter.Return(flg ? MonadHelpers.Cons(x, ys) : ys)));
                 },
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
@@ -410,17 +411,18 @@ namespace MonadLib
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
-        public static IMonad<T1, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1> monadAdapter)
+        public static TMonad FilterM<TMonad, TA>(Func<TA, IMonad<T1, bool>> p, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, IEnumerable<TA>>
         {
-            // TODO: fix ReSharper grumble: Implicitly captured closure: p
-            return @as.HeadAndTail().Match(
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof (TMonad));
+            return (TMonad)@as.HeadAndTail().Match(
                 tuple =>
                 {
                     var x = tuple.Item1;
                     var xs = tuple.Item2;
                     return monadAdapter.Bind(
                         p(x), flg => monadAdapter.Bind(
-                            FilterMInternal(p, xs, monadAdapter),
+                            FilterM<TMonad, TA>(p, xs),
                             ys => monadAdapter.Return(flg ? MonadHelpers.Cons(x, ys) : ys)));
                 },
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
@@ -643,17 +645,18 @@ namespace MonadLib
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
-        public static IMonad<T1, T2, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, T2, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1, T2> monadAdapter)
+        public static TMonad FilterM<TMonad, TA>(Func<TA, IMonad<T1, T2, bool>> p, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, T2, IEnumerable<TA>>
         {
-            // TODO: fix ReSharper grumble: Implicitly captured closure: p
-            return @as.HeadAndTail().Match(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof (TMonad));
+            return (TMonad)@as.HeadAndTail().Match(
                 tuple =>
                 {
                     var x = tuple.Item1;
                     var xs = tuple.Item2;
                     return monadAdapter.Bind(
                         p(x), flg => monadAdapter.Bind(
-                            FilterMInternal(p, xs, monadAdapter),
+                            FilterM<TMonad, TA>(p, xs),
                             ys => monadAdapter.Return(flg ? MonadHelpers.Cons(x, ys) : ys)));
                 },
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
@@ -876,17 +879,18 @@ namespace MonadLib
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));
         }
 
-        public static IMonad<T1, T2, T3, IEnumerable<TA>> FilterMInternal<TA>(Func<TA, IMonad<T1, T2, T3, bool>> p, IEnumerable<TA> @as, MonadAdapter<T1, T2, T3> monadAdapter)
+        public static TMonad FilterM<TMonad, TA>(Func<TA, IMonad<T1, T2, T3, bool>> p, IEnumerable<TA> @as)
+            where TMonad : IMonad<T1, T2, T3, IEnumerable<TA>>
         {
-            // TODO: fix ReSharper grumble: Implicitly captured closure: p
-            return @as.HeadAndTail().Match(
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof (TMonad));
+            return (TMonad)@as.HeadAndTail().Match(
                 tuple =>
                 {
                     var x = tuple.Item1;
                     var xs = tuple.Item2;
                     return monadAdapter.Bind(
                         p(x), flg => monadAdapter.Bind(
-                            FilterMInternal(p, xs, monadAdapter),
+                            FilterM<TMonad, TA>(p, xs),
                             ys => monadAdapter.Return(flg ? MonadHelpers.Cons(x, ys) : ys)));
                 },
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
