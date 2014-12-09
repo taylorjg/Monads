@@ -27,8 +27,8 @@ namespace MonadLib
 <# var addnlTypesPrefix = string.IsNullOrEmpty(addnlTypes) ? string.Empty : addnlTypes + ", "; #>
 <# var addnlTypesList = string.IsNullOrEmpty(addnlTypes) ? string.Empty : "<" + addnlTypes + ">"; #>
 <# var isLastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
-	internal static partial class MonadCominatorsQueryExtensions
-	{
+    internal static partial class MonadCominatorsQueryExtensions
+    {
         public static IMonad<<#= addnlTypesPrefix #>TB> Select<<#= addnlTypesPrefix #>TA, TB>(this IMonad<<#= addnlTypesPrefix #>TA> ma, Func<TA, TB> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -49,7 +49,7 @@ namespace MonadLib
                 ma, a => monadAdapter.Bind(
                     f1(a), b => monadAdapter.Return(f2(a, b))));
         }
-	}
+    }
 
     public static partial class MonadCombinators<#= addnlTypesList #>
     {
@@ -58,60 +58,60 @@ namespace MonadLib
         public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<<#= addnlTypesPrefix #>TA> ma)
             where TMonad : IMonad<<#= addnlTypesPrefix #>TB>
         {
-			return (TMonad)
-				from a in ma
-				select f(a);
+            return (TMonad)
+                from a in ma
+                select f(a);
         }
 
         public static TMonad LiftM2<TMonad, TA, TB, TC>(Func<TA, TB, TC> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb)
             where TMonad : IMonad<<#= addnlTypesPrefix #>TC>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				select f(a, b);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                select f(a, b);
         }
 
         public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb, IMonad<<#= addnlTypesPrefix #>TC> mc)
             where TMonad : IMonad<<#= addnlTypesPrefix #>TD>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				select f(a, b, c);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                select f(a, b, c);
         }
 
         public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb, IMonad<<#= addnlTypesPrefix #>TC> mc, IMonad<<#= addnlTypesPrefix #>TD> md)
             where TMonad : IMonad<<#= addnlTypesPrefix #>TE>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				select f(a, b, c, d);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                select f(a, b, c, d);
         }
 
         public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<<#= addnlTypesPrefix #>TA> ma, IMonad<<#= addnlTypesPrefix #>TB> mb, IMonad<<#= addnlTypesPrefix #>TC> mc, IMonad<<#= addnlTypesPrefix #>TD> md, IMonad<<#= addnlTypesPrefix #>TE> me)
             where TMonad : IMonad<<#= addnlTypesPrefix #>TF>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				from e in me
-				select f(a, b, c, d, e);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                from e in me
+                select f(a, b, c, d, e);
         }
 
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<<#= addnlTypesPrefix #>TMonad>
-			where TMonad : IMonad<<#= addnlTypesPrefix #>TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
+        public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+            where TMonadMonad : IMonad<<#= addnlTypesPrefix #>TMonad>
+            where TMonad : IMonad<<#= addnlTypesPrefix #>TA>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(mma, ma => ma);
+        }
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<<#= addnlTypesPrefix #>TA>> ms)
             where TMonad : IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>>
@@ -149,7 +149,7 @@ namespace MonadLib
         }
 
         public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<<#= addnlTypesPrefix #>TA> ma)
-			where TMonad : IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>>
+            where TMonad : IMonad<<#= addnlTypesPrefix #>IEnumerable<TA>>
         {
             return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
@@ -186,14 +186,14 @@ namespace MonadLib
         }
 
         public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<<#= addnlTypesPrefix #>IEnumerable<TC>>
+            where TMonad : IMonad<<#= addnlTypesPrefix #>IEnumerable<TC>>
         {
             return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
         public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<<#= addnlTypesPrefix #>Unit>
+            where TMonad : IMonad<<#= addnlTypesPrefix #>Unit>
         // ReSharper restore InconsistentNaming
         {
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));

@@ -330,7 +330,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> MFilter<TA>(Func<TA, bool> p, <#= monadName #><<#= addnlTypesPrefix #>TA> ma)
         {
-			return ma.MFilter(p);
+            return ma.MFilter(p);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> MFilter<TA>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, bool> p)

@@ -6,8 +6,8 @@ using MonadLib.Registries;
 
 namespace MonadLib
 {
-	internal static partial class MonadCominatorsQueryExtensions
-	{
+    internal static partial class MonadCominatorsQueryExtensions
+    {
         public static IMonad<TB> Select<TA, TB>(this IMonad<TA> ma, Func<TA, TB> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -28,67 +28,67 @@ namespace MonadLib
                 ma, a => monadAdapter.Bind(
                     f1(a), b => monadAdapter.Return(f2(a, b))));
         }
-	}
+    }
 
     public static partial class MonadCombinators
     {
         public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<TA> ma)
             where TMonad : IMonad<TB>
         {
-			return (TMonad)
-				from a in ma
-				select f(a);
+            return (TMonad)
+                from a in ma
+                select f(a);
         }
 
         public static TMonad LiftM2<TMonad, TA, TB, TC>(Func<TA, TB, TC> f, IMonad<TA> ma, IMonad<TB> mb)
             where TMonad : IMonad<TC>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				select f(a, b);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                select f(a, b);
         }
 
         public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc)
             where TMonad : IMonad<TD>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				select f(a, b, c);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                select f(a, b, c);
         }
 
         public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md)
             where TMonad : IMonad<TE>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				select f(a, b, c, d);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                select f(a, b, c, d);
         }
 
         public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<TA> ma, IMonad<TB> mb, IMonad<TC> mc, IMonad<TD> md, IMonad<TE> me)
             where TMonad : IMonad<TF>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				from e in me
-				select f(a, b, c, d, e);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                from e in me
+                select f(a, b, c, d, e);
         }
 
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<TMonad>
-			where TMonad : IMonad<TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
+        public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+            where TMonadMonad : IMonad<TMonad>
+            where TMonad : IMonad<TA>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(mma, ma => ma);
+        }
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<TA>> ms)
             where TMonad : IMonad<IEnumerable<TA>>
@@ -126,7 +126,7 @@ namespace MonadLib
         }
 
         public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<TA> ma)
-			where TMonad : IMonad<IEnumerable<TA>>
+            where TMonad : IMonad<IEnumerable<TA>>
         {
             return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
@@ -163,14 +163,14 @@ namespace MonadLib
         }
 
         public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<IEnumerable<TC>>
+            where TMonad : IMonad<IEnumerable<TC>>
         {
             return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
         public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<Unit>
+            where TMonad : IMonad<Unit>
         // ReSharper restore InconsistentNaming
         {
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));
@@ -234,8 +234,8 @@ namespace MonadLib
         }
     }
 
-	internal static partial class MonadCominatorsQueryExtensions
-	{
+    internal static partial class MonadCominatorsQueryExtensions
+    {
         public static IMonad<T1, TB> Select<T1, TA, TB>(this IMonad<T1, TA> ma, Func<TA, TB> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -256,67 +256,67 @@ namespace MonadLib
                 ma, a => monadAdapter.Bind(
                     f1(a), b => monadAdapter.Return(f2(a, b))));
         }
-	}
+    }
 
     public static partial class MonadCombinators<T1>
     {
         public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<T1, TA> ma)
             where TMonad : IMonad<T1, TB>
         {
-			return (TMonad)
-				from a in ma
-				select f(a);
+            return (TMonad)
+                from a in ma
+                select f(a);
         }
 
         public static TMonad LiftM2<TMonad, TA, TB, TC>(Func<TA, TB, TC> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb)
             where TMonad : IMonad<T1, TC>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				select f(a, b);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                select f(a, b);
         }
 
         public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc)
             where TMonad : IMonad<T1, TD>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				select f(a, b, c);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                select f(a, b, c);
         }
 
         public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md)
             where TMonad : IMonad<T1, TE>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				select f(a, b, c, d);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                select f(a, b, c, d);
         }
 
         public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, TA> ma, IMonad<T1, TB> mb, IMonad<T1, TC> mc, IMonad<T1, TD> md, IMonad<T1, TE> me)
             where TMonad : IMonad<T1, TF>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				from e in me
-				select f(a, b, c, d, e);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                from e in me
+                select f(a, b, c, d, e);
         }
 
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<T1, TMonad>
-			where TMonad : IMonad<T1, TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
+        public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+            where TMonadMonad : IMonad<T1, TMonad>
+            where TMonad : IMonad<T1, TA>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(mma, ma => ma);
+        }
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, TA>> ms)
             where TMonad : IMonad<T1, IEnumerable<TA>>
@@ -354,7 +354,7 @@ namespace MonadLib
         }
 
         public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<T1, TA> ma)
-			where TMonad : IMonad<T1, IEnumerable<TA>>
+            where TMonad : IMonad<T1, IEnumerable<TA>>
         {
             return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
@@ -391,14 +391,14 @@ namespace MonadLib
         }
 
         public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<T1, IEnumerable<TC>>
+            where TMonad : IMonad<T1, IEnumerable<TC>>
         {
             return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
         public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<T1, Unit>
+            where TMonad : IMonad<T1, Unit>
         // ReSharper restore InconsistentNaming
         {
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));
@@ -462,8 +462,8 @@ namespace MonadLib
         }
     }
 
-	internal static partial class MonadCominatorsQueryExtensions
-	{
+    internal static partial class MonadCominatorsQueryExtensions
+    {
         public static IMonad<T1, T2, TB> Select<T1, T2, TA, TB>(this IMonad<T1, T2, TA> ma, Func<TA, TB> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -484,67 +484,67 @@ namespace MonadLib
                 ma, a => monadAdapter.Bind(
                     f1(a), b => monadAdapter.Return(f2(a, b))));
         }
-	}
+    }
 
     public static partial class MonadCombinators<T1, T2>
     {
         public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<T1, T2, TA> ma)
             where TMonad : IMonad<T1, T2, TB>
         {
-			return (TMonad)
-				from a in ma
-				select f(a);
+            return (TMonad)
+                from a in ma
+                select f(a);
         }
 
         public static TMonad LiftM2<TMonad, TA, TB, TC>(Func<TA, TB, TC> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb)
             where TMonad : IMonad<T1, T2, TC>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				select f(a, b);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                select f(a, b);
         }
 
         public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc)
             where TMonad : IMonad<T1, T2, TD>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				select f(a, b, c);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                select f(a, b, c);
         }
 
         public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc, IMonad<T1, T2, TD> md)
             where TMonad : IMonad<T1, T2, TE>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				select f(a, b, c, d);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                select f(a, b, c, d);
         }
 
         public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, T2, TA> ma, IMonad<T1, T2, TB> mb, IMonad<T1, T2, TC> mc, IMonad<T1, T2, TD> md, IMonad<T1, T2, TE> me)
             where TMonad : IMonad<T1, T2, TF>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				from e in me
-				select f(a, b, c, d, e);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                from e in me
+                select f(a, b, c, d, e);
         }
 
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<T1, T2, TMonad>
-			where TMonad : IMonad<T1, T2, TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
+        public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+            where TMonadMonad : IMonad<T1, T2, TMonad>
+            where TMonad : IMonad<T1, T2, TA>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(mma, ma => ma);
+        }
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, T2, TA>> ms)
             where TMonad : IMonad<T1, T2, IEnumerable<TA>>
@@ -582,7 +582,7 @@ namespace MonadLib
         }
 
         public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<T1, T2, TA> ma)
-			where TMonad : IMonad<T1, T2, IEnumerable<TA>>
+            where TMonad : IMonad<T1, T2, IEnumerable<TA>>
         {
             return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
@@ -619,14 +619,14 @@ namespace MonadLib
         }
 
         public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<T1, T2, IEnumerable<TC>>
+            where TMonad : IMonad<T1, T2, IEnumerable<TC>>
         {
             return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
         public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<T1, T2, Unit>
+            where TMonad : IMonad<T1, T2, Unit>
         // ReSharper restore InconsistentNaming
         {
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));
@@ -690,8 +690,8 @@ namespace MonadLib
         }
     }
 
-	internal static partial class MonadCominatorsQueryExtensions
-	{
+    internal static partial class MonadCominatorsQueryExtensions
+    {
         public static IMonad<T1, T2, T3, TB> Select<T1, T2, T3, TA, TB>(this IMonad<T1, T2, T3, TA> ma, Func<TA, TB> f)
         {
             var monadAdapter = ma.GetMonadAdapter();
@@ -712,67 +712,67 @@ namespace MonadLib
                 ma, a => monadAdapter.Bind(
                     f1(a), b => monadAdapter.Return(f2(a, b))));
         }
-	}
+    }
 
     public static partial class MonadCombinators<T1, T2, T3>
     {
         public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<T1, T2, T3, TA> ma)
             where TMonad : IMonad<T1, T2, T3, TB>
         {
-			return (TMonad)
-				from a in ma
-				select f(a);
+            return (TMonad)
+                from a in ma
+                select f(a);
         }
 
         public static TMonad LiftM2<TMonad, TA, TB, TC>(Func<TA, TB, TC> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb)
             where TMonad : IMonad<T1, T2, T3, TC>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				select f(a, b);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                select f(a, b);
         }
 
         public static TMonad LiftM3<TMonad, TA, TB, TC, TD>(Func<TA, TB, TC, TD> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc)
             where TMonad : IMonad<T1, T2, T3, TD>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				select f(a, b, c);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                select f(a, b, c);
         }
 
         public static TMonad LiftM4<TMonad, TA, TB, TC, TD, TE>(Func<TA, TB, TC, TD, TE> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc, IMonad<T1, T2, T3, TD> md)
             where TMonad : IMonad<T1, T2, T3, TE>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				select f(a, b, c, d);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                select f(a, b, c, d);
         }
 
         public static TMonad LiftM5<TMonad, TA, TB, TC, TD, TE, TF>(Func<TA, TB, TC, TD, TE, TF> f, IMonad<T1, T2, T3, TA> ma, IMonad<T1, T2, T3, TB> mb, IMonad<T1, T2, T3, TC> mc, IMonad<T1, T2, T3, TD> md, IMonad<T1, T2, T3, TE> me)
             where TMonad : IMonad<T1, T2, T3, TF>
         {
-			return (TMonad)
-				from a in ma
-				from b in mb
-				from c in mc
-				from d in md
-				from e in me
-				select f(a, b, c, d, e);
+            return (TMonad)
+                from a in ma
+                from b in mb
+                from c in mc
+                from d in md
+                from e in me
+                select f(a, b, c, d, e);
         }
 
-		public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
-			where TMonadMonad : IMonad<T1, T2, T3, TMonad>
-			where TMonad : IMonad<T1, T2, T3, TA>
-		{
-			var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
-			return (TMonad)monadAdapter.Bind(mma, ma => ma);
-		}
+        public static TMonad Join<TMonadMonad, TMonad, TA>(TMonadMonad mma)
+            where TMonadMonad : IMonad<T1, T2, T3, TMonad>
+            where TMonad : IMonad<T1, T2, T3, TA>
+        {
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)monadAdapter.Bind(mma, ma => ma);
+        }
 
         public static TMonad Sequence<TMonad, TA>(IEnumerable<IMonad<T1, T2, T3, TA>> ms)
             where TMonad : IMonad<T1, T2, T3, IEnumerable<TA>>
@@ -810,7 +810,7 @@ namespace MonadLib
         }
 
         public static TMonad ReplicateM<TMonad, TA>(int n, IMonad<T1, T2, T3, TA> ma)
-			where TMonad : IMonad<T1, T2, T3, IEnumerable<TA>>
+            where TMonad : IMonad<T1, T2, T3, IEnumerable<TA>>
         {
             return Sequence<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
@@ -847,14 +847,14 @@ namespace MonadLib
         }
 
         public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, T3, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<T1, T2, T3, IEnumerable<TC>>
+            where TMonad : IMonad<T1, T2, T3, IEnumerable<TC>>
         {
             return Sequence<TMonad, TC>(@as.Zip(bs, f));
         }
 
         // ReSharper disable InconsistentNaming
         public static TMonad ZipWithM_<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<T1, T2, T3, TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)
-			where TMonad : IMonad<T1, T2, T3, Unit>
+            where TMonad : IMonad<T1, T2, T3, Unit>
         // ReSharper restore InconsistentNaming
         {
             return Sequence_<TMonad, TC>(@as.Zip(bs, f));

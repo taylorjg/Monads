@@ -295,7 +295,7 @@ namespace MonadLib
 
         public static Maybe<TA> MFilter<TA>(Func<TA, bool> p, Maybe<TA> ma)
         {
-			return ma.MFilter(p);
+            return ma.MFilter(p);
         }
 
         public static Maybe<TA> MFilter<TA>(this Maybe<TA> ma, Func<TA, bool> p)
