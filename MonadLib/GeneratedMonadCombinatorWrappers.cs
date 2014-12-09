@@ -258,12 +258,12 @@ namespace MonadLib
 
         public static Maybe<TB> Forever<TA, TB>(this Maybe<TA> m) 
         {
-            return (Maybe<TB>)MonadCombinators.Forever<TA, TB>(m);
+            return MonadCombinators.Forever<Maybe<TB>, TA, TB>(m);
         }
 
         public static Maybe<Unit> Void<TA>(this Maybe<TA> m) 
         {
-            return (Maybe<Unit>)MonadCombinators.Void(m);
+            return MonadCombinators.Void<Maybe<Unit>, TA>(m);
         }
 
         public static Maybe<TB> Ap<TA, TB>(Maybe<Func<TA, TB>> mf, Maybe<TA> ma) 
@@ -572,12 +572,12 @@ namespace MonadLib
 
         public static Either<TLeft, TB> Forever<TLeft, TA, TB>(this Either<TLeft, TA> m) 
         {
-            return (Either<TLeft, TB>)MonadCombinators<TLeft>.Forever<TA, TB>(m);
+            return MonadCombinators<TLeft>.Forever<Either<TLeft, TB>, TA, TB>(m);
         }
 
         public static Either<TLeft, Unit> Void<TLeft, TA>(this Either<TLeft, TA> m) 
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.Void(m);
+            return MonadCombinators<TLeft>.Void<Either<TLeft, Unit>, TA>(m);
         }
 
         public static Either<TLeft, TB> Ap<TLeft, TA, TB>(Either<TLeft, Func<TA, TB>> mf, Either<TLeft, TA> ma) 
@@ -850,12 +850,12 @@ namespace MonadLib
 
         public static State<TS, TB> Forever<TS, TA, TB>(this State<TS, TA> m) 
         {
-            return (State<TS, TB>)MonadCombinators<TS>.Forever<TA, TB>(m);
+            return MonadCombinators<TS>.Forever<State<TS, TB>, TA, TB>(m);
         }
 
         public static State<TS, Unit> Void<TS, TA>(this State<TS, TA> m) 
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.Void(m);
+            return MonadCombinators<TS>.Void<State<TS, Unit>, TA>(m);
         }
 
         public static State<TS, TB> Ap<TS, TA, TB>(State<TS, Func<TA, TB>> mf, State<TS, TA> ma) 
@@ -1128,12 +1128,12 @@ namespace MonadLib
 
         public static Reader<TR, TB> Forever<TR, TA, TB>(this Reader<TR, TA> m) 
         {
-            return (Reader<TR, TB>)MonadCombinators<TR>.Forever<TA, TB>(m);
+            return MonadCombinators<TR>.Forever<Reader<TR, TB>, TA, TB>(m);
         }
 
         public static Reader<TR, Unit> Void<TR, TA>(this Reader<TR, TA> m) 
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.Void(m);
+            return MonadCombinators<TR>.Void<Reader<TR, Unit>, TA>(m);
         }
 
         public static Reader<TR, TB> Ap<TR, TA, TB>(Reader<TR, Func<TA, TB>> mf, Reader<TR, TA> ma) 
@@ -1406,12 +1406,12 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, TB> Forever<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> m) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, TB>)MonadCombinators<TMonoid, TW>.Forever<TA, TB>(m);
+            return MonadCombinators<TMonoid, TW>.Forever<Writer<TMonoid, TW, TB>, TA, TB>(m);
         }
 
         public static Writer<TMonoid, TW, Unit> Void<TMonoid, TW, TA>(this Writer<TMonoid, TW, TA> m) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.Void(m);
+            return MonadCombinators<TMonoid, TW>.Void<Writer<TMonoid, TW, Unit>, TA>(m);
         }
 
         public static Writer<TMonoid, TW, TB> Ap<TMonoid, TW, TA, TB>(Writer<TMonoid, TW, Func<TA, TB>> mf, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>

@@ -206,17 +206,19 @@ namespace MonadLib
         }
 
         // ReSharper disable FunctionRecursiveOnAllPaths
-        public static IMonad<TB> Forever<TA, TB>(IMonad<TA> m)
+        public static TMonad Forever<TMonad, TA, TB>(IMonad<TA> m)
+			where TMonad : IMonad<TB>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, Forever<TA, TB>(m));
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, Forever<TMonad, TA, TB>(m));
         }
         // ReSharper restore FunctionRecursiveOnAllPaths
 
-        public static IMonad<Unit> Void<TA>(IMonad<TA> m)
+        public static TMonad Void<TMonad, TA>(IMonad<TA> m)
+			where TMonad : IMonad<Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
 
         public static TMonad Ap<TMonad, TA, TB>(IMonad<Func<TA, TB>> mf, IMonad<TA> ma)
@@ -436,17 +438,19 @@ namespace MonadLib
         }
 
         // ReSharper disable FunctionRecursiveOnAllPaths
-        public static IMonad<T1, TB> Forever<TA, TB>(IMonad<T1, TA> m)
+        public static TMonad Forever<TMonad, TA, TB>(IMonad<T1, TA> m)
+			where TMonad : IMonad<T1, TB>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, Forever<TA, TB>(m));
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, Forever<TMonad, TA, TB>(m));
         }
         // ReSharper restore FunctionRecursiveOnAllPaths
 
-        public static IMonad<T1, Unit> Void<TA>(IMonad<T1, TA> m)
+        public static TMonad Void<TMonad, TA>(IMonad<T1, TA> m)
+			where TMonad : IMonad<T1, Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
 
         public static TMonad Ap<TMonad, TA, TB>(IMonad<T1, Func<TA, TB>> mf, IMonad<T1, TA> ma)
@@ -666,17 +670,19 @@ namespace MonadLib
         }
 
         // ReSharper disable FunctionRecursiveOnAllPaths
-        public static IMonad<T1, T2, TB> Forever<TA, TB>(IMonad<T1, T2, TA> m)
+        public static TMonad Forever<TMonad, TA, TB>(IMonad<T1, T2, TA> m)
+			where TMonad : IMonad<T1, T2, TB>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, Forever<TA, TB>(m));
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, Forever<TMonad, TA, TB>(m));
         }
         // ReSharper restore FunctionRecursiveOnAllPaths
 
-        public static IMonad<T1, T2, Unit> Void<TA>(IMonad<T1, T2, TA> m)
+        public static TMonad Void<TMonad, TA>(IMonad<T1, T2, TA> m)
+			where TMonad : IMonad<T1, T2, Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
 
         public static TMonad Ap<TMonad, TA, TB>(IMonad<T1, T2, Func<TA, TB>> mf, IMonad<T1, T2, TA> ma)
@@ -896,17 +902,19 @@ namespace MonadLib
         }
 
         // ReSharper disable FunctionRecursiveOnAllPaths
-        public static IMonad<T1, T2, T3, TB> Forever<TA, TB>(IMonad<T1, T2, T3, TA> m)
+        public static TMonad Forever<TMonad, TA, TB>(IMonad<T1, T2, T3, TA> m)
+			where TMonad : IMonad<T1, T2, T3, TB>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, Forever<TA, TB>(m));
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, Forever<TMonad, TA, TB>(m));
         }
         // ReSharper restore FunctionRecursiveOnAllPaths
 
-        public static IMonad<T1, T2, T3, Unit> Void<TA>(IMonad<T1, T2, T3, TA> m)
+        public static TMonad Void<TMonad, TA>(IMonad<T1, T2, T3, TA> m)
+			where TMonad : IMonad<T1, T2, T3, Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
 
         public static TMonad Ap<TMonad, TA, TB>(IMonad<T1, T2, T3, Func<TA, TB>> mf, IMonad<T1, T2, T3, TA> ma)

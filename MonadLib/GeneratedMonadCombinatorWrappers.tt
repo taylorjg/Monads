@@ -292,12 +292,12 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> Forever<<#= addnlTypesPrefix #>TA, TB>(this <#= monadName #><<#= addnlTypesPrefix #>TA> m) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>TB>)MonadCombinators<#= addnlTypesList #>.Forever<TA, TB>(m);
+            return MonadCombinators<#= addnlTypesList #>.Forever<<#= monadName #><<#= addnlTypesPrefix #>TB>, TA, TB>(m);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> Void<<#= addnlTypesPrefix #>TA>(this <#= monadName #><<#= addnlTypesPrefix #>TA> m) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.Void(m);
+            return MonadCombinators<#= addnlTypesList #>.Void<<#= monadName #><<#= addnlTypesPrefix #>Unit>, TA>(m);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> Ap<<#= addnlTypesPrefix #>TA, TB>(<#= monadName #><<#= addnlTypesPrefix #>Func<TA, TB>> mf, <#= monadName #><<#= addnlTypesPrefix #>TA> ma) <#= typeConstraints #>

@@ -229,17 +229,19 @@ namespace MonadLib
         }
 
         // ReSharper disable FunctionRecursiveOnAllPaths
-        public static IMonad<<#= addnlTypesPrefix #>TB> Forever<TA, TB>(IMonad<<#= addnlTypesPrefix #>TA> m)
+        public static TMonad Forever<TMonad, TA, TB>(IMonad<<#= addnlTypesPrefix #>TA> m)
+			where TMonad : IMonad<<#= addnlTypesPrefix #>TB>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, Forever<TA, TB>(m));
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, Forever<TMonad, TA, TB>(m));
         }
         // ReSharper restore FunctionRecursiveOnAllPaths
 
-        public static IMonad<<#= addnlTypesPrefix #>Unit> Void<TA>(IMonad<<#= addnlTypesPrefix #>TA> m)
+        public static TMonad Void<TMonad, TA>(IMonad<<#= addnlTypesPrefix #>TA> m)
+			where TMonad : IMonad<<#= addnlTypesPrefix #>Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(m, monadAdapter.Return(new Unit()));
         }
 
         public static TMonad Ap<TMonad, TA, TB>(IMonad<<#= addnlTypesPrefix #>Func<TA, TB>> mf, IMonad<<#= addnlTypesPrefix #>TA> ma)
