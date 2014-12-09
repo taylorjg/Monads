@@ -162,27 +162,28 @@ namespace MonadLib
             return Sequence_<TMonad, TA>(System.Linq.Enumerable.Repeat(ma, n));
         }
 
-        public static IMonad<<#= addnlTypesPrefix #>TA> FoldMInternal<TA, TB>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<#= addnlTypesList #> monadAdapter)
+        public static TMonad FoldM<TMonad, TA, TB>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs)
+            where TMonad : IMonad<<#= addnlTypesPrefix #>TA>
         {
-            // TODO: fix ReSharper grumble: Implicitly captured closure: f
-            return bs.HeadAndTail().Match(
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)bs.HeadAndTail().Match(
                 tuple =>
                 {
                     var x = tuple.Item1;
                     var xs = tuple.Item2;
                     var m = f(a, x);
-                    return monadAdapter.Bind(m, acc => FoldMInternal(f, acc, xs, monadAdapter));
+                    return monadAdapter.Bind(m, acc => FoldM<TMonad, TA, TB>(f, acc, xs));
                 },
                 () => monadAdapter.Return(a));
         }
 
         // ReSharper disable InconsistentNaming
-        public static IMonad<<#= addnlTypesPrefix #>Unit> FoldMInternal_<TA, TB>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs, MonadAdapter<#= addnlTypesList #> monadAdapter)
+        public static TMonad FoldM_<TMonad, TA, TB>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs)
+            where TMonad : IMonad<<#= addnlTypesPrefix #>Unit>
         // ReSharper restore InconsistentNaming
         {
-            var m = FoldMInternal(f, a, bs, monadAdapter);
-            var unit = monadAdapter.Return(new Unit());
-            return monadAdapter.BindIgnoringLeft(m, unit);
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)monadAdapter.BindIgnoringLeft(FoldM<IMonad<<#= addnlTypesPrefix #>TA>, TA, TB>(f, a, bs), monadAdapter.Return(new Unit()));
         }
 
         public static TMonad ZipWithM<TMonad, TA, TB, TC>(Func<TA, TB, IMonad<<#= addnlTypesPrefix #>TC>> f, IEnumerable<TA> @as, IEnumerable<TB> bs)

@@ -226,7 +226,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> FoldM<<#= addnlTypesPrefix #>TA, TB>(Func<TA, TB, <#= monadName #><<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>TA>)MonadCombinators<#= addnlTypesList #>.FoldMInternal(f, a, bs, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.FoldM<<#= monadName #><<#= addnlTypesPrefix #>TA>, TA, TB>(f, a, bs);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TA> FoldM<<#= addnlTypesPrefix #>TA, TB>(Func<TA, TB, <#= monadName #><<#= addnlTypesPrefix #>TA>> f, TA a, params TB[] bs) <#= typeConstraints #>
@@ -238,7 +238,7 @@ namespace MonadLib
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> FoldM_<<#= addnlTypesPrefix #>TA, TB>(Func<TA, TB, <#= monadName #><<#= addnlTypesPrefix #>TA>> f, TA a, IEnumerable<TB> bs) <#= typeConstraints #>
         // ReSharper restore InconsistentNaming
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.FoldMInternal_(f, a, bs, new <#= monadAdapterType #>());
+            return MonadCombinators<#= addnlTypesList #>.FoldM_<<#= monadName #><<#= addnlTypesPrefix #>Unit>, TA, TB>(f, a, bs);
         }
 
         // ReSharper disable InconsistentNaming

@@ -192,7 +192,7 @@ namespace MonadLib
 
         public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs) 
         {
-            return (Maybe<TA>)MonadCombinators.FoldMInternal(f, a, bs, new MaybeMonadAdapter());
+            return MonadCombinators.FoldM<Maybe<TA>, TA, TB>(f, a, bs);
         }
 
         public static Maybe<TA> FoldM<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, params TB[] bs) 
@@ -204,7 +204,7 @@ namespace MonadLib
         public static Maybe<Unit> FoldM_<TA, TB>(Func<TA, TB, Maybe<TA>> f, TA a, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (Maybe<Unit>)MonadCombinators.FoldMInternal_(f, a, bs, new MaybeMonadAdapter());
+            return MonadCombinators.FoldM_<Maybe<Unit>, TA, TB>(f, a, bs);
         }
 
         // ReSharper disable InconsistentNaming
@@ -506,7 +506,7 @@ namespace MonadLib
 
         public static Either<TLeft, TA> FoldM<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, IEnumerable<TB> bs) 
         {
-            return (Either<TLeft, TA>)MonadCombinators<TLeft>.FoldMInternal(f, a, bs, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.FoldM<Either<TLeft, TA>, TA, TB>(f, a, bs);
         }
 
         public static Either<TLeft, TA> FoldM<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, params TB[] bs) 
@@ -518,7 +518,7 @@ namespace MonadLib
         public static Either<TLeft, Unit> FoldM_<TLeft, TA, TB>(Func<TA, TB, Either<TLeft, TA>> f, TA a, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.FoldMInternal_(f, a, bs, new EitherMonadAdapter<TLeft>());
+            return MonadCombinators<TLeft>.FoldM_<Either<TLeft, Unit>, TA, TB>(f, a, bs);
         }
 
         // ReSharper disable InconsistentNaming
@@ -784,7 +784,7 @@ namespace MonadLib
 
         public static State<TS, TA> FoldM<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, IEnumerable<TB> bs) 
         {
-            return (State<TS, TA>)MonadCombinators<TS>.FoldMInternal(f, a, bs, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.FoldM<State<TS, TA>, TA, TB>(f, a, bs);
         }
 
         public static State<TS, TA> FoldM<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, params TB[] bs) 
@@ -796,7 +796,7 @@ namespace MonadLib
         public static State<TS, Unit> FoldM_<TS, TA, TB>(Func<TA, TB, State<TS, TA>> f, TA a, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.FoldMInternal_(f, a, bs, new StateMonadAdapter<TS>());
+            return MonadCombinators<TS>.FoldM_<State<TS, Unit>, TA, TB>(f, a, bs);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1062,7 +1062,7 @@ namespace MonadLib
 
         public static Reader<TR, TA> FoldM<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, IEnumerable<TB> bs) 
         {
-            return (Reader<TR, TA>)MonadCombinators<TR>.FoldMInternal(f, a, bs, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.FoldM<Reader<TR, TA>, TA, TB>(f, a, bs);
         }
 
         public static Reader<TR, TA> FoldM<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, params TB[] bs) 
@@ -1074,7 +1074,7 @@ namespace MonadLib
         public static Reader<TR, Unit> FoldM_<TR, TA, TB>(Func<TA, TB, Reader<TR, TA>> f, TA a, IEnumerable<TB> bs) 
         // ReSharper restore InconsistentNaming
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.FoldMInternal_(f, a, bs, new ReaderMonadAdapter<TR>());
+            return MonadCombinators<TR>.FoldM_<Reader<TR, Unit>, TA, TB>(f, a, bs);
         }
 
         // ReSharper disable InconsistentNaming
@@ -1340,7 +1340,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, TA> FoldM<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, TA>)MonadCombinators<TMonoid, TW>.FoldMInternal(f, a, bs, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.FoldM<Writer<TMonoid, TW, TA>, TA, TB>(f, a, bs);
         }
 
         public static Writer<TMonoid, TW, TA> FoldM<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, params TB[] bs) where TMonoid : IMonoid<TW>
@@ -1352,7 +1352,7 @@ namespace MonadLib
         public static Writer<TMonoid, TW, Unit> FoldM_<TMonoid, TW, TA, TB>(Func<TA, TB, Writer<TMonoid, TW, TA>> f, TA a, IEnumerable<TB> bs) where TMonoid : IMonoid<TW>
         // ReSharper restore InconsistentNaming
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.FoldMInternal_(f, a, bs, new WriterMonadAdapter<TMonoid, TW>());
+            return MonadCombinators<TMonoid, TW>.FoldM_<Writer<TMonoid, TW, Unit>, TA, TB>(f, a, bs);
         }
 
         // ReSharper disable InconsistentNaming
