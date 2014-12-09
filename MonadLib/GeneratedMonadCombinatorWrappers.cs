@@ -243,7 +243,7 @@ namespace MonadLib
 
         public static Maybe<Unit> When(this Maybe<Unit> m, bool b) 
         {
-            return (Maybe<Unit>)MonadCombinators.When(b, m);
+            return MonadCombinators.When(b, m);
         }
 
         public static Maybe<Unit> Unless(bool b, Maybe<Unit> m) 
@@ -253,7 +253,7 @@ namespace MonadLib
 
         public static Maybe<Unit> Unless(this Maybe<Unit> m, bool b) 
         {
-            return (Maybe<Unit>)MonadCombinators.Unless(b, m);
+            return MonadCombinators.Unless(b, m);
         }
 
         public static Maybe<TB> Forever<TA, TB>(this Maybe<TA> m) 
@@ -557,7 +557,7 @@ namespace MonadLib
 
         public static Either<TLeft, Unit> When<TLeft>(this Either<TLeft, Unit> m, bool b) 
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.When(b, m);
+            return MonadCombinators<TLeft>.When(b, m);
         }
 
         public static Either<TLeft, Unit> Unless<TLeft>(bool b, Either<TLeft, Unit> m) 
@@ -567,7 +567,7 @@ namespace MonadLib
 
         public static Either<TLeft, Unit> Unless<TLeft>(this Either<TLeft, Unit> m, bool b) 
         {
-            return (Either<TLeft, Unit>)MonadCombinators<TLeft>.Unless(b, m);
+            return MonadCombinators<TLeft>.Unless(b, m);
         }
 
         public static Either<TLeft, TB> Forever<TLeft, TA, TB>(this Either<TLeft, TA> m) 
@@ -835,7 +835,7 @@ namespace MonadLib
 
         public static State<TS, Unit> When<TS>(this State<TS, Unit> m, bool b) 
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.When(b, m);
+            return MonadCombinators<TS>.When(b, m);
         }
 
         public static State<TS, Unit> Unless<TS>(bool b, State<TS, Unit> m) 
@@ -845,7 +845,7 @@ namespace MonadLib
 
         public static State<TS, Unit> Unless<TS>(this State<TS, Unit> m, bool b) 
         {
-            return (State<TS, Unit>)MonadCombinators<TS>.Unless(b, m);
+            return MonadCombinators<TS>.Unless(b, m);
         }
 
         public static State<TS, TB> Forever<TS, TA, TB>(this State<TS, TA> m) 
@@ -1113,7 +1113,7 @@ namespace MonadLib
 
         public static Reader<TR, Unit> When<TR>(this Reader<TR, Unit> m, bool b) 
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.When(b, m);
+            return MonadCombinators<TR>.When(b, m);
         }
 
         public static Reader<TR, Unit> Unless<TR>(bool b, Reader<TR, Unit> m) 
@@ -1123,7 +1123,7 @@ namespace MonadLib
 
         public static Reader<TR, Unit> Unless<TR>(this Reader<TR, Unit> m, bool b) 
         {
-            return (Reader<TR, Unit>)MonadCombinators<TR>.Unless(b, m);
+            return MonadCombinators<TR>.Unless(b, m);
         }
 
         public static Reader<TR, TB> Forever<TR, TA, TB>(this Reader<TR, TA> m) 
@@ -1391,7 +1391,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, Unit> When<TMonoid, TW>(this Writer<TMonoid, TW, Unit> m, bool b) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.When(b, m);
+            return MonadCombinators<TMonoid, TW>.When(b, m);
         }
 
         public static Writer<TMonoid, TW, Unit> Unless<TMonoid, TW>(bool b, Writer<TMonoid, TW, Unit> m) where TMonoid : IMonoid<TW>
@@ -1401,7 +1401,7 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, Unit> Unless<TMonoid, TW>(this Writer<TMonoid, TW, Unit> m, bool b) where TMonoid : IMonoid<TW>
         {
-            return (Writer<TMonoid, TW, Unit>)MonadCombinators<TMonoid, TW>.Unless(b, m);
+            return MonadCombinators<TMonoid, TW>.Unless(b, m);
         }
 
         public static Writer<TMonoid, TW, TB> Forever<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> m) where TMonoid : IMonoid<TW>

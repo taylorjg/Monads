@@ -192,13 +192,15 @@ namespace MonadLib
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
         }
 
-        public static IMonad<Unit> When(bool b, IMonad<Unit> m)
+        public static TMonad When<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return b ? m : monadAdapter.Return(new Unit());
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return (TMonad)(b ? m : monadAdapter.Return(new Unit()));
         }
 
-        public static IMonad<Unit> Unless(bool b, IMonad<Unit> m)
+        public static TMonad Unless<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<Unit>
         {
             return When(!b, m);
         }
@@ -420,13 +422,15 @@ namespace MonadLib
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
         }
 
-        public static IMonad<T1, Unit> When(bool b, IMonad<T1, Unit> m)
+        public static TMonad When<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<T1, Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return b ? m : monadAdapter.Return(new Unit());
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return (TMonad)(b ? m : monadAdapter.Return(new Unit()));
         }
 
-        public static IMonad<T1, Unit> Unless(bool b, IMonad<T1, Unit> m)
+        public static TMonad Unless<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<T1, Unit>
         {
             return When(!b, m);
         }
@@ -648,13 +652,15 @@ namespace MonadLib
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
         }
 
-        public static IMonad<T1, T2, Unit> When(bool b, IMonad<T1, T2, Unit> m)
+        public static TMonad When<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<T1, T2, Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return b ? m : monadAdapter.Return(new Unit());
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return (TMonad)(b ? m : monadAdapter.Return(new Unit()));
         }
 
-        public static IMonad<T1, T2, Unit> Unless(bool b, IMonad<T1, T2, Unit> m)
+        public static TMonad Unless<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<T1, T2, Unit>
         {
             return When(!b, m);
         }
@@ -876,13 +882,15 @@ namespace MonadLib
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
         }
 
-        public static IMonad<T1, T2, T3, Unit> When(bool b, IMonad<T1, T2, T3, Unit> m)
+        public static TMonad When<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<T1, T2, T3, Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return b ? m : monadAdapter.Return(new Unit());
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return (TMonad)(b ? m : monadAdapter.Return(new Unit()));
         }
 
-        public static IMonad<T1, T2, T3, Unit> Unless(bool b, IMonad<T1, T2, T3, Unit> m)
+        public static TMonad Unless<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<T1, T2, T3, Unit>
         {
             return When(!b, m);
         }

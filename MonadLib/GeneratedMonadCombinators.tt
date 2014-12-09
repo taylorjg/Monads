@@ -215,13 +215,15 @@ namespace MonadLib
                 () => monadAdapter.Return(MonadHelpers.Nil<TA>()));
         }
 
-        public static IMonad<<#= addnlTypesPrefix #>Unit> When(bool b, IMonad<<#= addnlTypesPrefix #>Unit> m)
+        public static TMonad When<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<<#= addnlTypesPrefix #>Unit>
         {
-            var monadAdapter = m.GetMonadAdapter();
-            return b ? m : monadAdapter.Return(new Unit());
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return (TMonad)(b ? m : monadAdapter.Return(new Unit()));
         }
 
-        public static IMonad<<#= addnlTypesPrefix #>Unit> Unless(bool b, IMonad<<#= addnlTypesPrefix #>Unit> m)
+        public static TMonad Unless<TMonad>(bool b, TMonad m)
+			where TMonad : IMonad<<#= addnlTypesPrefix #>Unit>
         {
             return When(!b, m);
         }

@@ -277,7 +277,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> When<#= addnlTypesList #>(this <#= monadName #><<#= addnlTypesPrefix #>Unit> m, bool b) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.When(b, m);
+            return MonadCombinators<#= addnlTypesList #>.When(b, m);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> Unless<#= addnlTypesList #>(bool b, <#= monadName #><<#= addnlTypesPrefix #>Unit> m) <#= typeConstraints #>
@@ -287,7 +287,7 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>Unit> Unless<#= addnlTypesList #>(this <#= monadName #><<#= addnlTypesPrefix #>Unit> m, bool b) <#= typeConstraints #>
         {
-            return (<#= monadName #><<#= addnlTypesPrefix #>Unit>)MonadCombinators<#= addnlTypesList #>.Unless(b, m);
+            return MonadCombinators<#= addnlTypesList #>.Unless(b, m);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> Forever<<#= addnlTypesPrefix #>TA, TB>(this <#= monadName #><<#= addnlTypesPrefix #>TA> m) <#= typeConstraints #>
