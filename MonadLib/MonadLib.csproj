@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MonadAgnosticFunctions.cs" />
+    <Compile Include="MonadPlusAgnosticFunctions.cs" />
     <Compile Include="GeneratedMonadCombinators.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

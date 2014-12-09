@@ -4,7 +4,7 @@ using MonadLib.Registries;
 
 namespace MonadLib
 {
-    public static class MonadAgnosticFunctions
+    public static class MonadPlusAgnosticFunctions
     {
         public static TMonadPlus LookupM<TMonadPlus, TA, TB>(TA k, IEnumerable<Tuple<TA, TB>> alist)
             where TMonadPlus : IMonadPlus<TB>

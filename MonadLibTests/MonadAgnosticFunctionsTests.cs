@@ -31,7 +31,7 @@ namespace MonadLibTests
         [Test]
         public void LookupMTest()
         {
-            var homeNumber = MonadAgnosticFunctions.LookupM<Maybe<string>, Context, string>(Context.Home, _phoneBook);
+            var homeNumber = MonadPlusAgnosticFunctions.LookupM<Maybe<string>, Context, string>(Context.Home, _phoneBook);
             Assert.That(homeNumber.FromJust, Is.EqualTo("123-1"));
         }
     }
