@@ -11,7 +11,7 @@ namespace MonadLib
         {
             var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TB>(typeof (TMonadPlus));
 
-            var result = alist.HeadAndTail().Match(
+            return (TMonadPlus) alist.HeadAndTail().Match(
                 tuple =>
                     {
                         var xy = tuple.Item1;
@@ -24,8 +24,6 @@ namespace MonadLib
                                    : LookupM<TMonadPlus, TA, TB>(k, xys);
                     },
                 () => monadPlusAdapter.MZero);
-
-            return (TMonadPlus) result;
         }
     }
 }

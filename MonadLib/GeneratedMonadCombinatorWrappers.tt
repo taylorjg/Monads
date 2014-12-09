@@ -42,18 +42,18 @@ namespace MonadLib
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> SelectMany<<#= addnlTypesPrefix #>TA, TB>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f) <#= typeConstraints #>
         {
-            return ma.FlatMap(f);
+            return ma.Bind(f);
         }
 
         public static <#= monadName #><<#= addnlTypesPrefix #>TC> SelectMany<<#= addnlTypesPrefix #>TA, TB, TC>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f1, Func<TA, TB, TC> f2) <#= typeConstraints #>
         {
 <# if (string.IsNullOrEmpty(addnlTypesList)) { #>
-            return ma.FlatMap(
-                a => f1(a).FlatMap(
+            return ma.Bind(
+                a => f1(a).Bind(
                     b => Return(f2(a, b))));
 <# } else { #>
-            return ma.FlatMap(
-                a => f1(a).FlatMap(
+            return ma.Bind(
+                a => f1(a).Bind(
                     b => <#= monadName #><#= addnlTypesList #>.Return(f2(a, b))));
 <# } #>
         }

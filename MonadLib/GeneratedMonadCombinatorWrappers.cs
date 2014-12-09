@@ -14,13 +14,13 @@ namespace MonadLib
 
         public static Maybe<TB> SelectMany<TA, TB>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f) 
         {
-            return ma.FlatMap(f);
+            return ma.Bind(f);
         }
 
         public static Maybe<TC> SelectMany<TA, TB, TC>(this Maybe<TA> ma, Func<TA, Maybe<TB>> f1, Func<TA, TB, TC> f2) 
         {
-            return ma.FlatMap(
-                a => f1(a).FlatMap(
+            return ma.Bind(
+                a => f1(a).Bind(
                     b => Return(f2(a, b))));
         }
 
@@ -328,13 +328,13 @@ namespace MonadLib
 
         public static Either<TLeft, TB> SelectMany<TLeft, TA, TB>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f) 
         {
-            return ma.FlatMap(f);
+            return ma.Bind(f);
         }
 
         public static Either<TLeft, TC> SelectMany<TLeft, TA, TB, TC>(this Either<TLeft, TA> ma, Func<TA, Either<TLeft, TB>> f1, Func<TA, TB, TC> f2) 
         {
-            return ma.FlatMap(
-                a => f1(a).FlatMap(
+            return ma.Bind(
+                a => f1(a).Bind(
                     b => Either<TLeft>.Return(f2(a, b))));
         }
 
@@ -606,13 +606,13 @@ namespace MonadLib
 
         public static State<TS, TB> SelectMany<TS, TA, TB>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f) 
         {
-            return ma.FlatMap(f);
+            return ma.Bind(f);
         }
 
         public static State<TS, TC> SelectMany<TS, TA, TB, TC>(this State<TS, TA> ma, Func<TA, State<TS, TB>> f1, Func<TA, TB, TC> f2) 
         {
-            return ma.FlatMap(
-                a => f1(a).FlatMap(
+            return ma.Bind(
+                a => f1(a).Bind(
                     b => State<TS>.Return(f2(a, b))));
         }
 
@@ -884,13 +884,13 @@ namespace MonadLib
 
         public static Reader<TR, TB> SelectMany<TR, TA, TB>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f) 
         {
-            return ma.FlatMap(f);
+            return ma.Bind(f);
         }
 
         public static Reader<TR, TC> SelectMany<TR, TA, TB, TC>(this Reader<TR, TA> ma, Func<TA, Reader<TR, TB>> f1, Func<TA, TB, TC> f2) 
         {
-            return ma.FlatMap(
-                a => f1(a).FlatMap(
+            return ma.Bind(
+                a => f1(a).Bind(
                     b => Reader<TR>.Return(f2(a, b))));
         }
 
@@ -1162,13 +1162,13 @@ namespace MonadLib
 
         public static Writer<TMonoid, TW, TB> SelectMany<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f) where TMonoid : IMonoid<TW>
         {
-            return ma.FlatMap(f);
+            return ma.Bind(f);
         }
 
         public static Writer<TMonoid, TW, TC> SelectMany<TMonoid, TW, TA, TB, TC>(this Writer<TMonoid, TW, TA> ma, Func<TA, Writer<TMonoid, TW, TB>> f1, Func<TA, TB, TC> f2) where TMonoid : IMonoid<TW>
         {
-            return ma.FlatMap(
-                a => f1(a).FlatMap(
+            return ma.Bind(
+                a => f1(a).Bind(
                     b => Writer<TMonoid, TW>.Return(f2(a, b))));
         }
 
