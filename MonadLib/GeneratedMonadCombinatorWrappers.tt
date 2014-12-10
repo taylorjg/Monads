@@ -312,7 +312,7 @@ namespace MonadLib
 
         public static Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TC>> Compose<<#= addnlTypesPrefix #>TA, TB, TC>(Func<TA, <#= monadName #><<#= addnlTypesPrefix #>TB>> f, Func<TB, <#= monadName #><<#= addnlTypesPrefix #>TC>> g) <#= typeConstraints #>
         {
-            return a => (<#= monadName #><<#= addnlTypesPrefix #>TC>)MonadCombinators<#= addnlTypesList #>.Compose(f, g)(a);
+            return a => MonadCombinators<#= addnlTypesList #>.Compose<<#= monadName #><<#= addnlTypesPrefix #>TC>, TA, TB, TC>(f, g)(a);
         }
 
 <# if (isMonadPlus) { #>

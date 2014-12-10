@@ -252,14 +252,11 @@ namespace MonadLib
             return LiftM2<TMonad, Func<TA, TB>, TA, TB>((f, a) => f(a), mf, ma);
         }
 
-        public static Func<TA, IMonad<<#= addnlTypesPrefix #>TC>> Compose<TA, TB, TC>(Func<TA, IMonad<<#= addnlTypesPrefix #>TB>> f, Func<TB, IMonad<<#= addnlTypesPrefix #>TC>> g)
+        public static Func<TA, TMonad> Compose<TMonad, TA, TB, TC>(Func<TA, IMonad<<#= addnlTypesPrefix #>TB>> f, Func<TB, IMonad<<#= addnlTypesPrefix #>TC>> g)
+            where TMonad : IMonad<<#= addnlTypesPrefix #>TC>
         {
-            return a =>
-            {
-                var mb = f(a);
-                var monadAdapter = mb.GetMonadAdapter();
-                return monadAdapter.Bind(mb, g);
-            };
+            var monadAdapter = MonadAdapterRegistry.Get<#= addnlTypesList #>(typeof(TMonad));
+            return a => (TMonad)monadAdapter.Bind(f(a), g);
         }
     }
 <# if (!isLastTypeToGenerate) WriteLine(string.Empty); #>

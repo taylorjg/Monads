@@ -278,7 +278,7 @@ namespace MonadLib
 
         public static Func<TA, Maybe<TC>> Compose<TA, TB, TC>(Func<TA, Maybe<TB>> f, Func<TB, Maybe<TC>> g) 
         {
-            return a => (Maybe<TC>)MonadCombinators.Compose(f, g)(a);
+            return a => MonadCombinators.Compose<Maybe<TC>, TA, TB, TC>(f, g)(a);
         }
 
         public static Maybe<TA> MZero<TA>()
@@ -592,7 +592,7 @@ namespace MonadLib
 
         public static Func<TA, Either<TLeft, TC>> Compose<TLeft, TA, TB, TC>(Func<TA, Either<TLeft, TB>> f, Func<TB, Either<TLeft, TC>> g) 
         {
-            return a => (Either<TLeft, TC>)MonadCombinators<TLeft>.Compose(f, g)(a);
+            return a => MonadCombinators<TLeft>.Compose<Either<TLeft, TC>, TA, TB, TC>(f, g)(a);
         }
 
     }
@@ -870,7 +870,7 @@ namespace MonadLib
 
         public static Func<TA, State<TS, TC>> Compose<TS, TA, TB, TC>(Func<TA, State<TS, TB>> f, Func<TB, State<TS, TC>> g) 
         {
-            return a => (State<TS, TC>)MonadCombinators<TS>.Compose(f, g)(a);
+            return a => MonadCombinators<TS>.Compose<State<TS, TC>, TA, TB, TC>(f, g)(a);
         }
 
     }
@@ -1148,7 +1148,7 @@ namespace MonadLib
 
         public static Func<TA, Reader<TR, TC>> Compose<TR, TA, TB, TC>(Func<TA, Reader<TR, TB>> f, Func<TB, Reader<TR, TC>> g) 
         {
-            return a => (Reader<TR, TC>)MonadCombinators<TR>.Compose(f, g)(a);
+            return a => MonadCombinators<TR>.Compose<Reader<TR, TC>, TA, TB, TC>(f, g)(a);
         }
 
     }
@@ -1426,7 +1426,7 @@ namespace MonadLib
 
         public static Func<TA, Writer<TMonoid, TW, TC>> Compose<TMonoid, TW, TA, TB, TC>(Func<TA, Writer<TMonoid, TW, TB>> f, Func<TB, Writer<TMonoid, TW, TC>> g) where TMonoid : IMonoid<TW>
         {
-            return a => (Writer<TMonoid, TW, TC>)MonadCombinators<TMonoid, TW>.Compose(f, g)(a);
+            return a => MonadCombinators<TMonoid, TW>.Compose<Writer<TMonoid, TW, TC>, TA, TB, TC>(f, g)(a);
         }
 
     }

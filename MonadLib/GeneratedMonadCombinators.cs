@@ -229,14 +229,11 @@ namespace MonadLib
             return LiftM2<TMonad, Func<TA, TB>, TA, TB>((f, a) => f(a), mf, ma);
         }
 
-        public static Func<TA, IMonad<TC>> Compose<TA, TB, TC>(Func<TA, IMonad<TB>> f, Func<TB, IMonad<TC>> g)
+        public static Func<TA, TMonad> Compose<TMonad, TA, TB, TC>(Func<TA, IMonad<TB>> f, Func<TB, IMonad<TC>> g)
+            where TMonad : IMonad<TC>
         {
-            return a =>
-            {
-                var mb = f(a);
-                var monadAdapter = mb.GetMonadAdapter();
-                return monadAdapter.Bind(mb, g);
-            };
+            var monadAdapter = MonadAdapterRegistry.Get(typeof(TMonad));
+            return a => (TMonad)monadAdapter.Bind(f(a), g);
         }
     }
 
@@ -463,14 +460,11 @@ namespace MonadLib
             return LiftM2<TMonad, Func<TA, TB>, TA, TB>((f, a) => f(a), mf, ma);
         }
 
-        public static Func<TA, IMonad<T1, TC>> Compose<TA, TB, TC>(Func<TA, IMonad<T1, TB>> f, Func<TB, IMonad<T1, TC>> g)
+        public static Func<TA, TMonad> Compose<TMonad, TA, TB, TC>(Func<TA, IMonad<T1, TB>> f, Func<TB, IMonad<T1, TC>> g)
+            where TMonad : IMonad<T1, TC>
         {
-            return a =>
-            {
-                var mb = f(a);
-                var monadAdapter = mb.GetMonadAdapter();
-                return monadAdapter.Bind(mb, g);
-            };
+            var monadAdapter = MonadAdapterRegistry.Get<T1>(typeof(TMonad));
+            return a => (TMonad)monadAdapter.Bind(f(a), g);
         }
     }
 
@@ -697,14 +691,11 @@ namespace MonadLib
             return LiftM2<TMonad, Func<TA, TB>, TA, TB>((f, a) => f(a), mf, ma);
         }
 
-        public static Func<TA, IMonad<T1, T2, TC>> Compose<TA, TB, TC>(Func<TA, IMonad<T1, T2, TB>> f, Func<TB, IMonad<T1, T2, TC>> g)
+        public static Func<TA, TMonad> Compose<TMonad, TA, TB, TC>(Func<TA, IMonad<T1, T2, TB>> f, Func<TB, IMonad<T1, T2, TC>> g)
+            where TMonad : IMonad<T1, T2, TC>
         {
-            return a =>
-            {
-                var mb = f(a);
-                var monadAdapter = mb.GetMonadAdapter();
-                return monadAdapter.Bind(mb, g);
-            };
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2>(typeof(TMonad));
+            return a => (TMonad)monadAdapter.Bind(f(a), g);
         }
     }
 
@@ -931,14 +922,11 @@ namespace MonadLib
             return LiftM2<TMonad, Func<TA, TB>, TA, TB>((f, a) => f(a), mf, ma);
         }
 
-        public static Func<TA, IMonad<T1, T2, T3, TC>> Compose<TA, TB, TC>(Func<TA, IMonad<T1, T2, T3, TB>> f, Func<TB, IMonad<T1, T2, T3, TC>> g)
+        public static Func<TA, TMonad> Compose<TMonad, TA, TB, TC>(Func<TA, IMonad<T1, T2, T3, TB>> f, Func<TB, IMonad<T1, T2, T3, TC>> g)
+            where TMonad : IMonad<T1, T2, T3, TC>
         {
-            return a =>
-            {
-                var mb = f(a);
-                var monadAdapter = mb.GetMonadAdapter();
-                return monadAdapter.Bind(mb, g);
-            };
+            var monadAdapter = MonadAdapterRegistry.Get<T1, T2, T3>(typeof(TMonad));
+            return a => (TMonad)monadAdapter.Bind(f(a), g);
         }
     }
 }
