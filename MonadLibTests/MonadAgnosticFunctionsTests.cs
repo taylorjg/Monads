@@ -5,16 +5,16 @@ using NUnit.Framework;
 namespace MonadLibTests
 {
     [TestFixture]
-    class MonadAgnosticFunctionsTests
+    internal class MonadAgnosticFunctionsTests
     {
-        private Tuple<Context, string>[] _phoneBook;
-
         private enum Context
         {
             Home,
             Mobile,
             Business
         }
+
+        private Tuple<Context, string>[] _phoneBook;
 
         [SetUp]
         public void SetUp()
