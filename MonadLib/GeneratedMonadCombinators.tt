@@ -53,8 +53,6 @@ namespace MonadLib
 
     public static partial class MonadCombinators<#= addnlTypesList #>
     {
-<# if (!new[]{""}.Contains(addnlTypes)) { #>
-<# } #>
         public static TMonad LiftM<TMonad, TA, TB>(Func<TA, TB> f, IMonad<<#= addnlTypesPrefix #>TA> ma)
             where TMonad : IMonad<<#= addnlTypesPrefix #>TB>
         {

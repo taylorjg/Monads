@@ -33,8 +33,6 @@ namespace MonadLib
 <# var isLastTypeToGenerate = (index == typesToGenerate.Length - 1); #>
     public static partial class <#= monadName #>
     {
-<# if (!new[]{"Maybe"}.Contains(monadName)) { #>
-<# } #>
         public static <#= monadName #><<#= addnlTypesPrefix #>TB> Select<<#= addnlTypesPrefix #>TA, TB>(this <#= monadName #><<#= addnlTypesPrefix #>TA> ma, Func<TA, TB> f) <#= typeConstraints #>
         {
             return ma.Map(f);

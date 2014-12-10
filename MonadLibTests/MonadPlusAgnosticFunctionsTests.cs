@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace MonadLibTests
 {
     [TestFixture]
-    internal class MonadAgnosticFunctionsTests
+    internal class MonadPlusAgnosticFunctionsTests
     {
         private enum Context
         {
@@ -24,7 +24,7 @@ namespace MonadLibTests
                     Tuple.Create(Context.Mobile, "456"),
                     Tuple.Create(Context.Home, "123-1"),
                     Tuple.Create(Context.Home, "123-2"),
-                    Tuple.Create(Context.Business, "789"),
+                    Tuple.Create(Context.Business, "789")
                 };
         }
 

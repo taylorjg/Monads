@@ -55,8 +55,6 @@
     <Compile Include="Registries\MonadAdapterRegistry.cs" />
     <Compile Include="Registries\MonadPlusAdapterRegistry.cs" />
     <Compile Include="Registries\MonoidAdapterRegistry.cs" />
-    <Compile Include="TempNewStyleMonadCombinators.cs" />
-    <Compile Include="TempNewStyleMonadCombinatorWrappers.cs" />
     <Compile Include="Writer.cs" />
     <Compile Include="GeneratedMonadCombinatorWrappers.cs">
       <AutoGen>True</AutoGen>

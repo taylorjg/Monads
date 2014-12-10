@@ -27,7 +27,7 @@ namespace MonadLib
 
         public MonoidAdapter<TA> GetMonoidAdapter()
         {
-            return ListMonoid.GetMonoidAdapter<TA>();
+            return MonoidAdapterRegistry.Get<TA>(typeof(ListMonoid<>));
         }
     }
 
@@ -53,7 +53,7 @@ namespace MonadLib
             return MConcat(@as.AsEnumerable());
         }
 
-        internal static ListMonoidAdapter<TA> GetMonoidAdapter<TA>()
+        private static ListMonoidAdapter<TA> GetMonoidAdapter<TA>()
         {
             return (ListMonoidAdapter<TA>)MonoidAdapterRegistry.Get<TA>(typeof(ListMonoid<>));
         }

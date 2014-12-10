@@ -10,7 +10,12 @@ namespace MonadLib
             where TMonadPlus : IMonadPlus<TB>
         {
             var monadPlusAdapter = MonadPlusAdapterRegistry.Get<TB>(typeof (TMonadPlus));
+            return LookupMInternal<TMonadPlus, TA, TB>(k, alist, monadPlusAdapter);
+        }
 
+        private static TMonadPlus LookupMInternal<TMonadPlus, TA, TB>(TA k, IEnumerable<Tuple<TA, TB>> alist, MonadPlusAdapter<TB> monadPlusAdapter)
+            where TMonadPlus : IMonadPlus<TB>
+        {
             return (TMonadPlus) alist.HeadAndTail().Match(
                 tuple =>
                     {
@@ -20,8 +25,8 @@ namespace MonadLib
                         var y = xy.Item2;
 
                         return (EqualityComparer<TA>.Default.Equals(x, k))
-                                   ? monadPlusAdapter.MPlus((TMonadPlus) monadPlusAdapter.Return(y), LookupM<TMonadPlus, TA, TB>(k, xys))
-                                   : LookupM<TMonadPlus, TA, TB>(k, xys);
+                                   ? monadPlusAdapter.MPlus((TMonadPlus) monadPlusAdapter.Return(y), LookupMInternal<TMonadPlus, TA, TB>(k, xys, monadPlusAdapter))
+                                   : LookupMInternal<TMonadPlus, TA, TB>(k, xys, monadPlusAdapter);
                     },
                 () => monadPlusAdapter.MZero);
         }
