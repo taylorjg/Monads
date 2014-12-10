@@ -34,11 +34,9 @@ namespace MonadLib
                 });
         }
 
-        private WriterMonadAdapter<TMonoid, TW> _monadAdapter;
-
         public MonadAdapter<TMonoid, TW> GetMonadAdapter()
         {
-            return _monadAdapter ?? (_monadAdapter = new WriterMonadAdapter<TMonoid, TW>());
+            return MonadAdapterRegistry.Get<TMonoid, TW>(typeof(Writer<,,>));
         }
     }
 

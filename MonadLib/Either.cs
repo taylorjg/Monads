@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Flinq;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -98,11 +99,9 @@ namespace MonadLib
         private readonly TLeft _left;
         private readonly TA _right;
 
-        private MonadAdapter<TLeft> _monadAdapter;
-
         public MonadAdapter<TLeft> GetMonadAdapter()
         {
-            return _monadAdapter ?? (_monadAdapter = new EitherMonadAdapter<TLeft>());
+            return MonadAdapterRegistry.Get<TLeft>(typeof(Either<,>));
         }
     }
 

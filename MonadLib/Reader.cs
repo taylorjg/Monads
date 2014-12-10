@@ -1,4 +1,5 @@
 ﻿using System;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -11,11 +12,9 @@ namespace MonadLib
 
         public Func<TR, TA> RunReader { get; private set; }
 
-        private ReaderMonadAdapter<TR> _monadAdapter;
-
         public MonadAdapter<TR> GetMonadAdapter()
         {
-            return _monadAdapter ?? (_monadAdapter = new ReaderMonadAdapter<TR>());
+            return MonadAdapterRegistry.Get<TR>(typeof(Reader<,>));
         }
     }
 

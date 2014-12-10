@@ -1,4 +1,5 @@
 ﻿using System;
+using MonadLib.Registries;
 
 namespace MonadLib
 {
@@ -26,11 +27,9 @@ namespace MonadLib
             return State<TS>.Get().Bind(s => State<TS>.Return(f(s)));
         }
 
-        private MonadAdapter<TS> _monadAdapter;
-
         public MonadAdapter<TS> GetMonadAdapter()
         {
-            return _monadAdapter ?? (_monadAdapter = new StateMonadAdapter<TS>());
+            return MonadAdapterRegistry.Get<TS>(typeof(State<,>));
         }
     }
 
