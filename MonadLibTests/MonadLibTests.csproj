@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FnTests.cs" />
     <Compile Include="MonadPlusAgnosticFunctionsTests.cs" />
     <Compile Include="MonoidAdapterRegistryTests.cs" />
     <Compile Include="MonadPlusAdapterRegistryTests.cs" />

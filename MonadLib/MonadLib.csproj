@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fn.cs" />
+    <Compile Include="IApplicative.cs" />
+    <Compile Include="IFunctor.cs" />
     <Compile Include="MonadPlusAgnosticFunctions.cs" />
     <Compile Include="GeneratedMonadCombinators.cs">
       <AutoGen>True</AutoGen>

@@ -276,6 +276,26 @@ namespace MonadLib
             return MonadCombinators.Ap<Maybe<TB>, TA, TB>(mf, ma);
         }
 
+        public static Maybe<Func<TB, TResult>> Ap<TA, TB, TResult>(this Maybe<TA> ma, Maybe<Func<TA, TB, TResult>> mf)
+        {
+            return mf.Bind(f => MonadCombinators.LiftM<Maybe<Func<TB, TResult>>, TA, Func<TB, TResult>>(t1 => Fn.PartiallyApply(f, t1), ma));
+        }
+
+        public static Maybe<Func<TB, TC, TResult>> Ap<TA, TB, TC, TResult>(this Maybe<TA> ma, Maybe<Func<TA, TB, TC, TResult>> mf)
+        {
+            return mf.Bind(f => MonadCombinators.LiftM<Maybe<Func<TB, TC, TResult>>, TA, Func<TB, TC, TResult>>(t1 => Fn.PartiallyApply(f, t1), ma));
+        }
+
+        public static Maybe<Func<TB, TC, TD, TResult>> Ap<TA, TB, TC, TD, TResult>(this Maybe<TA> ma, Maybe<Func<TA, TB, TC, TD, TResult>> mf)
+        {
+            return mf.Bind(f => MonadCombinators.LiftM<Maybe<Func<TB, TC, TD, TResult>>, TA, Func<TB, TC, TD, TResult>>(t1 => Fn.PartiallyApply(f, t1), ma));
+        }
+
+        public static Maybe<Func<TB, TC, TD, TE, TResult>> Ap<TA, TB, TC, TD, TE, TResult>(this Maybe<TA> ma, Maybe<Func<TA, TB, TC, TD, TE, TResult>> mf)
+        {
+            return mf.Bind(f => MonadCombinators.LiftM<Maybe<Func<TB, TC, TD, TE, TResult>>, TA, Func<TB, TC, TD, TE, TResult>>(t1 => Fn.PartiallyApply(f, t1), ma));
+        }
+
         public static Func<TA, Maybe<TC>> Compose<TA, TB, TC>(Func<TA, Maybe<TB>> f, Func<TB, Maybe<TC>> g) 
         {
             return a => MonadCombinators.Compose<Maybe<TC>, TA, TB, TC>(f, g)(a);
