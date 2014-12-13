@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EitherMonadTests.cs" />
     <Compile Include="FnTests.cs" />
     <Compile Include="MaybeApplicativeTests.cs" />
     <Compile Include="MaybeFunctorTests.cs" />

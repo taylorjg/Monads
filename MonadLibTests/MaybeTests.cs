@@ -33,9 +33,9 @@ namespace MonadLibTests
         public void FromJustAppliedToNothingThrowsException()
         {
             var maybe = Maybe.Nothing<int>();
-#pragma warning disable 168
+            #pragma warning disable 168
             Assert.Throws<InvalidOperationException>(() => { var dummy = maybe.FromJust; });
-#pragma warning restore 168
+            #pragma warning restore 168
         }
 
         [Test]
@@ -197,16 +197,6 @@ namespace MonadLibTests
             Assert.That(actual2, Is.EqualTo(expected));
         }
 
-        // ReSharper disable UnusedMethodReturnValue.Local
-        private static IEnumerable<ITestCaseData> TestCaseSourceForEquals()
-        {
-            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Nothing<int>(), true).SetName("Nothing and Nothing");
-            yield return new TestCaseData(Maybe.Just(42), Maybe.Just(42), true).SetName("Just(42) and Just(42)");
-            yield return new TestCaseData(Maybe.Just(42), Maybe.Just(43), false).SetName("Just(42) and Just(43)");
-            yield return new TestCaseData(Maybe.Nothing<int>(), Maybe.Just(42), false).SetName("Nothing and Just(43)");
-        }
-        // ReSharper restore UnusedMethodReturnValue.Local
-
         [Test]
         public void ToEnumerableAppliedToJust()
         {
@@ -310,6 +300,22 @@ namespace MonadLibTests
             var maybe = Maybe.Nothing<int>();
             var n = maybe.ToNullable();
             Assert.That(n.HasValue, Is.False);
+        }
+
+        // ReSharper disable UnusedMethodReturnValue.Local
+
+        private static IEnumerable<ITestCaseData> TestCaseSourceForEquals()
+        {
+            yield return MakeEqualsTestCaseData(null, null, true).SetName("Nothing and Nothing => true");
+            yield return MakeEqualsTestCaseData(42, 42, true).SetName("Just(42) and Just(42) => true");
+            yield return MakeEqualsTestCaseData(42, 43, false).SetName("Just(42) and Just(43) => false");
+            yield return MakeEqualsTestCaseData(null, 42, false).SetName("Nothing and Just(42) => false");
+            yield return MakeEqualsTestCaseData(42, null, false).SetName("Just(42) and Nothing => false");
+        }
+
+        private static TestCaseData MakeEqualsTestCaseData(int? a, int? b, bool flag)
+        {
+            return new TestCaseData(a.ToMaybe(), b.ToMaybe(), flag);
         }
     }
 }

@@ -6,13 +6,15 @@ using NUnit.Framework;
 
 namespace MonadLibTests
 {
+    // ReSharper disable InconsistentNaming
+
     [TestFixture]
     internal class MaybeMonadTests
     {
         [Test, TestCaseSource("TestCaseSourceForLiftMTests")]
-        public void LiftM(Maybe<int> ma, bool expectedIsJust, int expectedFromJust)
+        public void LiftM(Maybe<int>[] maybes, bool expectedIsJust, int expectedFromJust)
         {
-            var actual = Maybe.LiftM(a => a, ma);
+            var actual = Maybe.LiftM(a => a, maybes[0]);
             Assert.That(actual.IsJust, Is.EqualTo(expectedIsJust));
             if (expectedIsJust)
             {
@@ -252,176 +254,59 @@ namespace MonadLibTests
 
         private static IEnumerable<ITestCaseData> TestCaseSourceForLiftMTests()
         {
-            yield return new TestCaseData(Maybe.Just(1), true, 1).SetName("1 Just");
-            yield return new TestCaseData(Maybe.Nothing<int>(), false, default(int)).SetName("1 Nothing");
+            yield return MakeLiftTestCaseData(1).SetName("1 Just");
+            yield return MakeLiftTestCaseData(new int?[]{null}).SetName("1 Nothing");
         }
 
         private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM2Tests()
         {
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2)
-                    },
-                true,
-                3).SetName("2 Justs");
-
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("1 Just and 1 Nothing");
-
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("2 Nothings");
+            yield return MakeLiftTestCaseData(1, 2).SetName("2 Justs");
+            yield return MakeLiftTestCaseData(1, null).SetName("1 Just and 1 Nothing");
+            yield return MakeLiftTestCaseData(null, null).SetName("2 Nothings");
         }
 
         private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM3Tests()
         {
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Just(3)
-                    },
-                true,
-                6).SetName("3 Justs");
-
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("2 Justs and 1 Nothing");
-
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("3 Nothings");
+            yield return MakeLiftTestCaseData(1, 2, 3).SetName("3 Justs");
+            yield return MakeLiftTestCaseData(1, 2, null).SetName("2 Justs and 1 Nothing");
+            yield return MakeLiftTestCaseData(null, null, null).SetName("3 Nothings");
         }
 
         private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM4Tests()
         {
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Just(3),
-                        Maybe.Just(4)
-                    },
-                true,
-                10).SetName("4 Justs");
-
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Just(3),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("3 Justs and 1 Nothing");
-
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("4 Nothings");
+            yield return MakeLiftTestCaseData(1, 2, 3, 4).SetName("4 Justs");
+            yield return MakeLiftTestCaseData(1, 2, 3, null).SetName("3 Justs and 1 Nothing");
+            yield return MakeLiftTestCaseData(null, null, null, null).SetName("4 Nothings");
         }
 
         private static IEnumerable<ITestCaseData> TestCaseSourceForLiftM5Tests()
         {
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Just(3),
-                        Maybe.Just(4),
-                        Maybe.Just(5)
-                    },
-                true,
-                15).SetName("5 Justs");
+            yield return MakeLiftTestCaseData(1, 2, 3, 4, 5).SetName("5 Justs");
+            yield return MakeLiftTestCaseData(1, 2, 3, 4, null).SetName("4 Justs and 1 Nothing");
+            yield return MakeLiftTestCaseData(null, null, null, null, null).SetName("5 Nothings");
+        }
 
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Just(3),
-                        Maybe.Just(4),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("4 Justs and 1 Nothing");
-
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>(),
-                        Maybe.Nothing<int>()
-                    },
-                false,
-                default(int)).SetName("5 Nothings");
+        private static TestCaseData MakeLiftTestCaseData(params int?[] ns)
+        {
+            var ms = ns.Select(n => n.ToMaybe()).ToArray();
+            var expectedIsJust = ns.All(n => n.HasValue);
+            var expectedFromJust = (expectedIsJust) ? ns.Sum() : default(int);
+            return new TestCaseData(ms, expectedIsJust, expectedFromJust);
         }
 
         private static IEnumerable<ITestCaseData> TestCaseSourceForSequenceTests()
         {
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Just(3),
-                        Maybe.Just(4)
-                    },
-                true,
-                new[] { 1, 2, 3, 4 }).SetName("4 Justs");
+            yield return MakeSequenceTestCaseData(1, 2, 3, 4).SetName("4 Justs");
+            yield return MakeSequenceTestCaseData(1, 2, null, 4).SetName("3 Justs and 1 Nothing");
+            yield return MakeSequenceTestCaseData().SetName("Empty list of maybes");
+        }
 
-            yield return new TestCaseData(
-                new[]
-                    {
-                        Maybe.Just(1),
-                        Maybe.Just(2),
-                        Maybe.Nothing<int>(),
-                        Maybe.Just(4)
-                    },
-                false,
-                null).SetName("3 Justs and 1 Nothing");
-
-            yield return new TestCaseData(
-                new Maybe<int>[] { },
-                true,
-                new int[] { }).SetName("Empty list of maybes");
+        private static TestCaseData MakeSequenceTestCaseData(params int?[] ns)
+        {
+            var ms = ns.Select(n => n.ToMaybe()).ToArray();
+            var expectedIsJust = ns.All(n => n.HasValue);
+            var expectedFromJust = expectedIsJust ? ns.SelectMany(n => n.HasValue ? new[] { n.Value } : new int[0]).ToArray() : null;
+            return new TestCaseData(ms, expectedIsJust, expectedFromJust);
         }
     }
 }
