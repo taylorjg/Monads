@@ -48,6 +48,7 @@
     <Compile Include="FnTests.cs" />
     <Compile Include="MaybeApplicativeTests.cs" />
     <Compile Include="MaybeFunctorTests.cs" />
+    <Compile Include="MaybeMonadTests.cs" />
     <Compile Include="MonadPlusAgnosticFunctionsTests.cs" />
     <Compile Include="MonoidAdapterRegistryTests.cs" />
     <Compile Include="MonadPlusAdapterRegistryTests.cs" />
