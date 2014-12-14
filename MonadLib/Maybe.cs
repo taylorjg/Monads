@@ -205,50 +205,6 @@ namespace MonadLib
             var applicativeAdapter = new MaybeApplicativeAdapter();
             return (Maybe<TResult>)applicativeAdapter.Apply(ff, fa);
         }
-
-        public static Maybe<Func<TB, TResult>> Apply<TA, TB, TResult>(Maybe<Func<TA, TB, TResult>> ff, Maybe<TA> fa)
-        {
-            return fa.Apply(ff);
-        }
-
-        public static Maybe<Func<TB, TResult>> Apply<TA, TB, TResult>(this Maybe<TA> fa, Maybe<Func<TA, TB, TResult>> ff)
-        {
-            var applicativeAdapter = new MaybeApplicativeAdapter();
-            return (Maybe<Func<TB, TResult>>)applicativeAdapter.Apply(ff, fa);
-        }
-
-        public static Maybe<Func<TB, TC, TResult>> Apply<TA, TB, TC, TResult>(Maybe<Func<TA, TB, TC, TResult>> ff, Maybe<TA> fa)
-        {
-            return fa.Apply(ff);
-        }
-
-        public static Maybe<Func<TB, TC, TResult>> Apply<TA, TB, TC, TResult>(this Maybe<TA> fa, Maybe<Func<TA, TB, TC, TResult>> ff)
-        {
-            var applicativeAdapter = new MaybeApplicativeAdapter();
-            return (Maybe<Func<TB, TC, TResult>>)applicativeAdapter.Apply(ff, fa);
-        }
-
-        public static Maybe<Func<TB, TC, TD, TResult>> Apply<TA, TB, TC, TD, TResult>(Maybe<Func<TA, TB, TC, TD, TResult>> ff, Maybe<TA> fa)
-        {
-            return fa.Apply(ff);
-        }
-
-        public static Maybe<Func<TB, TC, TD, TResult>> Apply<TA, TB, TC, TD, TResult>(this Maybe<TA> fa, Maybe<Func<TA, TB, TC, TD, TResult>> ff)
-        {
-            var applicativeAdapter = new MaybeApplicativeAdapter();
-            return (Maybe<Func<TB, TC, TD, TResult>>)applicativeAdapter.Apply(ff, fa);
-        }
-
-        public static Maybe<Func<TB, TC, TD, TE, TResult>> Apply<TA, TB, TC, TD, TE, TResult>(Maybe<Func<TA, TB, TC, TD, TE, TResult>> ff, Maybe<TA> fa)
-        {
-            return fa.Apply(ff);
-        }
-
-        public static Maybe<Func<TB, TC, TD, TE, TResult>> Apply<TA, TB, TC, TD, TE, TResult>(this Maybe<TA> fa, Maybe<Func<TA, TB, TC, TD, TE, TResult>> ff)
-        {
-            var applicativeAdapter = new MaybeApplicativeAdapter();
-            return (Maybe<Func<TB, TC, TD, TE, TResult>>)applicativeAdapter.Apply(ff, fa);
-        }
     }
 
     internal class MaybeFunctorAdapter : FunctorAdapter
@@ -271,34 +227,6 @@ namespace MonadLib
         {
             var ma = (Maybe<TA>)fa;
             var mf = (Maybe<Func<TA, TResult>>)ff;
-            return ma.Ap(mf);
-        }
-
-        public override IApplicative<Func<TB, TResult>> Apply<TA, TB, TResult>(IApplicative<Func<TA, TB, TResult>> ff, IApplicative<TA> fa)
-        {
-            var ma = (Maybe<TA>)fa;
-            var mf = (Maybe<Func<TA, TB, TResult>>)ff;
-            return ma.Ap(mf);
-        }
-
-        public override IApplicative<Func<TB, TC, TResult>> Apply<TA, TB, TC, TResult>(IApplicative<Func<TA, TB, TC, TResult>> ff, IApplicative<TA> fa)
-        {
-            var ma = (Maybe<TA>)fa;
-            var mf = (Maybe<Func<TA, TB, TC, TResult>>)ff;
-            return ma.Ap(mf);
-        }
-
-        public override IApplicative<Func<TB, TC, TD, TResult>> Apply<TA, TB, TC, TD, TResult>(IApplicative<Func<TA, TB, TC, TD, TResult>> ff, IApplicative<TA> fa)
-        {
-            var ma = (Maybe<TA>)fa;
-            var mf = (Maybe<Func<TA, TB, TC, TD, TResult>>)ff;
-            return ma.Ap(mf);
-        }
-
-        public override IApplicative<Func<TB, TC, TD, TE, TResult>> Apply<TA, TB, TC, TD, TE, TResult>(IApplicative<Func<TA, TB, TC, TD, TE, TResult>> ff, IApplicative<TA> fa)
-        {
-            var ma = (Maybe<TA>)fa;
-            var mf = (Maybe<Func<TA, TB, TC, TD, TE, TResult>>)ff;
             return ma.Ap(mf);
         }
     }
