@@ -3,14 +3,14 @@
 namespace MonadLib
 {
     // ReSharper disable UnusedTypeParameter
-    public interface IFunctor<TA>
+    public interface IFunctor<T1, TA>
     {
-        FunctorAdapter GetFunctorAdapter();
+        FunctorAdapter<T1> GetFunctorAdapter();
     }
     // ReSharper restore UnusedTypeParameter
 
-    public abstract class FunctorAdapter
+    public abstract class FunctorAdapter<T1>
     {
-        public abstract IFunctor<TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TA> fa);
+        public abstract IFunctor<T1, TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<T1, TA> fa);
     }
 }

@@ -6,7 +6,7 @@ using MonadLib.Registries;
 
 namespace MonadLib
 {
-    public sealed class Either<TLeft, TA> : IMonad<TLeft, TA>
+    public sealed class Either<TLeft, TA> : IApplicative<TLeft, TA>, IMonad<TLeft, TA>
     {
         private Either(LeftOrRight leftOrRight, TLeft left, TA right)
         {
@@ -99,6 +99,16 @@ namespace MonadLib
         private readonly TLeft _left;
         private readonly TA _right;
 
+        public FunctorAdapter<TLeft> GetFunctorAdapter()
+        {
+            return new EitherFunctorAdapter<TLeft>();
+        }
+
+        public ApplicativeAdapter<TLeft> GetApplicativeAdapter()
+        {
+            return new EitherApplicativeAdapter<TLeft>();
+        }
+
         public MonadAdapter<TLeft> GetMonadAdapter()
         {
             return MonadAdapterRegistry.Get<TLeft>(typeof(Either<,>));
@@ -152,6 +162,74 @@ namespace MonadLib
         public static Either<TLeft, TA> Return<TA>(TA right)
         {
             return Right(right);
+        }
+    }
+
+    // This class should probably be generated via T4.
+    public static class EitherFunctorExtensions
+    {
+        public static Either<TLeft, TResult> FMap<TLeft, TA, TResult>(Func<TA, TResult> f, Either<TLeft, TA> fa)
+        {
+            return fa.FMap(f);
+        }
+
+        public static Either<TLeft, TResult> FMap<TLeft, TA, TResult>(this Either<TLeft, TA> fa, Func<TA, TResult> f)
+        {
+            var functorAdapter = new EitherFunctorAdapter<TLeft>();
+            return (Either<TLeft, TResult>)functorAdapter.FMap(f, fa);
+        }
+    }
+
+    // This class should probably be generated via T4.
+    public static class EitherApplicativeExtensions
+    {
+        public static Either<TLeft, TResult> Apply<TLeft, TA, TResult>(Either<TLeft, Func<TA, TResult>> ff, Either<TLeft, TA> fa)
+        {
+            return fa.Apply(ff);
+        }
+
+        public static Either<TLeft, TResult> Apply<TLeft, TA, TResult>(this Either<TLeft, TA> fa, Either<TLeft, Func<TA, TResult>> ff)
+        {
+            var applicativeAdapter = new EitherApplicativeAdapter<TLeft>();
+            return (Either<TLeft, TResult>)applicativeAdapter.Apply(ff, fa);
+        }
+    }
+
+    internal class EitherFunctorAdapter<TLeft> : FunctorAdapter<TLeft>
+    {
+        public EitherFunctorAdapter()
+        {
+        }
+
+        public override IFunctor<TLeft, TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TLeft, TA> fa)
+        {
+            var ma = (Either<TLeft, TA>) fa;
+            return ma.Match(Either<TLeft>.Left<TResult>, a => Either<TLeft>.Right(f(a)));
+        }
+    }
+
+    internal class EitherApplicativeAdapter<TLeft> : ApplicativeAdapter<TLeft>
+    {
+        public EitherApplicativeAdapter()
+        {
+        }
+
+        public override IFunctor<TLeft, TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TLeft, TA> fa)
+        {
+            var ma = (Either<TLeft, TA>)fa;
+            return ma.Match(Either<TLeft>.Left<TResult>, a => Either<TLeft>.Right(f(a)));
+        }
+
+        public override IApplicative<TLeft, TA> Pure<TA>(TA a)
+        {
+            return Either<TLeft>.Right(a);
+        }
+
+        public override IApplicative<TLeft, TResult> Apply<TA, TResult>(IApplicative<TLeft, Func<TA, TResult>> ff, IApplicative<TLeft, TA> fa)
+        {
+            var ma = (Either<TLeft, TA>) fa;
+            var mf = (Either<TLeft, Func<TA, TResult>>) ff;
+            return ma.Ap(mf);
         }
     }
 

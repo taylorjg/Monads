@@ -7,7 +7,7 @@ using MonadLib.Registries;
 
 namespace MonadLib
 {
-    public sealed class Maybe<TA> : IFunctor<TA>, IApplicative<TA>, IMonadPlus<TA>
+    public sealed class Maybe<TA> : IApplicative<TA>, IMonadPlus<TA>
     {
         private Maybe(TA a, bool isNothing)
         {
@@ -179,6 +179,7 @@ namespace MonadLib
         }
     }
 
+    // This class should probably be generated via T4.
     public static class MaybeFunctorExtensions
     {
         public static Maybe<TResult> FMap<TA, TResult>(Func<TA, TResult> f, Maybe<TA> fa)
@@ -193,6 +194,7 @@ namespace MonadLib
         }
     }
 
+    // This class should probably be generated via T4.
     public static class MaybeApplicativeExtensions
     {
         public static Maybe<TResult> Apply<TA, TResult>(Maybe<Func<TA, TResult>> ff, Maybe<TA> fa)
@@ -209,6 +211,10 @@ namespace MonadLib
 
     internal class MaybeFunctorAdapter : FunctorAdapter
     {
+        public MaybeFunctorAdapter()
+        {
+        }
+
         public override IFunctor<TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TA> fa)
         {
             var ma = (Maybe<TA>)fa;
@@ -218,6 +224,16 @@ namespace MonadLib
 
     internal class MaybeApplicativeAdapter : ApplicativeAdapter
     {
+        public MaybeApplicativeAdapter()
+        {
+        }
+
+        public override IFunctor<TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TA> fa)
+        {
+            var ma = (Maybe<TA>)fa;
+            return ma.Match(a => Maybe.Just(f(a)), Maybe.Nothing<TResult>);
+        }
+
         public override IApplicative<TA> Pure<TA>(TA a)
         {
             return Maybe.Just(a);
@@ -251,7 +267,7 @@ namespace MonadLib
         {
             return Maybe.Just(a);
         }
-
+        
         public override IMonad<TBInner> Bind<TAInner, TBInner>(IMonad<TAInner> ma, Func<TAInner, IMonad<TBInner>> f)
         {
             var maybeA = (Maybe<TAInner>)ma;

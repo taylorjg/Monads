@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IApplicativeT1.cs" />
+    <Compile Include="IFunctorT1.cs" />
     <Compile Include="Fn.cs" />
     <Compile Include="IApplicative.cs" />
     <Compile Include="IFunctor.cs" />
