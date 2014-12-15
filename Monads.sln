@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrapbook", "DemoPrograms\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WriterAllAboutMonadsExample", "DemoPrograms\WriterAllAboutMonadsExample\WriterAllAboutMonadsExample.csproj", "{6846AD7B-B973-48B5-A646-717714072CFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaybeApMovieReview", "DemoPrograms\MaybeApMovieReview\MaybeApMovieReview.csproj", "{3D6E6BC4-9D2E-450D-BD7B-0C111F256ED0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{6846AD7B-B973-48B5-A646-717714072CFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6846AD7B-B973-48B5-A646-717714072CFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6846AD7B-B973-48B5-A646-717714072CFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D6E6BC4-9D2E-450D-BD7B-0C111F256ED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D6E6BC4-9D2E-450D-BD7B-0C111F256ED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D6E6BC4-9D2E-450D-BD7B-0C111F256ED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D6E6BC4-9D2E-450D-BD7B-0C111F256ED0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,5 +123,6 @@ Global
 		{46A71B41-3F97-441A-94F7-9B6EF6CBBD48} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 		{74D47445-FB1F-47D4-A01F-CA03F7B3713E} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 		{6846AD7B-B973-48B5-A646-717714072CFA} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
+		{3D6E6BC4-9D2E-450D-BD7B-0C111F256ED0} = {8C3AB78E-A097-44BF-AECD-A06CB02789F0}
 	EndGlobalSection
 EndGlobal
