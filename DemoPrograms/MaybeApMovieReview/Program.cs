@@ -15,9 +15,12 @@ namespace MaybeApMovieReview
 
         private static Maybe<MovieReview> ApReview(Dictionary<string, Maybe<string>> alist)
         {
-            return Lookup1("review", alist)
-                .Ap(Lookup1("user", alist)
-                .Ap(Maybe.LiftM(Fn.Curry(MovieReview.MakeMovieReviewFunc), Lookup1("title", alist))));
+            return
+                Maybe.Ap(
+                    Maybe.Ap(
+                        Maybe.LiftM(Fn.Curry(MovieReview.MakeMovieReviewFunc), Lookup1("title", alist)),
+                        Lookup1("user", alist)),
+                    Lookup1("review", alist));
         }
 
         private static void Main()
