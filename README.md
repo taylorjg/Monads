@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/01ec0t0utrmagah9/branch/master?svg=true)](https://ci.appveyor.com/project/taylorjg/monads/branch/master)
 
 ## Description
 
