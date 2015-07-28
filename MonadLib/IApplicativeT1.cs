@@ -12,6 +12,6 @@ namespace MonadLib
     public abstract class ApplicativeAdapter<T1> : FunctorAdapter<T1>
     {
         public abstract IApplicative<T1, TA> Pure<TA>(TA a);
-        public abstract IApplicative<T1, TResult> Apply<TA, TResult>(IApplicative<T1, Func<TA, TResult>> ff, IApplicative<T1, TA> fa);
+        public abstract IApplicative<T1, TB> Apply<TA, TB>(IApplicative<T1, Func<TA, TB>> ff, IApplicative<T1, TA> fa);
     }
 }

@@ -118,7 +118,7 @@ namespace MonadLib
             return new Maybe<TA>();
         }
 
-        public static Maybe<TA> Just<TA>(TA a)
+        public static Maybe<TA> Just<TA>(this TA a)
         {
             return new Maybe<TA>(a);
         }
@@ -174,6 +174,11 @@ namespace MonadLib
         }
 
         public static Maybe<TA> Return<TA>(TA a)
+        {
+            return Just(a);
+        }
+
+        public static Maybe<TA> Pure<TA>(this TA a)
         {
             return Just(a);
         }

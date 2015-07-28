@@ -10,18 +10,18 @@ namespace MonadLibTests
         [Test]
         public void FMapJust()
         {
-            var ma = Maybe.Just(42);
-            var actual = ma.FMap(Convert.ToString);
-            Assert.That(actual.IsJust, Is.True);
-            Assert.That(actual, Is.EqualTo(Maybe.Just("42")));
+            var fa = Maybe.Just(42);
+            var fb = fa.FMap(Convert.ToString);
+            Assert.That(fb.IsJust, Is.True);
+            Assert.That(fb.FromJust, Is.EqualTo("42"));
         }
 
         [Test]
         public void FMapNothing()
         {
-            var ma = Maybe.Nothing<int>();
-            var actual = ma.FMap(Convert.ToString);
-            Assert.That(actual.IsNothing, Is.True);
+            var fa = Maybe.Nothing<int>();
+            var fb = fa.FMap(Convert.ToString);
+            Assert.That(fb.IsNothing, Is.True);
         }
     }
 }
