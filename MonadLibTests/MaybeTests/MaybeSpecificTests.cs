@@ -10,7 +10,7 @@ namespace MonadLibTests.MaybeTests
     // ReSharper disable InconsistentNaming
 
     [TestFixture]
-    internal class SpecificTests
+    internal class MaybeSpecificTests
     {
         [Test]
         public void Nothing()

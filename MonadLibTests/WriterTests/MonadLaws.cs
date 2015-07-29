@@ -10,7 +10,7 @@ namespace MonadLibTests.WriterTests
     using MyWriterString = Writer<ListMonoid<string>, string, string>;
 
     [TestFixture]
-    internal class WriterMonadLaws
+    internal class MonadLaws
     {
         [Test]
         public void BindLeftIdentity()

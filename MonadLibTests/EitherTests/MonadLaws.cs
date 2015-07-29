@@ -7,7 +7,7 @@ namespace MonadLibTests.EitherTests
     using EitherString = Either<string>;
 
     [TestFixture]
-    internal class EitherMonadLaws
+    internal class MonadLaws
     {
         [Test]
         public void BindLeftIdentity()

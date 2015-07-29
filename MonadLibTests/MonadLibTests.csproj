@@ -45,9 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EitherTests\EitherMonadLaws.cs" />
-    <Compile Include="EitherTests\EitherMonadTests.cs" />
-    <Compile Include="EitherTests\EitherTests.cs" />
+    <Compile Include="EitherTests\MonadLaws.cs" />
+    <Compile Include="EitherTests\MonadTests.cs" />
+    <Compile Include="EitherTests\EitherSpecificTests.cs" />
     <Compile Include="MaybeTests\LinqQuerySyntaxTests.cs" />
     <Compile Include="ListMonoidTests\MonoidLaws.cs" />
     <Compile Include="ListMonoidTests\MonoidTests.cs" />
@@ -58,20 +58,20 @@
     <Compile Include="MaybeTests\MonadPlusLaws.cs" />
     <Compile Include="MaybeTests\MonadPlusTests.cs" />
     <Compile Include="MaybeTests\MonadTests.cs" />
-    <Compile Include="MaybeTests\SpecificTests.cs" />
+    <Compile Include="MaybeTests\MaybeSpecificTests.cs" />
     <Compile Include="MiscTests\FnTests.cs" />
     <Compile Include="MiscTests\MonadPlusAgnosticFunctionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReaderTests\ReaderMonadLaws.cs" />
-    <Compile Include="ReaderTests\ReaderTests.cs" />
+    <Compile Include="ReaderTests\MonadLaws.cs" />
+    <Compile Include="ReaderTests\ReaderSpecificTests.cs" />
     <Compile Include="RegistryTests\MonadAdapterRegistryTests.cs" />
     <Compile Include="RegistryTests\MonadPlusAdapterRegistryTests.cs" />
     <Compile Include="RegistryTests\MonoidAdapterRegistryTests.cs" />
-    <Compile Include="StateTests\StateMonadLaws.cs" />
-    <Compile Include="StateTests\StateTests.cs" />
+    <Compile Include="StateTests\MonadLaws.cs" />
+    <Compile Include="StateTests\StateSpecificTests.cs" />
     <Compile Include="WriterTests\LinqQuerySyntaxTests.cs" />
-    <Compile Include="WriterTests\WriterMonadLaws.cs" />
-    <Compile Include="WriterTests\WriterTests.cs" />
+    <Compile Include="WriterTests\MonadLaws.cs" />
+    <Compile Include="WriterTests\WriterSpecificTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonadLib\MonadLib.csproj">

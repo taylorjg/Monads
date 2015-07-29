@@ -10,7 +10,7 @@ namespace MonadLibTests.EitherTests
     using EitherString = Either<string>;
 
     [TestFixture]
-    internal class EitherTests
+    internal class EitherSpecificTests
     {
         private static IEnumerable<Either<string, int>> MixtureOfLeftsAndRights()
         {

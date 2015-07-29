@@ -11,7 +11,7 @@ namespace MonadLibTests.EitherTests
     using EitherString = Either<string>;
 
     [TestFixture]
-    internal class EitherMonadTests
+    internal class MonadTests
     {
         [Test, TestCaseSource("TestCaseSourceForLiftMTests")]
         public void LiftM(Either<string, int>[] eithers, bool expectedIsRight, string expectedLeft, int expectedRight)

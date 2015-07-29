@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace MonadLibTests.StateTests
 {
     [TestFixture]
-    internal class StateMonadLaws
+    internal class MonadLaws
     {
         [Test]
         public void BindLeftIdentity()

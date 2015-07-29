@@ -10,7 +10,7 @@ namespace MonadLibTests.WriterTests
     using MyWriterUnit = Writer<ListMonoid<string>, string, Unit>;
 
     [TestFixture]
-    internal class WriterTests
+    internal class WriterSpecificTests
     {
         [Test]
         public void Tell()

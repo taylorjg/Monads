@@ -8,7 +8,7 @@ namespace MonadLibTests.ReaderTests
     using MyReaderString = Reader<string, string>;
 
     [TestFixture]
-    internal class ReaderTests
+    internal class ReaderSpecificTests
     {
         [Test]
         public void Ask()

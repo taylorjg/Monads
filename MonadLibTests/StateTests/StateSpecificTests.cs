@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace MonadLibTests.StateTests
 {
     [TestFixture]
-    internal class StateTests
+    internal class StateSpecificTests
     {
         [Test]
         public void EvalState()
