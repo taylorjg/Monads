@@ -1,10 +1,10 @@
 ﻿using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.ListMonoidTests
 {
     [TestFixture]
-    internal class ListMonoidTests
+    internal class MonoidTests
     {
         [Test]
         public void MEmpty()

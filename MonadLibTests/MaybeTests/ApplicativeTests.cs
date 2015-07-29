@@ -2,10 +2,10 @@
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.MaybeTests
 {
     [TestFixture]
-    internal class MaybeApplicativeTests
+    internal class ApplicativeTests
     {
         [Test]
         public void MaybeApplicativeApplyOfCurriedFuncWithArity2()

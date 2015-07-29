@@ -2,10 +2,10 @@
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.MaybeTests
 {
     [TestFixture]
-    internal class MaybeMonadLawsKleisli
+    internal class MonadLawsKleisli
     {
         [Test]
         public void BindLeftIdentity()

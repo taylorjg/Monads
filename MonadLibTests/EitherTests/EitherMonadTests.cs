@@ -4,7 +4,7 @@ using System.Linq;
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.EitherTests
 {
     // ReSharper disable InconsistentNaming
 

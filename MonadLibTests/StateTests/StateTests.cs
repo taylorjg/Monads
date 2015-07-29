@@ -1,7 +1,7 @@
 ﻿using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.StateTests
 {
     [TestFixture]
     internal class StateTests

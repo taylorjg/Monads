@@ -2,7 +2,7 @@
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.WriterTests
 {
     using MyWriter = Writer<ListMonoid<string>, string>;
     using MyWriterInt = Writer<ListMonoid<string>, string, int>;

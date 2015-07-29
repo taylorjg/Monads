@@ -2,10 +2,10 @@
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.MaybeTests
 {
     [TestFixture]
-    internal class MaybeFunctorTests
+    internal class FunctorTests
     {
         [Test]
         public void FMapJust()

@@ -3,7 +3,7 @@ using MonadLib;
 using MonadLib.Registries;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.RegistryTests
 {
     using TwTuple = Tuple<string, int>;
 

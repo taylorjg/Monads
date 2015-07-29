@@ -2,7 +2,7 @@
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.MiscTests
 {
     [TestFixture]
     internal class MonadPlusAgnosticFunctionsTests

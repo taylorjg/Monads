@@ -2,7 +2,7 @@
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.ReaderTests
 {
     using MyReader = Reader<string>;
     using MyReaderString = Reader<string, string>;

@@ -2,7 +2,7 @@
 using MonadLib.Registries;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.RegistryTests
 {
     [TestFixture]
     internal class MonoidAdapterRegistryTests

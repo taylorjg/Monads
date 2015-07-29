@@ -4,12 +4,12 @@ using System.Linq;
 using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.MaybeTests
 {
     // ReSharper disable InconsistentNaming
 
     [TestFixture]
-    internal class MaybeMonadTests
+    internal class MonadTests
     {
         [Test, TestCaseSource("TestCaseSourceForLiftMTests")]
         public void LiftM(Maybe<int>[] maybes, bool expectedIsJust, int expectedFromJust)

@@ -1,12 +1,12 @@
 ﻿using MonadLib;
 using NUnit.Framework;
 
-namespace MonadLibTests
+namespace MonadLibTests.ListMonoidTests
 {
     // ReSharper disable InconsistentNaming
 
     [TestFixture]
-    public class ListMonoidLaws
+    public class MonoidLaws
     {
         [Test]
         public void MAppendOfMEmptyAndXIsX()
