@@ -187,39 +187,25 @@ namespace MonadLib
     // This class should probably be generated via T4.
     public static class MaybeFunctorExtensions
     {
-        public static Maybe<TResult> FMap<TA, TResult>(Func<TA, TResult> f, Maybe<TA> fa)
-        {
-            return fa.FMap(f);
-        }
-
-        public static Maybe<TResult> FMap<TA, TResult>(this Maybe<TA> fa, Func<TA, TResult> f)
+        public static Maybe<TB> FMap<TA, TB>(this Maybe<TA> fa, Func<TA, TB> f)
         {
             var functorAdapter = new MaybeFunctorAdapter();
-            return (Maybe<TResult>)functorAdapter.FMap(f, fa);
+            return (Maybe<TB>)functorAdapter.FMap(f, fa);
         }
     }
 
     // This class should probably be generated via T4.
     public static class MaybeApplicativeExtensions
     {
-        public static Maybe<TResult> Apply<TA, TResult>(Maybe<Func<TA, TResult>> ff, Maybe<TA> fa)
-        {
-            return fa.Apply(ff);
-        }
-
-        public static Maybe<TResult> Apply<TA, TResult>(this Maybe<TA> fa, Maybe<Func<TA, TResult>> ff)
+        public static Maybe<TB> Apply<TA, TB>(this Maybe<Func<TA, TB>> ff, Maybe<TA> fa)
         {
             var applicativeAdapter = new MaybeApplicativeAdapter();
-            return (Maybe<TResult>)applicativeAdapter.Apply(ff, fa);
+            return (Maybe<TB>)applicativeAdapter.Apply(ff, fa);
         }
     }
 
     internal class MaybeFunctorAdapter : FunctorAdapter
     {
-        public MaybeFunctorAdapter()
-        {
-        }
-
         public override IFunctor<TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TA> fa)
         {
             var ma = (Maybe<TA>)fa;
@@ -229,10 +215,6 @@ namespace MonadLib
 
     internal class MaybeApplicativeAdapter : ApplicativeAdapter
     {
-        public MaybeApplicativeAdapter()
-        {
-        }
-
         public override IFunctor<TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TA> fa)
         {
             var ma = (Maybe<TA>)fa;
@@ -244,11 +226,11 @@ namespace MonadLib
             return Maybe.Just(a);
         }
 
-        public override IApplicative<TResult> Apply<TA, TResult>(IApplicative<Func<TA, TResult>> ff, IApplicative<TA> fa)
+        public override IApplicative<TB> Apply<TA, TB>(IApplicative<Func<TA, TB>> ff, IApplicative<TA> fa)
         {
+            var mf = (Maybe<Func<TA, TB>>)ff;
             var ma = (Maybe<TA>)fa;
-            var mf = (Maybe<Func<TA, TResult>>)ff;
-            return ma.Ap(mf);
+            return mf.Ap(ma);
         }
     }
 

@@ -1,4 +1,6 @@
-﻿namespace EitherMovieReview
+﻿using System;
+
+namespace EitherMovieReview
 {
     public class MovieReview
     {
@@ -28,6 +30,11 @@
                 User = user,
                 Review = review
             };
+        }
+
+        public static Func<string, string, string, MovieReview> MakeMovieReviewFunc
+        {
+            get { return MakeMovieReview; }
         }
     }
 }

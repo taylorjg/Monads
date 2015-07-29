@@ -183,24 +183,15 @@ namespace MonadLib
     // This class should probably be generated via T4.
     public static class EitherApplicativeExtensions
     {
-        public static Either<TLeft, TResult> Apply<TLeft, TA, TResult>(Either<TLeft, Func<TA, TResult>> ff, Either<TLeft, TA> fa)
-        {
-            return fa.Apply(ff);
-        }
-
-        public static Either<TLeft, TResult> Apply<TLeft, TA, TResult>(this Either<TLeft, TA> fa, Either<TLeft, Func<TA, TResult>> ff)
+        public static Either<TLeft, TB> Apply<TLeft, TA, TB>(this Either<TLeft, Func<TA, TB>> ff, Either<TLeft, TA> fa)
         {
             var applicativeAdapter = new EitherApplicativeAdapter<TLeft>();
-            return (Either<TLeft, TResult>)applicativeAdapter.Apply(ff, fa);
+            return (Either<TLeft, TB>)applicativeAdapter.Apply(ff, fa);
         }
     }
 
     internal class EitherFunctorAdapter<TLeft> : FunctorAdapter<TLeft>
     {
-        public EitherFunctorAdapter()
-        {
-        }
-
         public override IFunctor<TLeft, TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TLeft, TA> fa)
         {
             var ma = (Either<TLeft, TA>) fa;
@@ -210,10 +201,6 @@ namespace MonadLib
 
     internal class EitherApplicativeAdapter<TLeft> : ApplicativeAdapter<TLeft>
     {
-        public EitherApplicativeAdapter()
-        {
-        }
-
         public override IFunctor<TLeft, TResult> FMap<TA, TResult>(Func<TA, TResult> f, IFunctor<TLeft, TA> fa)
         {
             var ma = (Either<TLeft, TA>)fa;
@@ -225,11 +212,11 @@ namespace MonadLib
             return Either<TLeft>.Right(a);
         }
 
-        public override IApplicative<TLeft, TResult> Apply<TA, TResult>(IApplicative<TLeft, Func<TA, TResult>> ff, IApplicative<TLeft, TA> fa)
+        public override IApplicative<TLeft, TB> Apply<TA, TB>(IApplicative<TLeft, Func<TA, TB>> ff, IApplicative<TLeft, TA> fa)
         {
-            var ma = (Either<TLeft, TA>) fa;
-            var mf = (Either<TLeft, Func<TA, TResult>>) ff;
-            return ma.Ap(mf);
+            var mf = (Either<TLeft, Func<TA, TB>>)ff;
+            var ma = (Either<TLeft, TA>)fa;
+            return mf.Ap(ma);
         }
     }
 

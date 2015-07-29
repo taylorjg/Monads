@@ -223,7 +223,7 @@ namespace MonadLibTests.MaybeTests
         public void ApAppliedToFuncAndNumber()
         {
             Func<int, int> f = a => a * a;
-            var actual = Maybe.Ap(Maybe.Just(f), Maybe.Just(9));
+            var actual = Maybe.Return(f).Ap(9.Just());
             Assert.That(actual.IsJust, Is.True);
             Assert.That(actual.FromJust, Is.EqualTo(81));
         }
@@ -232,21 +232,21 @@ namespace MonadLibTests.MaybeTests
         public void ApAppliedToFuncAndNothing()
         {
             Func<int, int> f = a => a * a;
-            var actual = Maybe.Ap(Maybe.Just(f), Maybe.Nothing<int>());
+            var actual = Maybe.Return(f).Ap(Maybe.Nothing<int>());
             Assert.That(actual.IsNothing, Is.True);
         }
 
         [Test]
         public void ApAppliedToNothingAndNumber()
         {
-            var actual = Maybe.Ap(Maybe.Nothing<Func<int, int>>(), Maybe.Just(9));
+            var actual = Maybe.Nothing<Func<int, int>>().Ap(9.Just());
             Assert.That(actual.IsNothing, Is.True);
         }
 
         [Test]
         public void ApAppliedToNothingAndNothing()
         {
-            var actual = Maybe.Ap(Maybe.Nothing<Func<int, int>>(), Maybe.Nothing<int>());
+            var actual = Maybe.Nothing<Func<int, int>>().Ap(Maybe.Nothing<int>());
             Assert.That(actual.IsNothing, Is.True);
         }
 

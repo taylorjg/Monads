@@ -15,9 +15,9 @@ namespace MonadLibTests.MaybeTests
 
             var fa = a.Just();
             var fb = b.Just();
-            var ff = Fn.Curry(FuncWithArity2).Pure();
+            var fn = Fn.Curry(FuncWithArity2);
 
-            var actual = fb.Apply(fa.Apply(ff));
+            var actual = fn.Pure().Apply(fa).Apply(fb);
             
             Assert.That(actual.IsJust, Is.True);
             Assert.That(actual.FromJust, Is.EqualTo(Convert.ToString(a + b)));
@@ -32,14 +32,14 @@ namespace MonadLibTests.MaybeTests
             const float d = 4f;
             const double e = 5d;
 
-            var fa = Maybe.Just(a);
-            var fb = Maybe.Just(b);
-            var fc = Maybe.Just(c);
-            var fd = Maybe.Just(d);
-            var fe = Maybe.Just(e);
-            var ff = Maybe.Pure(Fn.Curry(FuncWithArity5));
+            var fa = a.Just();
+            var fb = b.Just();
+            var fc = c.Just();
+            var fd = d.Just();
+            var fe = e.Just();
+            var fn = Fn.Curry(FuncWithArity5);
         
-            var actual = fe.Apply(fd.Apply(fc.Apply(fb.Apply(fa.Apply(ff)))));
+            var actual = fn.Pure().Apply(fa).Apply(fb).Apply(fc).Apply(fd).Apply(fe);
 
             Assert.That(actual.IsJust, Is.True);
             Assert.That(actual.FromJust, Is.EqualTo(Convert.ToString(a + b + c + d + e)));
@@ -54,12 +54,12 @@ namespace MonadLibTests.MaybeTests
             const float d = 4f;
             const double e = 5d;
 
-            var fc = Maybe.Just(c);
-            var fd = Maybe.Just(d);
-            var fe = Maybe.Just(e);
-            var ff = Maybe.Pure(Fn.Curry(Fn.PartiallyApply(FuncWithArity5, a, b)));
+            var fc = c.Just();
+            var fd = d.Just();
+            var fe = e.Just();
+            var fn = Fn.Curry(Fn.PartiallyApply(FuncWithArity5, a, b));
         
-            var actual = fe.Apply(fd.Apply(fc.Apply(ff)));
+            var actual = fn.Pure().Apply(fc).Apply(fd).Apply(fe);
 
             Assert.That(actual.IsJust, Is.True);
             Assert.That(actual.FromJust, Is.EqualTo(Convert.ToString(a + b + c + d + e)));

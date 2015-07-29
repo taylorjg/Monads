@@ -4,10 +4,10 @@ using MonadLib;
 
 namespace EitherMovieReview
 {
-    using AssociationList = Dictionary<string, Maybe<string>>;
+    using AssociationList = IDictionary<string, Maybe<string>>;
     using EitherError = Either<string>;
 
-    internal class Program
+    internal static class Program
     {
         private static Either<string, string> Lookup1(string key, AssociationList alist)
         {
@@ -24,44 +24,42 @@ namespace EitherMovieReview
 
         private static Either<string, MovieReview> LiftedReview(AssociationList alist)
         {
-            return Either.LiftM3(
-                MovieReview.MakeMovieReview,
-                Lookup1("title", alist),
-                Lookup1("user", alist),
-                Lookup1("review", alist));
+            return Either.LiftM(Fn.Curry(MovieReview.MakeMovieReviewFunc), Lookup1("title", alist))
+                .Ap(Lookup1("user", alist))
+                .Ap(Lookup1("review", alist));
         }
 
         private static void Main()
         {
             // All keys present and correct
-            Print(LiftedReview(new AssociationList
+            Print(LiftedReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
-                    {"user", Maybe.Just("Jon")},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"title", "Jaws".Just()},
+                    {"user", "Jon".Just()},
+                    {"review", "A film about a shark".Just()}
                 }));
 
             // Missing "user" key
-            Print(LiftedReview(new AssociationList
+            Print(LiftedReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"title", "Jaws".Just()},
+                    {"review", "A film about a shark".Just()}
                 }));
 
             // Value of "user" key is empty
-            Print(LiftedReview(new AssociationList
+            Print(LiftedReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
-                    {"user", Maybe.Just(string.Empty)},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"title", "Jaws".Just()},
+                    {"user", string.Empty.Just()},
+                    {"review", "A film about a shark".Just()}
                 }));
 
             // Value of "user" key is Nothing
-            Print(LiftedReview(new AssociationList
+            Print(LiftedReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
+                    {"title", "Jaws".Just()},
                     {"user", Maybe.Nothing<string>()},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"review", "A film about a shark".Just()}
                 }));
         }
 

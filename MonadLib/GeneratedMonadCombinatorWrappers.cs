@@ -266,14 +266,9 @@ namespace MonadLib
             return MonadCombinators.Void<Maybe<Unit>, TA>(m);
         }
 
-        public static Maybe<TB> Ap<TA, TB>(Maybe<Func<TA, TB>> mf, Maybe<TA> ma) 
+        public static Maybe<TB> Ap<TA, TB>(this Maybe<Func<TA, TB>> mf, Maybe<TA> ma) 
         {
-            return ma.Ap(mf);
-        }
-
-        public static Maybe<TB> Ap<TA, TB>(this Maybe<TA> ma, Maybe<Func<TA, TB>> mf) 
-        {
-            return MonadCombinators.Ap<Maybe<TB>, TA, TB>(mf, ma);
+			return MonadCombinators.Ap<Maybe<TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Maybe<TC>> Compose<TA, TB, TC>(Func<TA, Maybe<TB>> f, Func<TB, Maybe<TC>> g) 
@@ -580,14 +575,9 @@ namespace MonadLib
             return MonadCombinators<TLeft>.Void<Either<TLeft, Unit>, TA>(m);
         }
 
-        public static Either<TLeft, TB> Ap<TLeft, TA, TB>(Either<TLeft, Func<TA, TB>> mf, Either<TLeft, TA> ma) 
+        public static Either<TLeft, TB> Ap<TLeft, TA, TB>(this Either<TLeft, Func<TA, TB>> mf, Either<TLeft, TA> ma) 
         {
-            return ma.Ap(mf);
-        }
-
-        public static Either<TLeft, TB> Ap<TLeft, TA, TB>(this Either<TLeft, TA> ma, Either<TLeft, Func<TA, TB>> mf) 
-        {
-            return MonadCombinators<TLeft>.Ap<Either<TLeft, TB>, TA, TB>(mf, ma);
+			return MonadCombinators<TLeft>.Ap<Either<TLeft, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Either<TLeft, TC>> Compose<TLeft, TA, TB, TC>(Func<TA, Either<TLeft, TB>> f, Func<TB, Either<TLeft, TC>> g) 
@@ -858,14 +848,9 @@ namespace MonadLib
             return MonadCombinators<TS>.Void<State<TS, Unit>, TA>(m);
         }
 
-        public static State<TS, TB> Ap<TS, TA, TB>(State<TS, Func<TA, TB>> mf, State<TS, TA> ma) 
+        public static State<TS, TB> Ap<TS, TA, TB>(this State<TS, Func<TA, TB>> mf, State<TS, TA> ma) 
         {
-            return ma.Ap(mf);
-        }
-
-        public static State<TS, TB> Ap<TS, TA, TB>(this State<TS, TA> ma, State<TS, Func<TA, TB>> mf) 
-        {
-            return MonadCombinators<TS>.Ap<State<TS, TB>, TA, TB>(mf, ma);
+			return MonadCombinators<TS>.Ap<State<TS, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, State<TS, TC>> Compose<TS, TA, TB, TC>(Func<TA, State<TS, TB>> f, Func<TB, State<TS, TC>> g) 
@@ -1136,14 +1121,9 @@ namespace MonadLib
             return MonadCombinators<TR>.Void<Reader<TR, Unit>, TA>(m);
         }
 
-        public static Reader<TR, TB> Ap<TR, TA, TB>(Reader<TR, Func<TA, TB>> mf, Reader<TR, TA> ma) 
+        public static Reader<TR, TB> Ap<TR, TA, TB>(this Reader<TR, Func<TA, TB>> mf, Reader<TR, TA> ma) 
         {
-            return ma.Ap(mf);
-        }
-
-        public static Reader<TR, TB> Ap<TR, TA, TB>(this Reader<TR, TA> ma, Reader<TR, Func<TA, TB>> mf) 
-        {
-            return MonadCombinators<TR>.Ap<Reader<TR, TB>, TA, TB>(mf, ma);
+			return MonadCombinators<TR>.Ap<Reader<TR, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Reader<TR, TC>> Compose<TR, TA, TB, TC>(Func<TA, Reader<TR, TB>> f, Func<TB, Reader<TR, TC>> g) 
@@ -1414,14 +1394,9 @@ namespace MonadLib
             return MonadCombinators<TMonoid, TW>.Void<Writer<TMonoid, TW, Unit>, TA>(m);
         }
 
-        public static Writer<TMonoid, TW, TB> Ap<TMonoid, TW, TA, TB>(Writer<TMonoid, TW, Func<TA, TB>> mf, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
+        public static Writer<TMonoid, TW, TB> Ap<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, Func<TA, TB>> mf, Writer<TMonoid, TW, TA> ma) where TMonoid : IMonoid<TW>
         {
-            return ma.Ap(mf);
-        }
-
-        public static Writer<TMonoid, TW, TB> Ap<TMonoid, TW, TA, TB>(this Writer<TMonoid, TW, TA> ma, Writer<TMonoid, TW, Func<TA, TB>> mf) where TMonoid : IMonoid<TW>
-        {
-            return MonadCombinators<TMonoid, TW>.Ap<Writer<TMonoid, TW, TB>, TA, TB>(mf, ma);
+			return MonadCombinators<TMonoid, TW>.Ap<Writer<TMonoid, TW, TB>, TA, TB>(mf, ma);
         }
 
         public static Func<TA, Writer<TMonoid, TW, TC>> Compose<TMonoid, TW, TA, TB, TC>(Func<TA, Writer<TMonoid, TW, TB>> f, Func<TB, Writer<TMonoid, TW, TC>> g) where TMonoid : IMonoid<TW>

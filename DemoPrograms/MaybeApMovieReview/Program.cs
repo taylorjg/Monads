@@ -4,23 +4,22 @@ using MonadLib;
 
 namespace MaybeApMovieReview
 {
-    internal class Program
+    using AssociationList = IDictionary<string, Maybe<string>>;
+
+    internal static class Program
     {
-        private static Maybe<string> Lookup1(string key, Dictionary<string, Maybe<string>> alist)
+        private static Maybe<string> Lookup1(string key, AssociationList alist)
         {
             return alist
                 .GetValue(key)
                 .Bind(v => v.MFilter(s => !string.IsNullOrEmpty(s)));
         }
 
-        private static Maybe<MovieReview> ApReview(Dictionary<string, Maybe<string>> alist)
+        private static Maybe<MovieReview> ApReview(AssociationList alist)
         {
-            return
-                Maybe.Ap(
-                    Maybe.Ap(
-                        Maybe.LiftM(Fn.Curry(MovieReview.MakeMovieReviewFunc), Lookup1("title", alist)),
-                        Lookup1("user", alist)),
-                    Lookup1("review", alist));
+            return Maybe.LiftM(Fn.Curry(MovieReview.MakeMovieReviewFunc), Lookup1("title", alist))
+                .Ap(Lookup1("user", alist))
+                .Ap(Lookup1("review", alist));
         }
 
         private static void Main()
@@ -28,32 +27,32 @@ namespace MaybeApMovieReview
             // All keys present and correct
             Print(ApReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
-                    {"user", Maybe.Just("Jon")},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"title", "Jaws".Just()},
+                    {"user", "Jon".Just()},
+                    {"review", "A film about a shark".Just()}
                 }));
 
             // Missing "user" key
             Print(ApReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"title", "Jaws".Just()},
+                    {"review", "A film about a shark".Just()}
                 }));
 
             // Value of "user" key is empty
             Print(ApReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
-                    {"user", Maybe.Just(string.Empty)},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"title", "Jaws".Just()},
+                    {"user", string.Empty.Just()},
+                    {"review", "A film about a shark".Just()}
                 }));
 
             // Value of "user" key is Nothing
             Print(ApReview(new Dictionary<string, Maybe<string>>
                 {
-                    {"title", Maybe.Just("Jaws")},
+                    {"title", "Jaws".Just()},
                     {"user", Maybe.Nothing<string>()},
-                    {"review", Maybe.Just("A film about a shark")}
+                    {"review", "A film about a shark".Just()}
                 }));
         }
 
